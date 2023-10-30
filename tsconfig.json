@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "strict": true,
+    "jsx": "preserve",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "lib": ["ESNext", "DOM"],
+    "skipLibCheck": true,
+    "noEmit": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "dist",
+    "typeRoots": ["./node_modules/@types"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./playground/*"],
+      "antdv-pro-layout": ["./src/index.ts"]
+    }
+  },
+  "exclude": ["dist","node_modules"],
+  "include": [
+    "playground/**/*.ts",
+    "playground/**/*.tsx",
+    "playground/**/*.vue",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "vite-env.d.ts"
+  ],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
