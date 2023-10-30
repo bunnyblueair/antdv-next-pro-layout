@@ -15,7 +15,7 @@ Ant Design Pro Layout of Vue, easy to use pro scaffolding.
 npm i antdv-pro-layout
 ```
 
-### 简单使用 Simple Usage
+## 简单使用 Simple Usage
 
 首先，您应该将所需的“antdv-pro布局”添加到库中。
 
