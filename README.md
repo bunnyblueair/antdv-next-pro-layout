@@ -310,9 +310,9 @@ Recommend look [Examples](./playground/) or [Use Template](https://gitee.com/TsM
 
 来自 [@ant-design-vue/pro-layout](https://github.com/vueComponent/pro-components)
 
-- next : Vue3 + <ant-design-vue@3.x> (latest)
-- v3.1 : Vue3 + <ant-design-vue@2.2.x> (release LTS)
-- v2 : Vue2 + <ant-design-vue@1.7.x>
+- next : Vue3 + `ant-design-vue@3.x` (latest)
+- v3.1 : Vue3 + `ant-design-vue@2.2.x` (release LTS)
+- v2 : Vue2 + `ant-design-vue@1.7.x`
 
 计划升级V4版本++++++
 
