@@ -6,7 +6,6 @@
     :tab-list="tabList"
     :tab-active-key="tabActiveKey"
     @tab-change="tabChange"
-    :breadcrumb="false"
     :tabProps="{
       hideAdd: true,
       tabPosition: 'top',

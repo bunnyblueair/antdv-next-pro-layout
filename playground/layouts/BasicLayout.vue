@@ -1,17 +1,20 @@
 <template>
-  <WaterMark content="Pro Layout" :z-index="100">
+  <a-watermark content="Pro Layout" :z-index="100">
     <pro-layout
       :locale="locale"
       v-model:collapsed="state.collapsed"
       v-model:selectedKeys="state.selectedKeys"
       v-model:openKeys="state.openKeys"
       :loading="loading"
-      :menu-data="menuData"
       :breadcrumb="{ routes: breadcrumb }"
       disable-content-margin
       style="min-height: 100vh"
       iconfont-url="//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js"
-      v-bind="proConfig"
+      layout="mix"
+      navTheme="light"
+      fixedHeader
+      fixSiderbar
+      splitMenus
     >
       <template #menuHeaderRender>
         <router-link :to="{ path: '/' }">
@@ -44,17 +47,17 @@
         </transition>
       </RouterView>
     </pro-layout>
-  </WaterMark>
+  </a-watermark>
 </template>
 
 <script setup lang="ts">
 import { useRouter, RouterView, RouterLink } from "vue-router";
 import {
-  WaterMark,
-  getMenuData,
-  clearMenuItem,
-  type RouteContextProps,
-  type MenuDataItem,
+  ProLayout,
+  // getMenuData,
+  // clearMenuItem,
+  // RouteContextProps,
+  // MenuDataItem,
 } from "antdv-pro-layout";
 import { SmileOutlined, HeartOutlined } from "@ant-design/icons-vue";
 import { reactive, ref, computed, watch } from "vue";
@@ -62,9 +65,9 @@ import RightContent from "@/components/RightContent/RightContent.vue";
 import SettingDrawer from "@/components/SettingDrawer/SettingDrawer.vue";
 
 const router = useRouter();
-const { menuData } = getMenuData(clearMenuItem(router.getRoutes()));
+// const { menuData } = getMenuData(clearMenuItem(router.getRoutes()));
 
-const state = reactive<Omit<RouteContextProps, "menuData">>({
+const state = reactive<any>({
   collapsed: false, // default collapsed
   openKeys: [], // defualt openKeys
   selectedKeys: [], // default selectedKeys
@@ -80,7 +83,7 @@ const proConfig = ref({
   splitMenus: true,
 });
 
-const locale = (menuData: MenuDataItem) => menuData.meta?.title;
+const locale = (menuData: any) => menuData.meta?.title;
 
 const breadcrumb = computed(() =>
   router.currentRoute.value.matched.concat().map((item) => {

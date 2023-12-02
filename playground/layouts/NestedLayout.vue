@@ -8,7 +8,6 @@
     :header-render="false"
     :fix-siderbar="true"
     :collapsed-button-render="false"
-    :menu-data="routes"
     disable-content-margin
     style="min-height: 100vh"
     iconfont-url="//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js"
@@ -27,7 +26,6 @@
         v-model:openKeys="baseState.childrenOpenKeys"
         nav-theme="light"
         :menu-header-render="false"
-        :menu-data="menuData"
         :fix-siderbar="true"
         :is-children-layout="true"
         disable-content-margin
@@ -67,27 +65,26 @@
 <script setup lang="ts">
 import { computed, reactive, ref, watchEffect, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import {
-  getMenuData,
-  clearMenuItem,
-  WaterMark,
-  type RouteContextProps,
-} from "antdv-pro-layout";
+// import {
+//   getMenuData,
+//   clearMenuItem, 
+//   type RouteContextProps,
+// } from "antdv-pro-layout";
 const loading = ref(false);
 const watermarkContent = ref("Pro Layout");
 const router = useRouter();
 // 请重新渲染菜单数据
-const { menuData } = getMenuData(clearMenuItem(router.getRoutes()));
+// const { menuData } = getMenuData(clearMenuItem(router.getRoutes()));
 import { UserOutlined } from "@ant-design/icons-vue";
 
-const routes = menuData.map((item) => {
-  return {
-    ...item,
-    children: null,
-  };
-});
+// const routes = menuData.map((item) => {
+//   return {
+//     ...item,
+//     children: null,
+//   };
+// });
 
-const baseState = reactive<Omit<RouteContextProps, "menuData">>({
+const baseState = reactive<any>({
   selectedKeys: ["PageInfo"],
   openKeys: [],
 

@@ -2,30 +2,46 @@ import { fileURLToPath, URL } from "url";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
-import typescript from "@rollup/plugin-typescript";
-import lessCopy from "./vite-plugin-less-copy";
+import dts from "vite-plugin-dts";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), vueJsx(), lessCopy()],
   resolve: {
     alias: {
       "antdv-pro-layout": fileURLToPath(new URL("./src", import.meta.url)),
       "@": fileURLToPath(new URL("./playground", import.meta.url)),
     },
   },
-  css: {
-    postcss: {},
-    preprocessorOptions: {
-      less: {
-        // DO NOT REMOVE THIS LINE
-        javascriptEnabled: true,
-        // modifyVars: {
-        //   hack: `true; @import 'ant-design-vue/es/style/themes/default.less'`,
-        // }
-      },
-    },
-  },
+  plugins: [
+    vue(),
+    vueJsx(),
+    dts({
+      //指定使用的tsconfig.json为我们整个项目根目录下掉,如果不配置,你也可以在components下新建tsconfig.json
+      outDir: "dist/types",
+      exclude: [
+        "playground/**/*.ts",
+        "playground/**/*.tsx",
+        "playground/**/*.vue",
+      ],
+    }),
+    // {
+    //   name: "vite:import-css",
+    //   apply: "build",
+    //   enforce: "post",
+    //   renderChunk(code, chunk) {
+    //     // 判断是不是组件入口js
+    //     if (
+    //       !chunk.isEntry &&
+    //       chunk.type === "chunk" &&
+    //       /\index.(js)$/i.test(chunk.fileName)
+    //     ) {
+    //       // 截取出组件名称
+    //       let str = chunk.fileName.split("/")[0];
+    //       return `import './${str}.css';\n${code}`;
+    //     }
+    //   },
+    // },
+  ],
   build: {
     lib: {
       entry: fileURLToPath(new URL("./src/index.ts", import.meta.url)),
@@ -58,18 +74,6 @@ export default defineConfig({
           dayjs: "dayjs",
         },
       },
-      plugins: [
-        typescript({
-          tsconfig: "./tsconfig.build.json",
-          target: "es2020",
-          emitDeclarationOnly: true,
-          // outDir: 'dist',
-          // declaration: true,
-          // declarationDir: '.',
-          exclude: "node_modules/**",
-          // allowSyntheticDefaultImports: true,
-        }),
-      ],
     },
   },
 });
