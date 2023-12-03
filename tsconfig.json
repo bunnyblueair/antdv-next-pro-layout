@@ -14,6 +14,7 @@
     "noEmit": false,
     "declaration": true,
     "emitDeclarationOnly": true,
+    "jsxImportSource": "vue",
     "outDir": "dist",
     "typeRoots": ["./node_modules/@types"],
     "baseUrl": ".",

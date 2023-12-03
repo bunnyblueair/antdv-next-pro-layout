@@ -3,6 +3,8 @@
     <pro-layout
       :locale="locale"
       v-model:collapsed="state.collapsed"
+      breakpoint="md"
+      v-model:broken="proConfig.broken"
       v-model:selectedKeys="state.selectedKeys"
       v-model:openKeys="state.openKeys"
       :loading="loading"
@@ -10,7 +12,7 @@
       disable-content-margin
       style="min-height: 100vh"
       iconfont-url="//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js"
-      layout="mix"
+      v-model:layout="proConfig.layout"
       navTheme="light"
       fixedHeader
       fixSiderbar
@@ -39,7 +41,13 @@
         </router-link>
       </template>
 
-      <SettingDrawer v-model="proConfig" />
+      <div>
+        <SettingDrawer v-model="proConfig" v-model:visible="proConfigVisible" />
+        <button @click="() => (proConfigVisible = !proConfigVisible)">
+          proConfigVisible
+        </button>
+        {{ state }}
+      </div>
 
       <RouterView v-slot="{ Component, route }">
         <transition name="slide-left" mode="out-in">
@@ -74,9 +82,11 @@ const state = reactive<any>({
 });
 
 const loading = ref(false);
+const proConfigVisible = ref(false);
 
 const proConfig = ref({
-  layout: "mix",
+  broken: true,
+  layout: "side" as "side" | "mix" | "top",
   navTheme: "light",
   fixedHeader: true,
   fixSiderbar: true,
@@ -115,3 +125,9 @@ watch(
   }
 );
 </script>
+
+<style lang="less" scoped>
+.sd :deep(button) {
+  margin-top: 20px;
+}
+</style>

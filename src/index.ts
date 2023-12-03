@@ -1,3 +1,3 @@
-export { default as PageContainer } from "./BasicLayout";
+export { default as PageContainer } from "./components/PageContainer";
 
-export { default as ProLayout } from "./BasicLayout";
+export { default as ProLayout } from "./components/ProLayout";
