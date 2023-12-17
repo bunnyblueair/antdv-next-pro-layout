@@ -1,10 +1,4 @@
-import {
-  defineComponent,
-  type App,
-  type CSSProperties,
-  type PropType,
-  computed,
-} from "vue";
+import { defineComponent, type App, computed } from "vue";
 
 import {
   Layout,
@@ -13,22 +7,14 @@ import {
   LayoutFooter,
 } from "ant-design-vue";
 import "./index.less"; // 导入样式文件
-import SiderMenu, { SiderMenuEmits, SiderMenuProps } from "../SiderMenu";
-import { DefaultProps } from "../../types/props";
-import ProHeader from "../ProHeader";
+import ProMenu, { ProMenuProps } from "../components/ProMenu";
+import ProHeader from "../components/ProHeader";
+import { useRouter } from "vue-router";
 
 const ProLayout = defineComponent({
   name: "ProLayout",
-  props: { ...SiderMenuProps },
-  emits: [
-    ...SiderMenuEmits,
-    "update:open-keys",
-    "update:selected-keys",
-    "openKeys",
-    "select",
-    "menuHeaderClick",
-    "menuClick",
-  ],
+  props: { ...ProMenuProps },
+  emits: ["update:collapsed", "menuSelect"],
   setup(props, { emit, attrs, slots }) {
     // const mediaScreenSize = useMediaQuery();
     // const isMobile = computed(
@@ -36,25 +22,33 @@ const ProLayout = defineComponent({
     //     (mediaScreenSize.value === "sm" || mediaScreenSize.value === "xs") &&
     //     props.mobile
     // );
-
-    const hasSider = !(props.layout === "top");
+    const router = useRouter();
 
     return () => {
+      const hasSider = !(props.layout === "top");
+
       return (
         <Layout
           class="ant-pro-layout"
           hasSider={hasSider}
           data-theme={props.theme}
         >
-          {hasSider ? (
-            <SiderMenu
+          {hasSider && (
+            <ProMenu
               {...Object.assign({}, props, {
                 onCollapse: (collapsed: boolean) => {
                   emit("update:collapsed", collapsed);
                 },
+                onSelect: (e: any) => {
+                  emit("menuSelect", e);
+                  // 跳转路由地址
+                  router.push({
+                    path: e.key,
+                  });
+                },
               })}
-            ></SiderMenu>
-          ) : null}
+            ></ProMenu>
+          )}
 
           <Layout>
             <ProHeader hasSider={hasSider} {...props}>
