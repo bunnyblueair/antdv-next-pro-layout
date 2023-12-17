@@ -2,12 +2,13 @@
   <a-watermark content="Pro Layout" :z-index="100">
     <pro-layout
       :locale="locale"
-      v-model:collapsed="state.collapsed"
       breakpoint="md"
-      v-model:broken="proConfig.broken"
+      v-model:collapsed="state.collapsed"
       v-model:selectedKeys="state.selectedKeys"
       v-model:openKeys="state.openKeys"
       :loading="loading"
+      :menu-data="menuData"
+      @menuSelect="(e:any)=>console.log('menuSelect',e)"
       :breadcrumb="{ routes: breadcrumb }"
       disable-content-margin
       style="min-height: 100vh"
@@ -41,12 +42,13 @@
         </router-link>
       </template>
 
-      <div>
+      <div style="display: block; background-color: beige">
         <SettingDrawer v-model="proConfig" v-model:visible="proConfigVisible" />
         <button @click="() => (proConfigVisible = !proConfigVisible)">
           proConfigVisible
         </button>
-        {{ state }}
+        <div>{{ state }}</div>
+        <div>{{ proConfig }}</div>
       </div>
 
       <RouterView v-slot="{ Component, route }">
@@ -62,8 +64,8 @@
 import { useRouter, RouterView, RouterLink } from "vue-router";
 import {
   ProLayout,
-  // getMenuData,
-  // clearMenuItem,
+  getMenuData,
+  clearMenuItem,
   // RouteContextProps,
   // MenuDataItem,
 } from "antdv-pro-layout";
@@ -73,7 +75,7 @@ import RightContent from "@/components/RightContent/RightContent.vue";
 import SettingDrawer from "@/components/SettingDrawer/SettingDrawer.vue";
 
 const router = useRouter();
-// const { menuData } = getMenuData(clearMenuItem(router.getRoutes()));
+const { menuData } = getMenuData(clearMenuItem(router.getRoutes()));
 
 const state = reactive<any>({
   collapsed: false, // default collapsed
@@ -85,8 +87,7 @@ const loading = ref(false);
 const proConfigVisible = ref(false);
 
 const proConfig = ref({
-  broken: true,
-  layout: "side" as "side" | "mix" | "top",
+  layout: "top" as "side" | "mix" | "top",
   navTheme: "light",
   fixedHeader: true,
   fixSiderbar: true,
