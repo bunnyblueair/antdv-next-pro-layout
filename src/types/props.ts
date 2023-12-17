@@ -1,4 +1,7 @@
 import { type PropType } from "vue";
+import { MenuDataItem } from "./menu";
+// import { menuProps } from "ant-design-vue/es/menu/src/Menu";
+// import { siderProps } from "ant-design-vue/es/layout/Sider";
 
 export const DefaultProps = {
   /**样式前缀 */
@@ -41,4 +44,34 @@ export const DefaultProps = {
     type: [String, Number],
     default: 200,
   },
+
+  /**菜单数据 */
+  menuData: {
+    type: Array as PropType<MenuDataItem[]>,
+    default: () => [],
+  },
+  /**菜单本地化 */
+  locale: {
+    type: Function as PropType<(menuDataItem: MenuDataItem) => string>,
+    default: (menuDataItem: MenuDataItem) => menuDataItem.meta?.title,
+  },
+  /**菜单字体图标引用 */
+  iconfontUrl: {
+    type: String,
+    default: "",
+  },
+  /**菜单字体图标前缀 */
+  iconPrefixes: {
+    type: String,
+    default: "icon-",
+  },
 };
+
+// export const ProMenuProps = {
+//   // 菜单栏
+//   ...menuProps(),
+//   // 侧边栏
+//   ...siderProps(),
+//   // 默认
+//   ...DefaultProps,
+// };
