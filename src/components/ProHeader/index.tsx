@@ -21,19 +21,20 @@ const ProHeader = defineComponent({
      * 固定侧边栏-占位
      */
     const fixHeaderBarStyle = (props: any) => {
-      const { collapsed, collapsedWidth, width } = props;
+      const { hasSider, collapsed, collapsedWidth, width } = props;
       const collapsedWidthStr =
         typeof collapsedWidth === "number"
           ? `${collapsedWidth}px`
           : collapsedWidth;
       const widthStr = typeof width === "number" ? `${width}px` : width;
       const widthStyle = `${collapsed ? collapsedWidthStr : widthStr}`;
+      const calcWidth = hasSider ? `calc(100% - ${widthStyle})` : "100%";
       return {
         padding: "0px",
         height: "48px",
         lineHeight: "48px",
-        width: `calc(100% - ${widthStyle})`,
-        zIndex: 19,
+        width: calcWidth,
+        zIndex: 1000,
         right: "0px",
       };
     };
