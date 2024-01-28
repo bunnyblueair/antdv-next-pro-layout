@@ -1,0 +1,76 @@
+.antv-pro-layout-header-logo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: padding 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+
+  & > img {
+    height: 36px;
+    vertical-align: middle;
+  }
+  & > span {
+    margin-left: 12px;
+    margin-right: 24px;
+    color: var(--ant-primary-color);
+    font-weight: 600;
+    font-size: 18px;
+    width: 128px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &__collapsed {
+    padding: 16px;
+  }
+
+  &__top {
+    overflow: hidden;
+  }
+
+  &__side {
+    padding: 16px;
+  }
+
+  & > a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+  }
+  & > a > img {
+    display: inline-block;
+    height: 32px;
+    vertical-align: middle;
+  }
+  & > a > h1 {
+    display: inline-block;
+    height: 32px;
+    margin: 0 0 0 12px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 32px;
+    vertical-align: middle;
+    animation: sider-logo-hide 0.3s;
+  }
+}
+
+// logo隐藏动画
+@keyframes sider-logo-hide {
+  0% {
+    display: none;
+    opacity: 0;
+  }
+
+  80% {
+    display: none;
+    opacity: 0;
+  }
+
+  to {
+    display: unset;
+    opacity: 1;
+  }
+}

@@ -1,5 +1,5 @@
 <template>
-    <div style="margin-right: 12px">
+    <div>
       <a-space>
         <a style="padding: 0 12px; display: inline-block; user-select: none" @click="handleClick"><BgColorsOutlined /></a>
         <a-dropdown>

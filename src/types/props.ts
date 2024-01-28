@@ -1,14 +1,14 @@
-import { type PropType } from "vue";
+import { CSSProperties, ExtractPropTypes, type PropType } from "vue";
 import { MenuDataItem } from "./menu";
 // import { menuProps } from "ant-design-vue/es/menu/src/Menu";
 // import { siderProps } from "ant-design-vue/es/layout/Sider";
 
-export const DefaultProps = {
+export const confProps = () => ({
   /**样式前缀 */
-  // prefixCls: {
-  //   type: String,
-  //   default: "antdv-pro",
-  // },
+  prefixCls: {
+    type: String,
+    default: "antdv-pro",
+  },
   /**布局 side mix top */
   layout: {
     type: String as PropType<"side" | "mix" | "top">,
@@ -19,13 +19,14 @@ export const DefaultProps = {
     type: String as PropType<"light" | "dark">,
     default: "light",
   },
+
   // 固定顶栏
-  fixHeaderBar: {
+  fixedHeader: {
     type: Boolean,
     default: true,
   },
   // 固定侧边
-  fixSiderBar: {
+  fixedSider: {
     type: Boolean,
     default: true,
   },
@@ -65,13 +66,5 @@ export const DefaultProps = {
     type: String,
     default: "icon-",
   },
-};
-
-// export const ProMenuProps = {
-//   // 菜单栏
-//   ...menuProps(),
-//   // 侧边栏
-//   ...siderProps(),
-//   // 默认
-//   ...DefaultProps,
-// };
+});
+export type ConfProps = Partial<ExtractPropTypes<ReturnType<typeof confProps>>>;

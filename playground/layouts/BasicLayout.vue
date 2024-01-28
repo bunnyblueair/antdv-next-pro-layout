@@ -1,63 +1,63 @@
 <template>
-  <a-watermark content="Pro Layout" :z-index="100">
-    <pro-layout
-      :locale="locale"
-      breakpoint="md"
-      v-model:collapsed="state.collapsed"
-      v-model:selectedKeys="state.selectedKeys"
-      v-model:openKeys="state.openKeys"
-      :loading="loading"
-      :menu-data="menuData"
-      @menuSelect="(e:any)=>console.log('menuSelect',e)"
-      :breadcrumb="{ routes: breadcrumb }"
-      disable-content-margin
-      style="min-height: 100vh"
-      iconfont-url="//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js"
-      v-model:layout="proConfig.layout"
-      navTheme="light"
-      fixedHeader
-      fixSiderbar
-      splitMenus
-    >
-      <template #menuHeaderRender>
-        <router-link :to="{ path: '/' }">
-          <img src="https://alicdn.antdv.com/v2/assets/logo.1ef800a8.svg" />
-          <h1>Preview Pro</h1>
-        </router-link>
-      </template>
+  <!-- <a-watermark content="Pro Layout" :z-index="100"> -->
+  <pro-layout
+    :locale="locale"
+    breakpoint="md"
+    v-model:collapsed="state.collapsed"
+    v-model:selectedKeys="state.selectedKeys"
+    v-model:openKeys="state.openKeys"
+    :loading="loading"
+    :menu-data="menuData"
+    @menuSelect="(e:any)=>console.log('menuSelect',e)"
+    @collapse="(e:any)=>console.log('collapse',e)"
+    :breadcrumb="{ routes: breadcrumb }"
+    disable-content-margin
+    style="min-height: 100vh"
+    iconfont-url="//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js"
+    v-model:layout="proConfig.layout"
+    navTheme="light"
+    fixedHeader
+    fixSiderbar
+    splitMenus
+  >
+    <template #menuHeaderRender>
+      <router-link :to="{ path: '/' }">
+        <img src="https://alicdn.antdv.com/v2/assets/logo.1ef800a8.svg" />
+        <h1>Preview Pro</h1>
+      </router-link>
+    </template>
 
-      <template #rightContentRender>
-        <RightContent :current-user="currentUser" />
-      </template>
+    <template #headerRight>
+      <RightContent :current-user="currentUser" />
+    </template>
 
-      <!-- custom breadcrumb itemRender  -->
-      <template #breadcrumbRender="{ route, params, routes }">
-        <span v-if="routes.indexOf(route) === routes.length - 1">
-          <HeartOutlined />
-          {{ route.breadcrumbName }}
-        </span>
-        <router-link v-else :to="{ path: route.path, params }">
-          <SmileOutlined />
-          {{ route.breadcrumbName }}
-        </router-link>
-      </template>
+    <!-- custom breadcrumb itemRender  -->
+    <template #breadcrumbRender="{ route, params, routes }">
+      <span v-if="routes.indexOf(route) === routes.length - 1">
+        <HeartOutlined />
+        {{ route.breadcrumbName }}
+      </span>
+      <router-link v-else :to="{ path: route.path, params }">
+        <SmileOutlined />
+        {{ route.breadcrumbName }}
+      </router-link>
+    </template>
 
-      <div style="display: block; background-color: beige">
-        <SettingDrawer v-model="proConfig" v-model:visible="proConfigVisible" />
-        <button @click="() => (proConfigVisible = !proConfigVisible)">
-          proConfigVisible
-        </button>
-        <div>{{ state }}</div>
-        <div>{{ proConfig }}</div>
-      </div>
+    <div style="display: block; background-color: beige">
+      <SettingDrawer v-model="proConfig" v-model:visible="proConfigVisible" />
+      <button @click="() => (proConfigVisible = !proConfigVisible)">
+        proConfigVisible
+      </button>
+      <div>{{ state }}</div>
+    </div>
 
-      <RouterView v-slot="{ Component, route }">
-        <transition name="slide-left" mode="out-in">
-          <component :is="Component" :key="route.path" />
-        </transition>
-      </RouterView>
-    </pro-layout>
-  </a-watermark>
+    <RouterView v-slot="{ Component, route }">
+      <transition name="slide-left" mode="out-in">
+        <component :is="Component" :key="route.path" />
+      </transition>
+    </RouterView>
+  </pro-layout>
+  <!-- </a-watermark> -->
 </template>
 
 <script setup lang="ts">
@@ -87,11 +87,15 @@ const loading = ref(false);
 const proConfigVisible = ref(false);
 
 const proConfig = ref({
-  layout: "top" as "side" | "mix" | "top",
-  navTheme: "light",
+  layout: "side" as "side" | "mix" | "top",
+  theme: "light" as "light" | "dark",
   fixedHeader: true,
-  fixSiderbar: true,
+  fixedSider: true,
   splitMenus: true,
+  // locale: (menuData: any) => menuData.meta?.title,
+  menuData: menuData as any,
+  // iconPrefixes: "icon-",
+  // iconfontUrl: "//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js",
 });
 
 const locale = (menuData: any) => menuData.meta?.title;

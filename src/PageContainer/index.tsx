@@ -26,7 +26,7 @@ const PageContainer = defineComponent({
             </PageHeader>
           </div>
 
-          <div class="ant-pro-page-container__content">{slots.default?.()}</div>
+          <div class="antv-pro-page-container__content">{slots.default?.()}</div>
         </div>
       );
     };

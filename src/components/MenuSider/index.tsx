@@ -1,26 +1,45 @@
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons-vue";
 import { Menu, MenuItem } from "ant-design-vue";
 import Sider, { siderProps } from "ant-design-vue/es/layout/Sider";
-import { defineComponent } from "vue";
+import { PropType, defineComponent } from "vue";
 import "./index.less"; // 导入样式文件
-import { DefaultProps } from "../../../../types/props";
+import { ConfProps, confProps } from "../../types/props";
+import { MenuProps, menuProps } from "ant-design-vue/lib/menu/src/Menu";
+import { SiderProps } from "ant-design-vue/lib/layout/Sider";
 
-const SiderMenu = defineComponent({
-  name: "SiderMenu",
+const MenuSider = defineComponent({
+  name: "MenuSider",
   props: {
-    // 左侧菜单栏
+    ...menuProps(),
     ...siderProps(),
-    // 默认
-    ...DefaultProps,
+    ...confProps(),
   },
-  emits: [],
+  // props: {
+  //   // 菜单栏
+  //   menu: {
+  //     type: Object as PropType<MenuProps>,
+  //     default: menuProps(),
+  //   },
+  //   // 侧边栏
+  //   sider: {
+  //     type: Object as PropType<SiderProps>,
+  //     default: siderProps(),
+  //   },
+  //   // 布局设置
+  //   conf: {
+  //     type: Object as PropType<ConfProps>,
+  //     default: confProps(),
+  //   },
+  // },
+  emits: ["update:collapsed"],
   inheritAttrs: false,
   setup(props, { emit, attrs, slots }) {
     /**
      * 固定侧边栏-占位
      */
-    const fixSiderBarStyle = (props: any) => {
-      const { collapsed, collapsedWidth, width } = props;
+    const fixSiderBarStyle = (conf: ConfProps) => {
+      let { collapsed = false, collapsedWidth = 48, width = 200 } = conf;
+
       const collapsedWidthStr =
         typeof collapsedWidth === "number"
           ? `${collapsedWidth}px`
@@ -39,42 +58,23 @@ const SiderMenu = defineComponent({
     };
 
     /**
-     * 菜单头渲染-默认
-     */
-    const menuHeaderRenderDefault = (collapsed?: boolean) => {
-      return (
-        <div
-          class={{
-            "ant-pro-sider-logo": true,
-            "ant-pro-sider-logo-collapsed": collapsed,
-          }}
-        >
-          <a>
-            <img
-              src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg"
-              alt="logo"
-            />
-            {collapsed ? null : <h1>Ant Design Pro </h1>}
-          </a>
-        </div>
-      );
-    };
-
-    /**
      * 菜单收起按钮渲染-默认
      */
-    const collapsedButtonRenderDefault = (props: any) => {
+    const collapsedButtonRenderDefault = (conf: ConfProps) => {
+      let { collapsed = false, theme = "light" } = conf;
+
       return (
         <Menu
-          theme={props.theme}
+          theme={theme}
           mode="inline"
           selectable={false}
           onClick={() => {
-            props.onCollapse?.(!props.collapsed, "clickTrigger");
+            props.onCollapse?.(!collapsed, "clickTrigger");
+            emit("update:collapsed", !collapsed);
           }}
         >
           <MenuItem key="collapsed" title={false}>
-            {props.collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
           </MenuItem>
         </Menu>
       );
@@ -85,23 +85,19 @@ const SiderMenu = defineComponent({
         <>
           {
             // 固定侧边栏占位
-            props.fixSiderBar && <aside style={fixSiderBarStyle(props)}></aside>
+            props.fixedSider && <aside style={fixSiderBarStyle(props)}></aside>
           }
 
           <Sider
-            {...props}
+            collapsed={props.collapsed}
+            breakpoint={props.breakpoint}
             class={{
               "ant-pro-sider": true,
-              "ant-pro-sider-fixed": props.fixSiderBar,
+              "ant-pro-sider-fixed": props.fixedSider,
             }}
             trigger={null}
           >
-            {
-              // 菜单头渲染
-              slots.menuHeaderRender
-                ? slots.menuHeaderRender(props)
-                : menuHeaderRenderDefault(props.collapsed)
-            }
+            {slots.menuHeader?.(props)}
 
             <div style="flex: 1 1 0%; overflow: hidden auto;">
               {slots.default?.(props)}
@@ -116,7 +112,7 @@ const SiderMenu = defineComponent({
 
             {
               // 菜单底部渲染
-              slots.menuFooterRender?.(props)
+              slots.menuFooter?.(props)
             }
           </Sider>
         </>
@@ -125,4 +121,4 @@ const SiderMenu = defineComponent({
   },
 });
 
-export default SiderMenu;
+export default MenuSider;

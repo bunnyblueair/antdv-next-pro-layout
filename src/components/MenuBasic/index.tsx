@@ -7,30 +7,50 @@ import {
   createFromIconfontCN,
 } from "@ant-design/icons-vue";
 import { Menu, MenuItem, MenuItemGroup, SubMenu } from "ant-design-vue";
-import { VNodeChild, defineComponent, isVNode } from "vue";
+import { PropType, VNodeChild, defineComponent, isVNode } from "vue";
 import "./index.less"; // 导入样式文件
-import { DefaultProps } from "../../../../types/props";
 import { menuProps } from "ant-design-vue/es/menu/src/Menu";
-import { MenuDataItem } from "../../../../types/menu";
-import { isImg, isUrl } from "../../../../utils/is";
+import { MenuDataItem } from "../../types/menu";
+import { isImg, isUrl } from "../../utils/is";
+import { RouterLink } from "vue-router";
+import { ConfProps, confProps } from "../../types/props";
+import { MenuMode, MenuProps } from "ant-design-vue/lib/menu";
 
-const BasicMenu = defineComponent({
-  name: "BasicMenu",
+const MenuBasic = defineComponent({
+  name: "MenuBasic",
   props: {
-    // 菜单栏
     ...menuProps(),
-    // 默认
-    ...DefaultProps,
+    mode: {
+      type: String as PropType<MenuMode>,
+      default: "horizontal",
+    },
+    ...confProps(),
   },
+  // props: {
+  //   // 菜单栏
+  //   menu: {
+  //     type: Object as PropType<MenuProps>,
+  //     default: menuProps(),
+  //   },
+  //   mode: {
+  //     type: String as PropType<MenuMode>,
+  //     default: "horizontal",
+  //   },
+  //   // 布局设置
+  //   conf: {
+  //     type: Object as PropType<ConfProps>,
+  //     default: confProps(),
+  //   },
+  // },
   emits: [],
   inheritAttrs: false,
   setup(props, { emit, attrs, slots }) {
-    const { iconfontUrl, iconPrefixes, locale } = props;
+    const { iconfontUrl, iconPrefixes, locale, menuData } = props;
 
     /**字体图标组件 */
-    let IconFont = createFromIconfontCN();
+    let IconFont: any = null;
     if (iconfontUrl) {
-      createFromIconfontCN({
+      IconFont = createFromIconfontCN({
         scriptUrl: iconfontUrl,
       });
     }
@@ -38,10 +58,9 @@ const BasicMenu = defineComponent({
     /**
      * 菜单图标渲染
      * @param icon 图标组件或字符
-     * @param iconPrefixes 字体图标前缀
      * @returns
      */
-    const menuIconRender = (icon: VNodeChild, iconPrefixes: string) => {
+    const menuIconRender = (icon: VNodeChild) => {
       if (!icon) {
         return null;
       }
@@ -52,11 +71,11 @@ const BasicMenu = defineComponent({
         if (isUrl(icon) || isImg(icon)) {
           return <img src={icon} alt="icon" class={`ant-pro-menu-icon`} />;
         }
-        if (icon.startsWith(iconPrefixes)) {
+        if (iconfontUrl && iconPrefixes && icon.startsWith(iconPrefixes)) {
           return <IconFont type={icon} />;
         }
       }
-      return icon;
+      return "";
     };
 
     /**
@@ -64,7 +83,11 @@ const BasicMenu = defineComponent({
      */
     const menuItemRender = (menusData: MenuDataItem[] = []) => {
       return menusData.map((item) => {
-        const menuTitle = locale(item);
+        // 菜单标题
+        let menuTitle = item.meta?.title;
+        if (typeof locale === "function") {
+          menuTitle = locale(item);
+        }
 
         // 有子菜单
         if (Array.isArray(item.children)) {
@@ -85,7 +108,7 @@ const BasicMenu = defineComponent({
               title={titleRender}
               key={item.path}
               popupClassName="ant-pro-menu-popup"
-              icon={menuIconRender(item.meta?.icon, iconPrefixes)}
+              icon={menuIconRender(item.meta?.icon)}
             >
               {menuItemRender(item.children)}
             </SubMenu>
@@ -96,17 +119,17 @@ const BasicMenu = defineComponent({
         const icon = item.meta?.icon;
         const target = item.meta?.target;
         const hasUrl = isUrl(item.path);
-        const attrs =
-          hasUrl || target ? { ...item.meta, href: item.path, target } : {};
+        const attrs = hasUrl || target ? { href: item.path, target } : {};
+        const props = { to: { name: item.name, ...item.meta } };
         const titleRender = icon ? (
-          <a {...attrs} class="ant-pro-menu-item">
-            {menuIconRender(icon, iconPrefixes)}
+          <RouterLink {...attrs} {...props} class="ant-pro-menu-item">
+            {menuIconRender(icon)}
             <span class="ant-pro-menu-item__title">{menuTitle}</span>
-          </a>
+          </RouterLink>
         ) : (
-          <a {...attrs} class="ant-pro-menu-item">
+          <RouterLink {...attrs} {...props} class="ant-pro-menu-item">
             {menuTitle}
-          </a>
+          </RouterLink>
         );
         return (
           <MenuItem
@@ -123,21 +146,17 @@ const BasicMenu = defineComponent({
 
     return () => {
       return (
-        <Menu
-          class="ant-pro-menu"
-          {...Object.assign({}, props, {
-            mode: props.layout === "top" ? "horizontal" : "inline",
-          })}
-        >
-          {Array.isArray(props.menuData) && menuItemRender(props.menuData)}
+        <Menu class="ant-pro-menu" {...props}>
+          {Array.isArray(menuData) && menuItemRender(menuData)}
 
+          {/* 废弃代码 */}
           <MenuItem key="1">
             <PieChartOutlined />
             <span>Option 1{props.collapsed}</span>
           </MenuItem>
           <MenuItem key="2">
             <DesktopOutlined />
-            <span>Option 2{JSON.stringify(props.menuData)}</span>
+            <span>Option 2 </span>
           </MenuItem>
           <SubMenu
             key="sub1"
@@ -177,4 +196,4 @@ const BasicMenu = defineComponent({
   },
 });
 
-export default BasicMenu;
+export default MenuBasic;
