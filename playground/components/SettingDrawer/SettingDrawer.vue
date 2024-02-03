@@ -1,6 +1,6 @@
 <template>
   <a-drawer
-    v-model:open="props.visible"
+    v-model:open="visible"
     :width="300"
     placement="right"
     :closable="false"
@@ -126,12 +126,12 @@ type ConfType = "layout" | "fixedHeader" | "fixSiderbar" | string;
 
 const props = defineProps<{
   modelValue: Record<string, string | boolean | undefined>;
-    visible: boolean;
 }>();
-const emit = defineEmits(["update:modelValue","update:visible"]);
+const emit = defineEmits(["update:modelValue"]);
 
+const visible = ref<boolean>(true);
 const handleShowDrawer = () => {
-  emit("update:visible", !props.visible);
+  visible.value = !visible.value;
 };
 
 const updateConf = (val: any, type: ConfType) => {

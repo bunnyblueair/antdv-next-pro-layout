@@ -1,44 +1,35 @@
 <template>
-  <PageContainer :title="title" :ghost="false">
+  <PageContainer :title="title">
     <template #content>
-      <a-row>
-        <a-col :span="18">
-          <a-descriptions size="small" :column="2">
-            <a-descriptions-item label="创建人">张三</a-descriptions-item>
-            <a-descriptions-item label="联系方式">
-              <a>421421</a>
-            </a-descriptions-item>
-            <a-descriptions-item label="创建时间"
-              >2017-01-10</a-descriptions-item
-            >
-            <a-descriptions-item label="更新时间"
-              >2017-10-10</a-descriptions-item
-            >
-            <a-descriptions-item label="备注">
-              中国浙江省杭州市西湖区古翠路
-            </a-descriptions-item>
-          </a-descriptions>
-        </a-col>
-        <a-col :span="6">
-          <a-space>
-            <a-statistic title="Feedback" :value="1128">
-              <template #prefix>
-                <LikeOutlined />
-              </template>
-            </a-statistic>
-            <a-statistic title="Unmerged" :value="93" suffix="/ 100" />
-          </a-space>
-        </a-col>
-      </a-row>
+      <a-descriptions size="small" :column="2">
+        <a-descriptions-item label="创建人">张三</a-descriptions-item>
+        <a-descriptions-item label="联系方式">
+          <a>421421</a>
+        </a-descriptions-item>
+        <a-descriptions-item label="创建时间">2017-01-10</a-descriptions-item>
+        <a-descriptions-item label="更新时间">2017-10-10</a-descriptions-item>
+        <a-descriptions-item label="备注">
+          中国浙江省杭州市西湖区古翠路
+        </a-descriptions-item>
+      </a-descriptions>
     </template>
     <template #extra>
       <a-button key="3">操作</a-button>
       <a-button key="2">操作</a-button>
       <a-button key="1" type="primary">主操作</a-button>
     </template>
-
+    <template #extraContent>
+      <a-space>
+        <a-statistic title="Feedback" :value="1128">
+          <template #prefix>
+            <LikeOutlined />
+          </template>
+        </a-statistic>
+        <a-statistic title="Unmerged" :value="93" suffix="/ 100" />
+      </a-space>
+    </template>
     <!-- 主内容区 -->
-    <div style="height: 100vh">
+    <div style="height: 120vh">
       <a-result
         status="404"
         :style="{

@@ -1,0 +1,59 @@
+.ant-pro-basicLayout {
+  // BFC
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100%;
+
+  .ant-layout-header {
+    &.ant-pro-fixed-header {
+      position: fixed;
+      top: 0;
+    }
+  }
+
+  &-content {
+    position: relative;
+    margin: 24px;
+
+    .ant-pro-page-container {
+      margin: -24px -24px 0;
+    }
+
+    &-disable-margin {
+      margin: 0;
+
+      .ant-pro-page-container {
+        margin: 0;
+      }
+    }
+    > .ant-layout {
+      max-height: 100%;
+    }
+  }
+
+  // children should support fixed
+  .ant-pro-basicLayout-is-children.ant-pro-basicLayout-fix-siderbar {
+    height: 100vh;
+    overflow: hidden;
+    transform: rotate(0);
+  }
+
+  &.ant-pro-basicLayout-has-header {
+    // tech-page-container
+    .tech-page-container {
+      height: calc(100vh - 48px);
+    }
+    .ant-pro-basicLayout-is-children.ant-pro-basicLayout-has-header {
+      .tech-page-container {
+        height: calc(100vh - 48px - 48px);
+      }
+      .ant-pro-basicLayout-is-children {
+        min-height: calc(100vh - 48px);
+        &.ant-pro-basicLayout-fix-siderbar {
+          height: calc(100vh - 48px);
+        }
+      }
+    }
+  }
+}

@@ -1,12 +1,12 @@
 <template>
-  <ConfigProvider>
+  <ConfigProvider :theme="{ token: { colorPrimary: load(), borderRadius: 6 } }">
     <router-view />
   </ConfigProvider>
 </template>
 
 <script setup lang="ts">
-import { ConfigProvider } from 'ant-design-vue';
-import { useUserTheme } from './hooks/useTheme';
+import { ConfigProvider } from "ant-design-vue";
+import { useUserTheme, load } from "./hooks/useTheme";
 
 useUserTheme();
 </script>
