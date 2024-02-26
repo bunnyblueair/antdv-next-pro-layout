@@ -314,7 +314,7 @@ Recommend look [Examples](./playground/) or [Use Template](https://gitee.com/TsM
 - v3.1 : Vue3 + `ant-design-vue@2.2.x` (release LTS)
 - v2 : Vue2 + `ant-design-vue@1.7.x`
 
-计划升级V4版本++++++
+当前分支v4版本，还在持续更新
 
 ## 持续维护 Continuous Maintenance
 
