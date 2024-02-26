@@ -15,7 +15,7 @@ import {
 } from "vue";
 
 import { Layout } from "ant-design-vue";
-import useConfigInject from "ant-design-vue/es/config-provider/hooks/useConfigInject";
+// import useConfigInject from "ant-design-vue/es/config-provider/hooks/useConfigInject";
 import useMediaQuery from "./hooks/useMediaQuery";
 
 import { defaultSettingProps } from "./defaultSettings";
@@ -54,7 +54,7 @@ import type {
 } from "./RenderTypings";
 
 import PageLoading from "./components/PageLoading";
-import "./BasicLayout.less";
+import "./BasicLayout.css";
 
 export const basicLayoutProps = {
   ...defaultSettingProps,

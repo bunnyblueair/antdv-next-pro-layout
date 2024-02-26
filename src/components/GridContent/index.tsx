@@ -1,4 +1,4 @@
-import './index.less';
+import './index.css';
 
 import type { FunctionalComponent, CSSProperties } from 'vue';
 import type { PureSettings } from '../../defaultSettings';

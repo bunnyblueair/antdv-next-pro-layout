@@ -8,7 +8,7 @@ import { TopNavHeader } from './components/TopNavHeader';
 import { useRouteContext } from './RouteContext';
 import type { CustomRender, WithFalse } from './typings';
 import { clearMenuItem } from './utils';
-import './Header.less';
+import './Header.css';
 import { Layout } from 'ant-design-vue';
 import PropTypes from 'ant-design-vue/es/_util/vue-types';
 

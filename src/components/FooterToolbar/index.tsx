@@ -1,4 +1,4 @@
-import './index.less';
+import './index.css';
 
 import { computed, defineComponent, onBeforeUnmount, onMounted, unref, type PropType } from 'vue';
 import { type RouteContextProps, useRouteContext } from '../../RouteContext';

@@ -1,6 +1,3 @@
-import './default.less';
-import './style.less';
-
 export * from './RouteContext';
 export * from './typings';
 export * from './utils/getMenuData';

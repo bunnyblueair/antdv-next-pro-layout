@@ -30,7 +30,7 @@ import type { MenuMode } from './typings';
 import type { MenuDataItem, MenuTheme, FormatLocale, LayoutType, WithFalse } from '../../typings';
 import type { MenuItemRender, SubMenuItemRender } from '../../RenderTypings';
 
-import './index.less';
+import './index.css';
 
 export function useRootSubmenuKeys(menus: MenuDataItem[]): ComputedRef<string[]> {
   return computed(() => menus.map((it) => it.path));

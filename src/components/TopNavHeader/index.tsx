@@ -5,7 +5,7 @@ import { BaseMenu, siderMenuProps, defaultRenderLogoAndTitle } from '../SiderMen
 import type { SiderMenuProps } from '../SiderMenu/SiderMenu';
 import { useRouteContext } from '../../RouteContext';
 
-import './index.less';
+import './index.css';
 
 export const topNavHeaderProps = { ...siderMenuProps, ...globalHeaderProps };
 

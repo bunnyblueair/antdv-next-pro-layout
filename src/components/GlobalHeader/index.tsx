@@ -12,7 +12,7 @@ import { clearMenuItem } from '../../utils';
 import { useRouteContext } from '../../RouteContext';
 import type headerProps from './headerProps';
 
-import './index.less';
+import './index.css';
 
 export type GlobalHeaderProps = ExtractPropTypes<typeof headerProps>;
 

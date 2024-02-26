@@ -1,4 +1,4 @@
-import './index.less';
+import './index.css';
 
 import { defineComponent, type PropType, type SetupContext } from 'vue';
 import type { WithFalse, CustomRender } from '../../typings';

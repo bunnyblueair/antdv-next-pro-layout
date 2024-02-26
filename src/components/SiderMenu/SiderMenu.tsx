@@ -16,7 +16,7 @@ import type { SiderProps } from './typings';
 import { defaultSettingProps } from '../../defaultSettings';
 import { useRouteContext } from '../../RouteContext';
 import PropTypes from 'ant-design-vue/es/_util/vue-types';
-import './index.less';
+import './index.css';
 import type {
   MenuHeaderRender,
   MenuFooterRender,

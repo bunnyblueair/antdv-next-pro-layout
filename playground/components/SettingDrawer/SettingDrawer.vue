@@ -144,7 +144,7 @@ const updateConf = (val: any, type: ConfType) => {
 };
 </script>
 
-<style lang="less">
+<style scoped>
 .ant-pro-setting-drawer-handle {
   position: absolute;
   top: 240px;
@@ -161,10 +161,9 @@ const updateConf = (val: any, type: ConfType) => {
   border-radius: 4px 0 0 4px;
   cursor: pointer;
   pointer-events: auto;
-
-  > span {
-    color: rgb(255, 255, 255);
-    font-size: 20px;
-  }
+}
+.ant-pro-setting-drawer-handle > span {
+  color: #ffffff;
+  font-size: 20px;
 }
 </style>

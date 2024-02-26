@@ -1,0 +1,71 @@
+.ant-pro-global-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 16px;
+  color: #000000d9;
+  background: #fff;
+  box-shadow: 0 1px 4px #00152914;
+}
+.ant-pro-global-header > * {
+  height: 100%;
+}
+.ant-pro-global-header-collapsed-button {
+  display: flex;
+  align-items: center;
+  margin-left: 16px;
+  font-size: 20px;
+}
+.ant-pro-global-header-layout-mix {
+  background-color: '#fff';
+}
+.ant-pro-global-header-layout-mix .ant-pro-global-header-logo h1 {
+  color: '#000';
+}
+.ant-pro-global-header-layout-mix .anticon {
+  color: '#000';
+}
+.ant-pro-global-header-logo {
+  position: relative;
+  overflow: hidden;
+}
+.ant-pro-global-header-logo a {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+.ant-pro-global-header-logo a img {
+  height: 28px;
+}
+.ant-pro-global-header-logo a h1 {
+  height: 32px;
+  margin: 0 0 0 8px;
+  margin: 0 0 0 12px;
+  color: '#000';
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 32px;
+}
+.ant-pro-global-header-menu .anticon {
+  margin-right: 8px;
+}
+.ant-pro-global-header-menu .ant-dropdown-menu-item {
+  min-width: 160px;
+}
+.ant-pro-global-header .dark {
+  height: 48px;
+}
+.ant-pro-global-header .dark .action {
+  color: rgba(255, 255, 255, 0.85);
+}
+.ant-pro-global-header .dark .action > i {
+  color: rgba(255, 255, 255, 0.85);
+}
+.ant-pro-global-header .dark .action:hover,
+.ant-pro-global-header .dark .action.opened {
+  background: '#000';
+}
+.ant-pro-global-header .dark .action .ant-badge {
+  color: rgba(255, 255, 255, 0.85);
+}
