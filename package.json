@@ -1,7 +1,7 @@
 {
   "name": "antdv-pro-layout",
   "type": "module",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Ant Design Pro Layout of Vue, easy to use pro scaffolding.",
   "keywords": [
     "Ant Design Vue",
@@ -27,14 +27,13 @@
   "files": [
     "dist"
   ],
-  "types": "./dist",
+  "types": "./dist/types",
   "style": "./dist/style.css",
-  "main": "./dist/antdv-pro-layout.umd.js",
-  "umd": "./dist/antdv-pro-layout.umd.cjs",
-  "module": "./dist/antdv-pro-layout.umd.cjs",
+  "main": "./dist/antdv-pro-layout.umd.cjs",
+  "module": "./dist/antdv-pro-layout.js",
   "exports": {
     ".": {
-      "import": "./dist/antdv-pro-layout.cjs",
+      "import": "./dist/antdv-pro-layout.js",
       "require": "./dist/antdv-pro-layout.umd.cjs"
     },
     "./dist/style.css": "./dist/style.css"
