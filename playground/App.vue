@@ -1,14 +1,17 @@
 <template>
-  <ConfigProvider :theme="{ token: { colorPrimary: load(), borderRadius: 6 } }">
+  <ConfigProvider :locale="zhCN" component-size="middle">
     <router-view />
   </ConfigProvider>
 </template>
 
 <script setup lang="ts">
-import { ConfigProvider } from "ant-design-vue";
-import { useUserTheme, load } from "./hooks/useTheme";
-
-useUserTheme();
+import { ConfigProvider } from "ant-design-vue/lib";
+import { usePrimaryColor } from "@/hooks/useTheme";
+import zhCN from "ant-design-vue/lib/locale/zh_CN";
+import dayjs from "dayjs";
+import "dayjs/locale/zh-cn";
+dayjs.locale("zh-cn"); // 默认中文
+usePrimaryColor(); // 载入用户自定义主题色
 </script>
 
 <style>
