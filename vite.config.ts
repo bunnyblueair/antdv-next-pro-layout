@@ -1,11 +1,19 @@
 import { fileURLToPath, URL } from "url";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-import vueJsx from "@vitejs/plugin-vue-jsx";
+import vueJSX from "@vitejs/plugin-vue-jsx";
 import dts from "vite-plugin-dts";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // 访问基础路径
+  base: "/",
+  // 本地开发服务配置
+  server: {
+    port: 5173, // 端口
+    host: false, // 暴露到网络地址
+    open: false, // 完成后自动跳转浏览器打开
+  },
   resolve: {
     alias: {
       "antdv-pro-layout": fileURLToPath(new URL("./src", import.meta.url)),
@@ -14,33 +22,17 @@ export default defineConfig({
   },
   plugins: [
     vue(),
-    vueJsx(),
+    vueJSX(),
     dts({
-      //指定使用的tsconfig.json为我们整个项目根目录下掉,如果不配置,你也可以在components下新建tsconfig.json
+      // 输出目录
       outDir: "dist/types",
+      // 排除目录
       exclude: [
         "playground/**/*.ts",
         "playground/**/*.tsx",
         "playground/**/*.vue",
       ],
     }),
-    // {
-    //   name: "vite:import-css",
-    //   apply: "build",
-    //   enforce: "post",
-    //   renderChunk(code, chunk) {
-    //     // 判断是不是组件入口js
-    //     if (
-    //       !chunk.isEntry &&
-    //       chunk.type === "chunk" &&
-    //       /\index.(js)$/i.test(chunk.fileName)
-    //     ) {
-    //       // 截取出组件名称
-    //       let str = chunk.fileName.split("/")[0];
-    //       return `import './${str}.css';\n${code}`;
-    //     }
-    //   },
-    // },
   ],
   build: {
     lib: {
