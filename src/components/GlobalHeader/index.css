@@ -11,20 +11,14 @@
 .ant-pro-global-header > * {
   height: 100%;
 }
-.ant-pro-global-header-collapsed-button {
-  display: flex;
-  align-items: center;
-  margin-left: 16px;
-  font-size: 20px;
-}
 .ant-pro-global-header-layout-mix {
-  background-color: '#fff';
+  background-color: #fff;
 }
 .ant-pro-global-header-layout-mix .ant-pro-global-header-logo h1 {
-  color: '#000';
+  color: #000;
 }
 .ant-pro-global-header-layout-mix .anticon {
-  color: '#000';
+  color: #000;
 }
 .ant-pro-global-header-logo {
   position: relative;
@@ -42,7 +36,7 @@
   height: 32px;
   margin: 0 0 0 8px;
   margin: 0 0 0 12px;
-  color: '#000';
+  color: #000;
   font-weight: 600;
   font-size: 18px;
   line-height: 32px;
@@ -64,7 +58,7 @@
 }
 .ant-pro-global-header .dark .action:hover,
 .ant-pro-global-header .dark .action.opened {
-  background: '#000';
+  background: #000;
 }
 .ant-pro-global-header .dark .action .ant-badge {
   color: rgba(255, 255, 255, 0.85);

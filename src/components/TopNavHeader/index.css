@@ -4,20 +4,34 @@
   height: 100%;
   box-shadow: 0 1px 4px 0 rgba(0, 21, 41, 0.12);
   transition: background 0.3s, width 0.2s;
-  color: "#fff";
+  color: #fff;
 }
-.ant-pro-top-nav-header .ant-menu {
-  background: transparent;
-}
+
+/*亮*/
 .ant-pro-top-nav-header.light {
-  color: "#000";
-  background-color: "#fff";
+  color: #000;
+  background-color: #fff;
 }
 .ant-pro-top-nav-header.light .ant-pro-top-nav-header-logo h1 {
-  color: "#000";
+  color: #000;
 }
 .ant-pro-top-nav-header.light .anticon {
-  color: inherit;
+  color: #000;
+}
+
+/*暗*/
+.ant-pro-top-nav-header.dark {
+  color: #fff; 
+}
+.ant-pro-top-nav-header.dark .ant-pro-top-nav-header-logo h1 {
+  color: #fff;
+}
+.ant-pro-top-nav-header.dark .anticon {
+  color: #fff;
+}
+
+.ant-pro-top-nav-header .ant-menu {
+  background: transparent;
 }
 .ant-pro-top-nav-header-main {
   display: flex;
@@ -29,7 +43,7 @@
   min-width: 192px;
 }
 .ant-pro-top-nav-header .anticon {
-  color: "#000";
+  color: #000;
 }
 .ant-pro-top-nav-header-logo {
   position: relative;
@@ -45,7 +59,7 @@
 .ant-pro-top-nav-header-logo h1 {
   display: inline-block;
   margin: 0 0 0 12px;
-  color: "#000";
+  color: #000;
   font-weight: 600;
   font-size: 16px;
   vertical-align: top;
@@ -60,7 +74,10 @@
 .ant-pro-top-nav-header-menu .ant-menu.ant-menu-horizontal .ant-menu-item {
   height: 100%;
 }
-.ant-pro-top-nav-header-menu .ant-menu.ant-menu-horizontal .ant-menu-item .ant-badge {
+.ant-pro-top-nav-header-menu
+  .ant-menu.ant-menu-horizontal
+  .ant-menu-item
+  .ant-badge {
   color: unset;
 }
 .ant-pro-menu-popup .ant-badge {

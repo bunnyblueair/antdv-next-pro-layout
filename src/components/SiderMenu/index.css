@@ -1,6 +1,6 @@
 .ant-pro-sider {
   position: relative;
-  background-color: "#fff";
+  background-color: #fff;
   border-right: 0;
   z-index: 20;
 }
@@ -8,11 +8,11 @@
   background: transparent;
 }
 .ant-pro-sider.ant-layout-sider-light .ant-menu-item a {
-  color: "#000";
+  color: #000;
 }
 .ant-pro-sider.ant-layout-sider-light .ant-menu-item-selected a,
 .ant-pro-sider.ant-layout-sider-light .ant-menu-item a:hover {
-  color: "#000";
+  color: #000;
 }
 .ant-pro-sider-logo {
   position: relative;
@@ -93,12 +93,14 @@
   overflow-x: hidden;
   box-shadow: 2px 0 8px #1d23290d;
 }
-.ant-pro-sider.ant-pro-sider-fixed > .ant-menu-root :not(.ant-pro-sider-link-menu) {
+.ant-pro-sider.ant-pro-sider-fixed
+  > .ant-menu-root
+  :not(.ant-pro-sider-link-menu) {
   height: calc(100vh - 48px);
   overflow-y: auto;
 }
 .ant-pro-sider-light {
-  background-color: "#fff";
+  background-color: #fff;
   box-shadow: 2px 0 8px 0 rgba(29, 35, 41, 0.05);
 }
 .ant-pro-sider-light .ant-layout-sider-children {
@@ -116,13 +118,10 @@
   box-shadow: inset 0 0 5px rgba(0, 21, 41, 0.05);
 }
 .ant-pro-sider-light .ant-pro-sider-logo h1 {
-  color: "#000";
+  color: #000;
 }
 .ant-pro-sider-light .ant-menu-light {
   border-right-color: transparent;
-}
-.ant-pro-sider-light .ant-pro-sider-collapsed-button {
-  border-top: "2px" "solid" "red";
 }
 .ant-pro-sider-icon {
   width: 14px;
@@ -134,18 +133,12 @@
 .ant-pro-sider-links ul.ant-menu-root {
   height: auto;
 }
-.ant-pro-sider-collapsed-button {
-  border-top: "2px" "solid" rgba(0, 0, 0, 0.25);
-}
-.ant-pro-sider-collapsed-button .anticon {
-  font-size: 16px;
-}
 .ant-pro-sider .top-nav-menu li.ant-menu-item {
   height: 100%;
   line-height: 1;
 }
 .ant-pro-sider .drawer .drawer-content {
-  background: "#fff";
+  background: #fff;
 }
 .ant-pro-menu-item .anticon + .ant-pro-menu-item-title {
   margin-left: 10px;

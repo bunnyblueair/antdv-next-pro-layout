@@ -1,22 +1,25 @@
-import { computed, type FunctionalComponent, type ExtractPropTypes } from 'vue';
-import type { RouteRecordRaw } from 'vue-router';
-import type { CustomRender } from '../../typings';
+import { computed, type FunctionalComponent, type ExtractPropTypes } from "vue";
+import type { RouteRecordRaw } from "vue-router";
+import type { CustomRender } from "../../typings";
 import {
   defaultRenderLogo,
   defaultRenderLogoAndTitle,
   defaultRenderCollapsedButton,
   type SiderMenuProps,
-} from '../SiderMenu/SiderMenu';
-import { TopNavHeader } from '../TopNavHeader';
-import { clearMenuItem } from '../../utils';
-import { useRouteContext } from '../../RouteContext';
-import type headerProps from './headerProps';
+} from "../SiderMenu/SiderMenu";
+import { TopNavHeader } from "../TopNavHeader";
+import { clearMenuItem } from "../../utils";
+import { useRouteContext } from "../../RouteContext";
+import type headerProps from "./headerProps";
 
-import './index.css';
+import "./index.css";
 
 export type GlobalHeaderProps = ExtractPropTypes<typeof headerProps>;
 
-const renderLogo = (menuHeaderRender: SiderMenuProps['menuHeaderRender'], logoDom: CustomRender) => {
+const renderLogo = (
+  menuHeaderRender: SiderMenuProps["menuHeaderRender"],
+  logoDom: CustomRender
+) => {
   if (menuHeaderRender === false) {
     return null;
   }
@@ -26,7 +29,10 @@ const renderLogo = (menuHeaderRender: SiderMenuProps['menuHeaderRender'], logoDo
   return logoDom;
 };
 
-export const GlobalHeader: FunctionalComponent<GlobalHeaderProps> = (props, { slots, emit }) => {
+export const GlobalHeader: FunctionalComponent<GlobalHeaderProps> = (
+  props,
+  { slots, emit }
+) => {
   const {
     isMobile,
     logo,
@@ -36,7 +42,7 @@ export const GlobalHeader: FunctionalComponent<GlobalHeaderProps> = (props, { sl
     menuHeaderRender,
     onMenuHeaderClick,
     layout,
-    headerTheme = 'dark',
+    headerTheme = "dark",
     splitMenus,
     menuData,
     prefixCls: customPrefixCls,
@@ -47,10 +53,11 @@ export const GlobalHeader: FunctionalComponent<GlobalHeaderProps> = (props, { sl
   const className = computed(() => {
     return {
       [baseClassName.value]: true,
-      [`${baseClassName.value}-layout-${layout}`]: layout && headerTheme === 'dark',
+      [`${baseClassName.value}-layout-${layout}`]:
+        layout && headerTheme === "dark",
     };
   });
-  if (layout === 'mix' && !isMobile && splitMenus) {
+  if (layout === "mix" && !isMobile && splitMenus) {
     const noChildrenMenuData = (menuData || []).map((item) => ({
       ...item,
       children: undefined,
@@ -62,7 +69,7 @@ export const GlobalHeader: FunctionalComponent<GlobalHeaderProps> = (props, { sl
         {...props}
         splitMenus={false}
         menuData={clearMenuData}
-        theme={headerTheme as 'light' | 'dark'}
+        theme={headerTheme as "light" | "dark"}
       />
     );
   }
@@ -73,28 +80,34 @@ export const GlobalHeader: FunctionalComponent<GlobalHeaderProps> = (props, { sl
     </span>
   );
   const onCollapse = () => {
-    emit('collapse', !props.collapsed);
+    emit("collapse", !props.collapsed);
   };
 
   return (
     <div class={className.value}>
       {isMobile && renderLogo(menuHeaderRender, logoDom)}
       {isMobile && collapsedButtonRender && (
-        <span class={`${baseClassName.value}-collapsed-button`} onClick={onCollapse}>
-          {collapsedButtonRender(collapsed)}
-        </span>
+        <span onClick={onCollapse}>{collapsedButtonRender(collapsed)}</span>
       )}
-      {layout === 'mix' && !isMobile && (
+      {layout === "mix" && !isMobile && (
         <>
-          <div class={`${baseClassName.value}-logo`} onClick={onMenuHeaderClick}>
-            {defaultRenderLogoAndTitle({ ...props, collapsed: false }, 'headerTitleRender')}
+          <div
+            class={`${baseClassName.value}-logo`}
+            onClick={onMenuHeaderClick}
+          >
+            {defaultRenderLogoAndTitle(
+              { ...props, collapsed: false },
+              "headerTitleRender"
+            )}
           </div>
         </>
       )}
       <div style={{ flex: 1 }}>{slots.default?.()}</div>
-      {rightContentRender && typeof rightContentRender === 'function' ? rightContentRender(props) : rightContentRender}
+      {rightContentRender && typeof rightContentRender === "function"
+        ? rightContentRender(props)
+        : rightContentRender}
     </div>
   );
 };
 GlobalHeader.inheritAttrs = false;
-GlobalHeader.emits = ['menuHeaderClick', 'collapse', 'openKeys', 'select'];
+GlobalHeader.emits = ["menuHeaderClick", "collapse", "openKeys", "select"];

@@ -1,18 +1,33 @@
-import { ref, computed, type FunctionalComponent, type ExtractPropTypes } from 'vue';
-import { default as ResizeObserver } from 'ant-design-vue/es/vc-resize-observer';
-import globalHeaderProps from '../GlobalHeader/headerProps';
-import { BaseMenu, siderMenuProps, defaultRenderLogoAndTitle } from '../SiderMenu';
-import type { SiderMenuProps } from '../SiderMenu/SiderMenu';
-import { useRouteContext } from '../../RouteContext';
+import {
+  ref,
+  computed,
+  type FunctionalComponent,
+  type ExtractPropTypes,
+} from "vue";
+import { default as ResizeObserver } from "ant-design-vue/es/vc-resize-observer";
+import globalHeaderProps from "../GlobalHeader/headerProps";
+import {
+  BaseMenu,
+  siderMenuProps,
+  defaultRenderLogoAndTitle,
+} from "../SiderMenu";
+import type { SiderMenuProps } from "../SiderMenu/SiderMenu";
+import { useRouteContext } from "../../RouteContext";
 
-import './index.css';
+import "./index.css";
 
 export const topNavHeaderProps = { ...siderMenuProps, ...globalHeaderProps };
 
-export type TopNavHeaderProps = Partial<ExtractPropTypes<typeof topNavHeaderProps>> & Partial<SiderMenuProps>;
+export type TopNavHeaderProps = Partial<
+  ExtractPropTypes<typeof topNavHeaderProps>
+> &
+  Partial<SiderMenuProps>;
 
-const RightContent: FunctionalComponent<TopNavHeaderProps> = ({ rightContentRender, ...props }) => {
-  const rightSize = ref<number | string>('auto');
+const RightContent: FunctionalComponent<TopNavHeaderProps> = ({
+  rightContentRender,
+  ...props
+}) => {
+  const rightSize = ref<number | string>("auto");
 
   return (
     <div
@@ -30,7 +45,7 @@ const RightContent: FunctionalComponent<TopNavHeaderProps> = ({ rightContentRend
             rightSize.value = width;
           }}
         >
-          {rightContentRender && typeof rightContentRender === 'function' ? (
+          {rightContentRender && typeof rightContentRender === "function" ? (
             <div>
               {rightContentRender({
                 ...props,
@@ -55,25 +70,24 @@ export const TopNavHeader: FunctionalComponent<TopNavHeaderProps> = (props) => {
     contentWidth,
     rightContentRender,
     layout,
+    theme,
     menuData,
   } = props;
   const context = useRouteContext();
-  const prefixCls = `${propPrefixCls || 'ant-pro'}-top-nav-header`;
+  const prefixCls = `${propPrefixCls || "ant-pro"}-top-nav-header`;
   const headerDom = defaultRenderLogoAndTitle(
     { ...props, collapsed: false } as SiderMenuProps,
     // REMARK:: Any time render header title
     // layout === 'mix' ? 'headerTitleRender' : undefined,
-    layout !== 'side' ? 'headerTitleRender' : undefined
+    layout !== "side" ? "headerTitleRender" : undefined
   );
-  const className = computed(() => {
-    return {
-      [prefixCls]: true,
-      light: props.theme === 'light',
-    };
-  });
+
   return (
-    <div class={className.value}>
-      <div ref={headerRef} class={`${prefixCls}-main ${contentWidth === 'Fixed' ? 'wide' : ''}`}>
+    <div class={[prefixCls, theme]}>
+      <div
+        ref={headerRef}
+        class={`${prefixCls}-main ${contentWidth === "Fixed" ? "wide" : ""}`}
+      >
         {headerDom && (
           <div class={`${prefixCls}-main-left`} onClick={onMenuHeaderClick}>
             <div class={`${prefixCls}-logo`} key="logo" id="logo">
@@ -85,7 +99,7 @@ export const TopNavHeader: FunctionalComponent<TopNavHeaderProps> = (props) => {
           <BaseMenu
             prefixCls={propPrefixCls}
             locale={props.locale || context.locale}
-            theme={props.theme === 'realDark' ? 'dark' : props.theme}
+            theme={props.theme === "realDark" ? "dark" : props.theme}
             mode={props.mode}
             collapsed={props.collapsed}
             iconfontUrl={props.iconfontUrl}
@@ -94,14 +108,18 @@ export const TopNavHeader: FunctionalComponent<TopNavHeaderProps> = (props) => {
             subMenuItemRender={props.subMenuItemRender}
             openKeys={context.openKeys}
             selectedKeys={context.selectedKeys}
-            class={{ 'top-nav-menu': props.mode === 'horizontal' }}
+            class={{ "top-nav-menu": props.mode === "horizontal" }}
             {...{
-              'onUpdate:openKeys': ($event: string[]) => onOpenKeys && onOpenKeys($event),
-              'onUpdate:selectedKeys': ($event: string[]) => onSelect && onSelect($event),
+              "onUpdate:openKeys": ($event: string[]) =>
+                onOpenKeys && onOpenKeys($event),
+              "onUpdate:selectedKeys": ($event: string[]) =>
+                onSelect && onSelect($event),
             }}
           />
         </div>
-        {rightContentRender && <RightContent rightContentRender={rightContentRender} {...props} />}
+        {rightContentRender && (
+          <RightContent rightContentRender={rightContentRender} {...props} />
+        )}
       </div>
     </div>
   );
