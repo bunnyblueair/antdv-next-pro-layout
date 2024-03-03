@@ -1,12 +1,19 @@
-import { provide, reactive, type InjectionKey, type Ref, type VNodeChild, type ComputedRef } from 'vue';
-import { createContext, useContext } from './hooks/context';
-import type { MenuDataItem, FormatLocale, WithFalse } from './typings';
-import type { PureSettings } from './defaultSettings';
+import {
+  provide,
+  reactive,
+  type InjectionKey,
+  type Ref,
+  type VNodeChild,
+  type ComputedRef,
+} from "vue";
+import { createContext, useContext } from "./hooks/context";
+import type { MenuDataItem, FormatLocale, WithFalse } from "./typings";
+import type { PureSettings } from "./defaultSettings";
 
 export interface Route {
   path: string;
   breadcrumbName: string;
-  children?: Omit<Route, 'children'>[];
+  children?: Omit<Route, "children">[];
 }
 
 export interface BreadcrumbProps {
@@ -14,10 +21,18 @@ export interface BreadcrumbProps {
   routes?: Route[];
   params?: any;
   separator?: VNodeChild;
-  itemRender?: (opts: { route: Route; params: any; routes: Array<Route>; paths: Array<string> }) => VNodeChild;
+  itemRender?: (opts: {
+    route: Route;
+    params: any;
+    routes: Array<Route>;
+    paths: Array<string>;
+  }) => VNodeChild;
 }
 
-export type BreadcrumbListReturn = Pick<BreadcrumbProps, Extract<keyof BreadcrumbProps, 'routes' | 'itemRender'>>;
+export type BreadcrumbListReturn = Pick<
+  BreadcrumbProps,
+  Extract<keyof BreadcrumbProps, "routes" | "itemRender">
+>;
 
 export interface MenuState {
   selectedKeys: string[];
@@ -38,17 +53,17 @@ export interface RouteContextProps extends Partial<PureSettings>, MenuState {
   hasHeader?: boolean;
   siderWidth?: number;
   headerHeight?: number;
-  hasFooterToolbar?: boolean;
-  hasFooter?: boolean;
   hasSide?: boolean;
-  setHasFooterToolbar?: (bool: boolean) => void;
   /* 附加属性 */
   [key: string]: any;
 }
 
-export const defaultPrefixCls = 'ant-pro';
+export const defaultPrefixCls = "ant-pro";
 
-export const getPrefixCls = (suffixCls?: string, customizePrefixCls?: string) => {
+export const getPrefixCls = (
+  suffixCls?: string,
+  customizePrefixCls?: string
+) => {
   if (customizePrefixCls) return customizePrefixCls;
   return suffixCls ? `${defaultPrefixCls}-${suffixCls}` : defaultPrefixCls;
 };
@@ -57,17 +72,23 @@ export const getPrefixCls = (suffixCls?: string, customizePrefixCls?: string) =>
 export const defaultRouteContext = reactive({
   getPrefixCls,
   locale: false,
-  contentWidth: 'Fluid',
-  hasFooterToolbar: false,
+  contentWidth: "Fluid",
 });
 
-export const routeContextInjectKey: InjectionKey<RouteContextProps> = Symbol('route-context');
+export const routeContextInjectKey: InjectionKey<RouteContextProps> =
+  Symbol("route-context");
 
 export const createRouteContext = () =>
-  createContext<RouteContextProps>(routeContextInjectKey, 'RouteContext.Provider');
+  createContext<RouteContextProps>(
+    routeContextInjectKey,
+    "RouteContext.Provider"
+  );
 
 export const useRouteContext = () =>
-  useContext<Required<RouteContextProps>>(routeContextInjectKey, defaultRouteContext);
+  useContext<Required<RouteContextProps>>(
+    routeContextInjectKey,
+    defaultRouteContext
+  );
 
 const Provider = createRouteContext();
 
