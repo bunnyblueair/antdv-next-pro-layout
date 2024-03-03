@@ -89,7 +89,7 @@ const routes: RouteRecordRaw[] = [
         component: () => {},
       },
       {
-        path: "https://www.3x.antdv.com/components/comment-cn?sdf=12321&id=12&sdnf",
+        path: "https://www.antdv.com/",
         name: "Ant Design Vue",
         meta: {
           title: "Antdv-当前窗口",

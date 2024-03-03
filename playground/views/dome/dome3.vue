@@ -1,21 +1,13 @@
 <template>
   <PageContainer
-    title="Version"
+    title="Title"
     sub-title="show current project dependencies"
-    :ghost="false"
     :avatar="{
-      src: 'https://avatars1.githubusercontent.com/u/8186664?s=460&v=4',
+      src: 'https://gw.alipayobjects.com/zos/antfincdn/K%24NnlsB%26hz/pageHeader.svg',
     }"
-    :breadcrumb="false"
-    @back="
-      () => {
-        console.log(1);
-      }
-    "
+    @back="() => $router.go(-1)"
+    :ghost="true"
   >
-    <template #content>
-      <strong>Content Area</strong>
-    </template>
     <template #extra>
       <strong>Extra Area</strong>
     </template>
@@ -23,11 +15,11 @@
       <a-tag>Tag1</a-tag>
       <a-tag color="pink">Tag2</a-tag>
     </template>
-    <template #footer>
-      <a-tabs>
-        <a-tab-pane key="1" tab="Details" />
-        <a-tab-pane key="2" tab="Rule" />
-      </a-tabs>
+    <template #content>
+      <strong>Content Area</strong>
+    </template>
+    <template #contentExtra>
+      <strong>ContentExtra Area</strong>
     </template>
 
     <a-card title="Info">
@@ -44,19 +36,4 @@ import { ref } from "vue";
 import { PageContainer } from "antdv-pro-layout";
 
 const list = ref<number>(50);
-
-const routes = [
-  {
-    path: "index",
-    breadcrumbName: "First-level Menu",
-  },
-  {
-    path: "first",
-    breadcrumbName: "Second-level Menu",
-  },
-  {
-    path: "second",
-    breadcrumbName: "Third-level Menu",
-  },
-];
 </script>

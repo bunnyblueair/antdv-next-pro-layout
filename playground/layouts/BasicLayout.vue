@@ -2,6 +2,7 @@
 import { useRouter, RouterView, RouterLink } from "vue-router";
 import {
   ProLayout,
+  GlobalFooter,
   getMenuData,
   clearMenuItem,
   type RouteContextProps,
@@ -34,8 +35,8 @@ const proConfig = ref<any>({
   fixedHeader: true,
   /**固定菜单栏 */
   fixSiderbar: true,
-  /**自动分割菜单 */
-  splitMenus: false,
+  /**自动分割菜单 mix */
+  splitMenus: true,
 });
 
 const locale = (menuData: MenuDataItem) => menuData.meta?.title;
@@ -82,7 +83,7 @@ function settingDrawer(bool: boolean) {
       :loading="loading"
       :menu-data="menuData"
       :breadcrumb="{ routes: breadcrumb }"
-      disable-content-margin
+      :disable-content-margin="true"
       v-bind="proConfig"
       iconfont-url="//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js"
     >
@@ -119,6 +120,33 @@ function settingDrawer(bool: boolean) {
           <component :is="Component" :key="route.path" />
         </transition>
       </RouterView>
+
+      <!--插槽-内容底部-->
+      <template #footerRender>
+        <GlobalFooter
+          :links="[
+            {
+              blankTarget: true,
+              title: '开发手册',
+              href: 'https://juejin.cn/column/7188761626017792056',
+            },
+            {
+              blankTarget: true,
+              title: '开源仓库',
+              href: 'https://gitee.com/TsMask/',
+            },
+            {
+              blankTarget: true,
+              title: '接口文档',
+              href: 'https://mask-api-midwayjs.apifox.cn/',
+            },
+          ]"
+          copyright="Copyright © 2023 Gitee For TsMask"
+        >
+        </GlobalFooter>
+      </template>
     </ProLayout>
   </a-watermark>
 </template>
+
+<style scoped></style>

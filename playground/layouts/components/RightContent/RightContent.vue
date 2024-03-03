@@ -70,7 +70,7 @@ function fnDrawerOpen() {
           <a-avatar
             shape="circle"
             size="default"
-            src="https://dummyimage.com/120x120"
+            src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"
             alt="头像"
           ></a-avatar>
           <span class="nick"> ProLayout </span>
