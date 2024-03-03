@@ -19,6 +19,13 @@ usePrimaryColor(); // 载入用户自定义主题色
   height: 100%;
 }
 
+body .ant-pro-basicLayout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+}
+
 .ant-pro-sider {
   z-index: 20;
 }
