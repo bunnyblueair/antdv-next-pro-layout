@@ -20,7 +20,7 @@
       </a>
     </template>
 
-    <WaterMark :content="watermarkContent">
+    <a-watermark :content="watermarkContent">
       <pro-layout
         v-model:collapsed="baseState.collapsed"
         v-model:selectedKeys="baseState.childrenSelectedKeys"
@@ -60,7 +60,7 @@
           <component :is="Component" />
         </router-view>
       </pro-layout>
-    </WaterMark>
+    </a-watermark>
   </pro-layout>
 </template>
 
@@ -70,7 +70,6 @@ import { useRouter } from "vue-router";
 import {
   getMenuData,
   clearMenuItem,
-  WaterMark,
   type RouteContextProps,
 } from "antdv-pro-layout";
 const loading = ref(false);
