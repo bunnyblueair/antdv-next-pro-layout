@@ -261,9 +261,6 @@ const ProLayout = defineComponent({
         "headerHeight",
         // 'hasSideMenu',
         // 'hasHeader',
-        // 'hasFooter',
-        // 'hasFooterToolbar',
-        // 'setHasFooterToolbar',
       ]) as any),
       isMobile,
       siderWidth,
@@ -415,8 +412,7 @@ const ProLayout = defineComponent({
         return {
           [`${baseClassName.value}-content`]: true,
           [`${baseClassName.value}-has-header`]: headerDom,
-          [`${baseClassName.value}-content-disable-margin`]:
-            props.disableContentMargin,
+          [`${baseClassName.value}-content-disable-margin`]: props.disableContentMargin,
         };
       });
 
