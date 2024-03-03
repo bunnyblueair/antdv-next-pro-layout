@@ -1,7 +1,7 @@
 {
   "name": "antdv-pro-layout",
   "type": "module",
-  "version": "4.0.3",
+  "version": "4.0.4",
   "description": "Ant Design Pro Layout of Vue, easy to use pro scaffolding.",
   "keywords": [
     "Ant Design Vue",
@@ -21,8 +21,8 @@
     "node": ">=18.0.0"
   },
   "peerDependencies": {
-    "ant-design-vue": ">=4.0.0",
-    "vue": ">=3.2.0"
+    "ant-design-vue": ">=4.1.0",
+    "vue": ">=3.4.0"
   },
   "files": [
     "dist"
