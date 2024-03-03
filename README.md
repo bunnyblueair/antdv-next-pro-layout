@@ -17,18 +17,18 @@ npm i antdv-pro-layout
 
 ## 简单使用 Simple Usage
 
-首先，您应该将所需的“antdv-pro布局”添加到库中。
+首先，您应该将所需的 `antdv-pro-layout` 添加到库中。
 
 First, you should add the `antdv-pro-layout` that you need into the library.
 
 ```js
 // main.[js|ts]
-import "antdv-pro-layout/dist/style.css"; // pro-layout css or style.less
+import 'antdv-pro-layout/dist/style.css';
 
 import { createApp } from "vue";
 import App from "./App.vue";
 import Antd from "ant-design-vue";
-import ProLayout, { PageContainer } from "antdv-pro-layout";
+import { ProLayout, PageContainer } from "antdv-pro-layout";
 
 const app = createApp(App);
 
@@ -77,7 +77,7 @@ const layoutConf = reactive({
 
 ## 当前可用功能 API
 
-### 布局 ProLayout
+### ProLayout 布局
 
 | Property                | Description                                                           | Type                                                                   | Default Value      |
 | ----------------------- | --------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------ |
@@ -258,49 +258,27 @@ const layoutConf = reactive({
 ></GlobalFooter>
 ```
 
-### 内容页 PageContainer
+### PageContainer 内容页
 
-| Property       | Description                                      | Type                               | Default Value |
-| -------------- | ------------------------------------------------ | ---------------------------------- | ------------- |
-| content        | Content area                                     | VNode \| v-slot                    | -             |
-| extra          | Extra content area, on the right side of content | VNode \| v-slot                    | -             |
-| extraContent   | Extra content area, on the right side of content | VNode \| v-slot                    | -             |
-| tabList        | Tabs title list                                  | `Array<{key: string, tab: sting}>` | -             |
-| tab-change     | Switch panel callback                            | (key) => void                      | -             |
-| tab-active-key | The currently highlighted tab item               | string                             | -             |
-| breadcrumb     | Show Bread crumbs bar                            | Boolean                            | -             |
+包含antdv组件API属性: [PageHeader 页头](https://www.antdv.com/components/page-header-cn#api)、[Affix 固钉](https://www.antdv.com/components/affix-cn#api)
 
-### 水印 WaterMark
+| 参数 | 说明 | 类型 | 默认值 |
+| ---- | ---- | ---- | ---- |
+| loading | 加载状态 | boolean | false |
+| fixed-header| 固定 PageHeader 到顶部      | boolean      | false  |
+| affixProps | 固钉的配置 | [affix](https://www.antdv.com/components/affix-cn#api) | - |
+| pageFooter | 渲染页脚插槽  |  VNode \| v-slot | -    |
+| pageHeader | 渲染页头替换PageHeader组件插槽  |  VNode \| v-slot | -    |
+| ... | [PageHeader 页头API](https://www.antdv.com/components/page-header-cn#api) | - | - |
+| breadcrumb     | PageHeader面包屑的配置,{}配置不显示  | [breadcrumb](https://www.antdv.com/components/breadcrumb-cn/)  | -       |
+| content | PageHeader默认插槽  |  VNode \| v-slot | -    |
+| contentExtra | PageHeader默认插槽右侧空间       | VNode \| v-slot | -   |
+| tab-list        | PageHeader插槽footer无时，显示标签列表    | `Array<{key: string, tab: any}>` | -             |
+| tab-active-key | 标签列表当前激活key      | string      | -  |
+| tab-change     | 标签列表tab被点击的回调    | (key) => void          | -      |
+| tab-props     | 标签列表标签页属性    | [tabs](https://www.antdv.com/components/tabs-cn)         | -      |
 
-| Property      | Description                           | Type             | Default Value          |
-| ------------- | ------------------------------------- | ---------------- | ---------------------- |
-| markStyle     | mark style                            | CSSProperties    | -                      |
-| markClassName | mark class                            | string           | -                      |
-| gapX          | Horizontal spacing between water-mark | number           | 212                    |
-| gapY          | Vertical spacing between watermark    | number           | 222                    |
-| offsetLeft    | Horizontal offset                     | number           | `offsetTop = gapX / 2` |
-| offsetTop     | Vertical offset                       | number           | `offsetTop = gapY / 2` |
-|               |                                       |                  |                        |
-| width         |                                       | number           | 120                    |
-| height        |                                       | number           | 64                     |
-| rotate        | Angle of rotation, unit °             | number           | -22                    |
-| image         | image src                             | string           | -                      |
-| zIndex        | water-mark z-index                    | number           | 9                      |
-| content       | water-mark Content                    | string           | -                      |
-| fontColor     | font-color                            | string           | `rgba(0,0,0,.15)`      |
-| fontSize      | font-size                             | string`\|`number | 16                     |
-
-#### Use WaterMark
-
-```vue
-<router-view v-slot="{ Component }">
-  <WaterMark content="Pro Layout">
-    <component :is="Component" />
-  </WaterMark>
-</router-view>
-```
-
-## 基本使用 Basic Usage
+## 基本使用示例 Basic Usage
 
 项目目录下 [Playground](./playground/) or [Use Template](https://gitee.com/TsMask/mask_vue3_antd)
 
@@ -314,7 +292,7 @@ Recommend look [Examples](./playground/) or [Use Template](https://gitee.com/TsM
 - v3.1 : Vue3 + `ant-design-vue@2.2.x` (release LTS)
 - v2 : Vue2 + `ant-design-vue@1.7.x`
 
-当前分支v4版本，还在持续更新
+当前[分支v4](https://gitee.com/TsMask/antdv-pro-layout)版本，还在持续更新
 
 ## 持续维护 Continuous Maintenance
 
