@@ -20,11 +20,10 @@ import { useRouteContext } from "../../RouteContext";
 import { getSlot, getSlotVNode } from "../../utils";
 import PageLoading from "../PageLoading";
 import GridContent from "../GridContent";
-import FooterToolbar from "../FooterToolbar";
 import { withInstall } from "ant-design-vue/es/_util/type";
 import type { CustomRender, VueNode } from "../../typings";
 import type { DefaultPropRender, PageHeaderRender } from "../../RenderTypings";
-
+import "./index.css";
 export interface Tab {
   key: string;
   tab: string | VNode;
@@ -36,7 +35,7 @@ export const pageHeaderTabConfig = {
    */
   tabList: {
     type: [Object, Function, Array] as PropType<
-      (Omit<TabPaneProps, "id"> & { key?: string })[]
+      (Omit<TabPaneProps, "id"> & { key?: string; tab?: any })[]
     >,
     default: () => undefined,
   },
@@ -71,57 +70,25 @@ export type PageHeaderTabConfig = Partial<
 
 export const pageContainerProps = {
   ...pageHeaderTabConfig,
-  ...pageHeaderProps,
+  ...pageHeaderProps(),
   prefixCls: {
     type: String,
     default: "ant-pro",
-  }, //PropTypes.string.def('ant-pro'),
-  title: {
-    type: [Object, String, Boolean, Function] as PropType<DefaultPropRender>,
-    default: () => null,
-  },
-  subTitle: {
-    type: [Object, String, Boolean, Function] as PropType<DefaultPropRender>,
-    default: () => null,
-  },
-  extra: {
-    type: [Object, String, Boolean, Function] as PropType<DefaultPropRender>,
-    default: () => null,
   },
   content: {
     type: [Object, String, Boolean, Function] as PropType<DefaultPropRender>,
     default: () => null,
   },
-  extraContent: {
+  contentExtra: {
     type: [Object, String, Boolean, Function] as PropType<DefaultPropRender>,
     default: () => null,
-  },
-  header: {
-    type: [Object, String, Boolean, Function] as PropType<DefaultPropRender>,
-    default: () => null,
-  },
-  footer: {
-    type: [Object, String, Boolean, Function] as PropType<DefaultPropRender>,
-    default: () => null,
-  },
-  pageHeaderRender: {
-    type: [Object, Function, Boolean] as PropType<PageHeaderRender>,
-    default: () => undefined,
   },
   affixProps: {
     type: [Object, Function] as PropType<AffixProps>,
   },
-  ghost: {
-    type: Boolean,
-    default: () => false,
-  }, //PropTypes.looseBool,
   loading: {
     type: Boolean,
-    default: () => undefined,
-  }, //PropTypes.looseBool,
-  breadcrumb: {
-    type: Boolean,
-    default: () => undefined,
+    default: () => null,
   },
 };
 
@@ -167,12 +134,72 @@ const renderFooter = (
   return null;
 };
 
+// PageHeader 页头 https://www.antdv.com/components/page-header-cn/#api
+const ProPageHeader: FunctionalComponent<
+  PageContainerProps & { prefixedClassName: string }
+> = (props) => {
+  const {
+    title,
+    tabList,
+    tabActiveKey,
+    breadcrumb,
+    content,
+    tags,
+    extra,
+    contentExtra,
+    prefixedClassName,
+    prefixCls,
+    fixedHeader,
+    footer,
+    ...restProps
+  } = props;
+
+  const pageHeaderTitle: any = title !== false ? title : undefined;
+
+  //面包屑的配置
+  let pageHeaderBreadcrumb = breadcrumb;
+  if (breadcrumb === undefined) {
+    const value = useRouteContext();
+    const unrefBreadcrumb = unref(value.breadcrumb || {});
+    pageHeaderBreadcrumb = {
+      ...unrefBreadcrumb,
+      routes: unrefBreadcrumb.routes,
+      itemRender: unrefBreadcrumb.itemRender,
+    };
+  }
+
+  return (
+    <div class={`${prefixedClassName}-warp`}>
+      <PageHeader
+        {...restProps}
+        title={pageHeaderTitle}
+        breadcrumb={pageHeaderBreadcrumb}
+        footer={
+          footer ||
+          renderFooter({
+            ...restProps,
+            tabList,
+            tabActiveKey,
+            prefixedClassName,
+          })
+        }
+        prefixCls={prefixCls}
+        tags={tags}
+        extra={extra}
+      >
+        {renderPageHeader(content, contentExtra, prefixedClassName)}
+      </PageHeader>
+    </div>
+  );
+};
+
+// 页头默认插槽内容渲染
 const renderPageHeader = (
   content: CustomRender,
-  extraContent: CustomRender,
+  contentExtra: CustomRender,
   prefixedClassName: string
 ): VueNode => {
-  if (!content && !extraContent) {
+  if (!content && !contentExtra) {
     return null;
   }
   return (
@@ -184,75 +211,14 @@ const renderPageHeader = (
               {(typeof content === "function" && content()) || content}
             </div>
           )}
-          {extraContent && (
-            <div class={`${prefixedClassName}-extraContent`}>
-              {(typeof extraContent === "function" && extraContent()) ||
-                extraContent}
+          {contentExtra && (
+            <div class={`${prefixedClassName}-contentExtra`}>
+              {(typeof contentExtra === "function" && contentExtra()) ||
+                contentExtra}
             </div>
           )}
         </div>
       </div>
-    </div>
-  );
-};
-
-const ProPageHeader: FunctionalComponent<
-  PageContainerProps & { prefixedClassName: string }
-> = (props) => {
-  const {
-    title,
-    tabList,
-    tabActiveKey,
-    breadcrumb,
-    content,
-    pageHeaderRender,
-    header,
-    extra,
-    extraContent,
-    prefixedClassName,
-    prefixCls,
-    fixedHeader: _,
-    ...restProps
-  } = props;
-
-  if (pageHeaderRender === false) {
-    return null;
-  }
-  if (pageHeaderRender) {
-    return pageHeaderRender({ ...props });
-  }
-
-  const pageHeaderTitle: any = title !== false ? title : undefined;
-
-  let pageHeaderBreadcrumb = undefined;
-  if (breadcrumb !== false) {
-    const value = useRouteContext();
-    const unrefBreadcrumb = unref(value.breadcrumb || {});
-    pageHeaderBreadcrumb = {
-      ...unrefBreadcrumb,
-      routes: unrefBreadcrumb.routes,
-      itemRender: unrefBreadcrumb.itemRender,
-    };
-  }
-
-  return (
-    <div class={`${prefixedClassName}-wrap`}>
-      <PageHeader
-        {...restProps}
-        // {...value}
-        title={pageHeaderTitle}
-        breadcrumb={pageHeaderBreadcrumb}
-        footer={renderFooter({
-          ...restProps,
-          tabList,
-          tabActiveKey,
-          prefixedClassName,
-        })}
-        prefixCls={prefixCls}
-        extra={extra}
-      >
-        {header || renderPageHeader(content, extraContent, prefixedClassName)}
-      </PageHeader>
     </div>
   );
 };
@@ -262,7 +228,7 @@ const PageContainer = defineComponent({
   inheritAttrs: false,
   props: pageContainerProps,
   setup(props, { slots }) {
-    const { loading, affixProps, ghost } = toRefs(props);
+    const { loading, affixProps } = toRefs(props);
     const value = useRouteContext();
     const { getPrefixCls } = value;
     const prefixCls = props.prefixCls || getPrefixCls();
@@ -270,45 +236,39 @@ const PageContainer = defineComponent({
     const classNames = computed(() => {
       return {
         [prefixedClassName.value]: true,
-        [`${prefixCls}-page-container-ghost`]: ghost.value,
+        [`${prefixCls}-page-container-ghost`]: Boolean(props.ghost),
       };
     });
     const headerDom = computed(() => {
-      const headerContent = getSlotVNode<DefaultPropRender>(
-        slots,
-        props,
-        "content"
-      );
+      // 渲染页头
+      if (slots.pageHeader) {
+        return slots.pageHeader({ ...props });
+      }
+
+      const tags = getSlotVNode<DefaultPropRender>(slots, props, "tags");
       const extra = getSlotVNode<DefaultPropRender>(slots, props, "extra");
-      const extraContent = getSlotVNode<DefaultPropRender>(
+      const footer = getSlotVNode<DefaultPropRender>(slots, props, "footer");
+      const content = getSlotVNode<DefaultPropRender>(slots, props, "content");
+      const contentExtra = getSlotVNode<DefaultPropRender>(
         slots,
         props,
-        "extraContent"
+        "contentExtra"
       );
-      // {
-      //   ...props,
-      //   content: headerContent,
-      //   extra,
-      //   extraContent,
-      //   prefixCls: undefined,
-      //   prefixedClassName: prefixedClassName.value,
-      // }
       return (
         <ProPageHeader
           {...props}
-          prefixCls={undefined}
           prefixedClassName={prefixedClassName.value}
-          ghost={ghost.value}
-          content={headerContent}
+          content={content}
+          tags={tags}
+          footer={footer}
           extra={extra}
-          extraContent={extraContent}
+          contentExtra={contentExtra}
         />
       );
     });
 
     return () => {
       const { fixedHeader } = props;
-      const footer = getSlot(slots, props, "footer");
       return (
         <div class={classNames.value}>
           {fixedHeader && headerDom.value ? (
@@ -324,25 +284,24 @@ const PageContainer = defineComponent({
             headerDom.value
           )}
           <GridContent>
-            {loading.value ? (
-              <PageLoading />
-            ) : slots.default ? (
-              <div>
-                <div class={`${prefixedClassName.value}-children-content`}>
-                  {slots.default()}
+            {
+              // 加载状态
+              loading.value ? (
+                <PageLoading />
+              ) : // 默认插槽
+              slots.default ? (
+                <div>
+                  <div class={`${prefixedClassName.value}-children-content`}>
+                    {slots.default()}
+                  </div>
                 </div>
-                {value.hasFooterToolbar && (
-                  <div
-                    style={{
-                      height: 48,
-                      marginTop: 24,
-                    }}
-                  />
-                )}
-              </div>
-            ) : null}
+              ) : null
+            }
           </GridContent>
-          {value.hasFooterToolbar && <FooterToolbar>{footer}</FooterToolbar>}
+          {
+            /* 渲染页脚 */
+            slots.pageFooter && slots.pageFooter({ ...props })
+          }
         </div>
       );
     };
