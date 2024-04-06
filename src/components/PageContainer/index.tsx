@@ -2,32 +2,24 @@ import {
   computed,
   defineComponent,
   unref,
-  toRefs,
   type FunctionalComponent,
-  type VNode,
   type PropType,
   type ExtractPropTypes,
   VNodeChild,
 } from "vue";
 /* replace antd ts define */
 import PageHeader, { pageHeaderProps } from "ant-design-vue/es/page-header";
-import { Tabs, Affix } from "ant-design-vue";
-import type { TabPaneProps } from "./interfaces/TabPane";
-import type { TabBarExtraContent } from "./interfaces/Tabs";
-import type { AffixProps } from "./interfaces/Affix";
+import { Tabs, Affix, AffixProps, TabPaneProps } from "ant-design-vue";
+import { TabBarExtraContent } from "ant-design-vue/es/tabs/src/interface";
+import { withInstall } from "ant-design-vue/es/_util/type";
 /* replace antd ts define end */
 import { useRouteContext } from "../../RouteContext";
-import { getSlot, getSlotVNode } from "../../utils";
+import { getSlotVNode } from "../../utils";
 import PageLoading from "../PageLoading";
 import GridContent from "../GridContent";
-import { withInstall } from "ant-design-vue/es/_util/type";
 import type { CustomRender, VueNode } from "../../typings";
-import type { DefaultPropRender, PageHeaderRender } from "../../RenderTypings";
+import type { DefaultPropRender } from "../../RenderTypings";
 import "./index.css";
-export interface Tab {
-  key: string;
-  tab: string | VNode;
-}
 
 export const pageHeaderTabConfig = {
   /**
@@ -64,9 +56,6 @@ export const pageHeaderTabConfig = {
   // events
   onTabChange: Function, //PropTypes.func,
 };
-export type PageHeaderTabConfig = Partial<
-  ExtractPropTypes<typeof pageHeaderTabConfig>
->;
 
 export const pageContainerProps = {
   ...pageHeaderTabConfig,
@@ -228,7 +217,6 @@ const PageContainer = defineComponent({
   inheritAttrs: false,
   props: pageContainerProps,
   setup(props, { slots }) {
-    const { loading, affixProps } = toRefs(props);
     const value = useRouteContext();
     const { getPrefixCls } = value;
     const prefixCls = props.prefixCls || getPrefixCls();
@@ -268,12 +256,12 @@ const PageContainer = defineComponent({
     });
 
     return () => {
-      const { fixedHeader } = props;
+      const { fixedHeader, affixProps, loading } = props;
       return (
         <div class={classNames.value}>
           {fixedHeader && headerDom.value ? (
             <Affix
-              {...affixProps.value}
+              {...(affixProps as any)}
               offsetTop={
                 value.hasHeader && value.fixedHeader ? value.headerHeight : 0
               }
@@ -286,7 +274,7 @@ const PageContainer = defineComponent({
           <GridContent>
             {
               // 加载状态
-              loading.value ? (
+              loading ? (
                 <PageLoading />
               ) : // 默认插槽
               slots.default ? (
@@ -307,5 +295,5 @@ const PageContainer = defineComponent({
     };
   },
 });
-// <WaterMark content="Pro Layout"></WaterMark>
+
 export default withInstall(PageContainer);
