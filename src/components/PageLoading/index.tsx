@@ -1,18 +1,18 @@
-import 'ant-design-vue/es/spin/style';
-
-import { defineComponent, h } from 'vue';
-import { Spin, type SpinProps } from 'ant-design-vue';
-import { spinProps } from 'ant-design-vue/es/spin/Spin';
-
-export type PageLoadingProps = SpinProps;
+import { defineComponent } from "vue";
+import { Spin } from "ant-design-vue";
+import { spinProps } from "ant-design-vue/es/spin";
+import "ant-design-vue/es/spin/style";
 
 const PageLoading = defineComponent({
-  name: 'PageLoading',
-  props: {
-    ...spinProps(),
-  },
-  render() {
-    return h('div', { style: { paddingTop: '100px', textAlign: 'center' } }, h(Spin, { ...this.$props }));
+  inheritAttrs: false,
+  name: "PageLoading",
+  props: spinProps(),
+  setup(props) {
+    return () => (
+      <div style={{ paddingTop: "100px", textAlign: "center" }}>
+        <Spin {...props}></Spin>
+      </div>
+    );
   },
 });
 
