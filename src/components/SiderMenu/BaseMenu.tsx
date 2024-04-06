@@ -225,11 +225,17 @@ class MenuUtil {
     const meta = { ...item.meta };
     const target = (meta.target || null) as string | null;
     const hasUrl = isUrl(item.path);
-    const CustomTag: any = (target && "a") || this.RouterLink;
-    const props = { to: { name: item.name, ...item.meta } };
-    const attrs =
-      hasUrl || target ? { ...item.meta, href: item.path, target } : {};
-
+    let attrs = {};
+    if (hasUrl || target) {
+      attrs = { ...item.meta, href: item.path, target };
+    }
+    // 自定义标签
+    let CustomTag: any = (target && "a") || this.RouterLink;
+    let props: any = { to: { name: item.name, ...item.meta } };
+    if (meta.disabled) {
+      CustomTag = "span";
+      props = null;
+    }
     const { prefixCls, locale } = this.props;
     const icon =
       (item.meta?.icon && <LazyIcon icon={item.meta.icon} />) || undefined;
