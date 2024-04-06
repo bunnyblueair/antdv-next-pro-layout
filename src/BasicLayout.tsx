@@ -15,6 +15,7 @@ import {
 } from "vue";
 
 import { Layout } from "ant-design-vue";
+import { withInstall } from "ant-design-vue/es/_util/type";
 // import useConfigInject from "ant-design-vue/es/config-provider/hooks/useConfigInject";
 import useMediaQuery from "./hooks/useMediaQuery";
 
@@ -465,10 +466,5 @@ const ProLayout = defineComponent({
     };
   },
 });
-
-ProLayout.install = (app: App) => {
-  app.component(ProLayout.name, ProLayout);
-  return app;
-};
-
-export default ProLayout as DefineComponent<BasicLayoutProps> & Plugin;
+ 
+export default withInstall(ProLayout);
