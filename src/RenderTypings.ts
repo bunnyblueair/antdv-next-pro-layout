@@ -1,11 +1,10 @@
 import type { BreadcrumbProps } from "./RouteContext";
 import type {
   CustomRender,
-  ProProps,
   WithFalse,
   MenuDataItem,
 } from "./typings";
-
+export type ProProps = Record<never, never>;
 // Custom render or slot
 export type DefaultPropRender = WithFalse<CustomRender> | any;
 
@@ -27,8 +26,7 @@ export type MenuHeaderRender = WithFalse<
 export type MenuContentRender = WithFalse<
   (props: ProProps, defaultDom: CustomRender) => CustomRender
 >;
-export type MenuFooterRender = WithFalse<(props?: ProProps) => CustomRender>;
-export type MenuExtraRender = WithFalse<(props?: ProProps) => CustomRender>;
+export type CustomRenderProps = WithFalse<(props?: ProProps) => CustomRender>;
 export type LogoRender = WithFalse<CustomRender>;
 
 export type CollapsedButtonRender = WithFalse<

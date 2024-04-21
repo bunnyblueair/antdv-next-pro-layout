@@ -18,15 +18,11 @@ export type VueNode =
 
 export type Theme = "dark" | "light";
 
-export type MenuTheme = Theme;
-
 export type LayoutType = "side" | "top" | "mix";
 
 export type TargetType = "_blank" | "_self" | unknown;
 
 export type ContentWidth = "Fluid" | "Fixed";
-
-export type ProProps = Record<never, never>;
 
 export interface MetaRecord {
   /**

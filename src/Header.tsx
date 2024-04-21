@@ -1,54 +1,79 @@
-import { defineComponent, computed, toRefs } from 'vue';
-import type { PropType, ExtractPropTypes } from 'vue';
-import type { RouteRecordRaw } from 'vue-router';
-import { GlobalHeader } from './components/GlobalHeader';
-import type { GlobalHeaderProps } from './components/GlobalHeader';
-import globalHeaderProps from './components/GlobalHeader/headerProps';
-import { TopNavHeader } from './components/TopNavHeader';
-import { useRouteContext } from './RouteContext';
-import type { CustomRender, WithFalse } from './typings';
-import { clearMenuItem } from './utils';
-import './Header.css';
-import { Layout } from 'ant-design-vue';
-import PropTypes from 'ant-design-vue/es/_util/vue-types';
+import { defineComponent, computed, toRefs } from "vue";
+import type { PropType, ExtractPropTypes } from "vue";
+import type { RouteRecordRaw } from "vue-router";
+import GlobalHeader, {
+  globalHeaderProps,
+  type GlobalHeaderProps,
+} from "./components/GlobalHeader";
+import { useRouteContext } from "./RouteContext";
+import type { CustomRender, WithFalse } from "./typings";
+import { clearMenuItem } from "./utils";
+import "./Header.css";
+import { Layout } from "ant-design-vue";
+import PropTypes from "ant-design-vue/es/_util/vue-types";
+import TopNavHeader from "./components/TopNavHeader";
 
 export const headerViewProps = {
   ...globalHeaderProps,
   headerRender: {
-    type: [Object, Function, Boolean] as PropType<WithFalse<(props: any, defaultDom: CustomRender) => CustomRender>>,
+    type: [Object, Function, Boolean] as PropType<
+      WithFalse<(props: any, defaultDom: CustomRender) => CustomRender>
+    >,
     default: () => undefined,
   },
   headerTitleRender: {
-    type: [Object, Function, Boolean] as PropType<WithFalse<(props: any, defaultDom: CustomRender) => CustomRender>>,
+    type: [Object, Function, Boolean] as PropType<
+      WithFalse<(props: any, defaultDom: CustomRender) => CustomRender>
+    >,
     default: () => undefined,
   },
   headerContentRender: {
-    type: [Object, Function, Boolean] as PropType<WithFalse<(props: any) => CustomRender>>,
+    type: [Object, Function, Boolean] as PropType<
+      WithFalse<(props: any) => CustomRender>
+    >,
     default: () => undefined,
   },
   hasSiderMenu: PropTypes.looseBool,
   siderWidth: PropTypes.number.def(208),
 };
 
-export type HeaderViewProps = Partial<ExtractPropTypes<typeof headerViewProps> & GlobalHeaderProps>;
+export type HeaderViewProps = Partial<
+  ExtractPropTypes<typeof headerViewProps> & GlobalHeaderProps
+>;
 
 export const HeaderView = defineComponent({
-  name: 'HeaderView',
+  name: "HeaderView",
   inheritAttrs: false,
   props: headerViewProps,
   setup(props) {
-    const { prefixCls, isMobile, fixedHeader, hasSiderMenu, headerHeight, layout, navTheme, onCollapse } =
-      toRefs(props);
+    const {
+      prefixCls,
+      isMobile,
+      fixedHeader,
+      hasSiderMenu,
+      headerHeight,
+      layout,
+      onCollapse,
+    } = toRefs(props);
     const context = useRouteContext();
-    const needFixedHeader = computed(() => fixedHeader.value || context.fixedHeader || layout.value === 'mix');
-    const isMix = computed(() => layout.value === 'mix');
-    const isTop = computed(() => layout.value === 'top');
+    const needFixedHeader = computed(
+      () => fixedHeader.value || context.fixedHeader || layout.value === "mix"
+    );
+    const isMix = computed(() => layout.value === "mix");
+    const isTop = computed(() => layout.value === "top");
     const needSettingWidth = computed(
-      () => needFixedHeader.value && hasSiderMenu.value && !isTop.value && !isMobile.value
+      () =>
+        needFixedHeader.value &&
+        hasSiderMenu.value &&
+        !isTop.value &&
+        !isMobile.value
     );
     // cache menu
     const clearMenuData = computed(
-      () => (context.menuData && clearMenuItem(context.menuData as RouteRecordRaw[])) || []
+      () =>
+        (context.menuData &&
+          clearMenuItem(context.menuData as RouteRecordRaw[])) ||
+        []
     );
 
     const className = computed(() => {
@@ -59,9 +84,14 @@ export const HeaderView = defineComponent({
     });
     const renderContent = () => {
       let defaultDom = (
-        <GlobalHeader {...props} onCollapse={onCollapse.value} menuData={clearMenuData.value}>
+        <GlobalHeader
+          {...props}
+          onCollapse={onCollapse.value}
+          menuData={clearMenuData.value}
+        >
           {!isMix.value
-            ? props.headerContentRender && typeof props.headerContentRender === 'function'
+            ? props.headerContentRender &&
+              typeof props.headerContentRender === "function"
               ? props.headerContentRender(props)
               : props.headerContentRender
             : null}
@@ -70,9 +100,8 @@ export const HeaderView = defineComponent({
       if (isTop.value && !isMobile.value) {
         defaultDom = (
           <TopNavHeader
-            theme={navTheme.value as 'light' | 'dark'}
-            mode="horizontal"
             {...props}
+            mode="horizontal"
             onCollapse={onCollapse.value}
             menuData={clearMenuData.value}
           />
@@ -88,9 +117,9 @@ export const HeaderView = defineComponent({
      * 计算侧边栏的宽度，不然导致左边的样式会出问题
      */
     const width = computed(() => {
-      return layout.value !== 'mix' && needSettingWidth.value
+      return layout.value !== "mix" && needSettingWidth.value
         ? `calc(100% - ${props.collapsed ? 48 : props.siderWidth}px)`
-        : '100%';
+        : "100%";
     });
     const right = computed(() => (needFixedHeader.value ? 0 : undefined));
     return () => {
@@ -101,7 +130,7 @@ export const HeaderView = defineComponent({
               style={{
                 height: `${headerHeight.value}px`,
                 lineHeight: `${headerHeight.value}px`,
-                background: 'transparent',
+                background: "transparent",
               }}
             />
           )}
@@ -111,7 +140,7 @@ export const HeaderView = defineComponent({
               height: `${headerHeight.value}px`,
               lineHeight: `${headerHeight.value}px`,
               width: width.value,
-              zIndex: layout.value === 'mix' ? 100 : 19,
+              zIndex: layout.value === "mix" ? 100 : 19,
               right: right.value,
             }}
             class={className.value}
