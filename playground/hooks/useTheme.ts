@@ -40,7 +40,7 @@ export function getLocalColor() {
  * 获取随机颜色范围
  * @returns 颜色
  */
-function getRandomColor(): string {
+export function getRandomColor(): string {
   const colors: string[] = [
     "#f5222d",
     "#fa541c",

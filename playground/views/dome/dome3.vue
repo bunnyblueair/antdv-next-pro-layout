@@ -6,7 +6,8 @@
       src: 'https://gw.alipayobjects.com/zos/antfincdn/K%24NnlsB%26hz/pageHeader.svg',
     }"
     @back="() => $router.go(-1)"
-    :ghost="true"
+    :ghost="false"
+    :loading="loading"
   >
     <template #extra>
       <strong>Extra Area</strong>
@@ -36,4 +37,9 @@ import { ref } from "vue";
 import { PageContainer } from "antdv-pro-layout";
 
 const list = ref<number>(50);
+
+const loading = ref<boolean>(true);
+setTimeout(() => {
+  loading.value = false
+}, 1200);
 </script>

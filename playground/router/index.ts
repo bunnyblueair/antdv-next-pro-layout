@@ -4,7 +4,7 @@ import BasicLayout from "../layouts/BasicLayout.vue";
 import BlankLayout from "../layouts/BlankLayout.vue";
 import NestedLayout from "../layouts/NestedLayout.vue";
 
-const routes: RouteRecordRaw[] = [
+const constantRoutes: RouteRecordRaw[] = [
   {
     path: "/",
     name: "Root",
@@ -45,26 +45,32 @@ const routes: RouteRecordRaw[] = [
             path: "page-info",
             name: "PageInfo",
             meta: { title: "页面信息", icon: "icon-huifu" },
-            component: () => import("../views/domes/page-info.vue"),
+            component: () => import("@/views/domes/page-info.vue"),
           },
           {
             path: "page-typography",
             name: "PageTypography",
             meta: { title: "文本信息", icon: "icon-huizhiguize" },
-            component: () => import("../views/domes/page-typography.vue"),
+            component: () => import("@/views/domes/page-typography.vue"),
           },
           {
             path: "dynamic-match/:id(\\d+)",
             name: "DynamicMatch",
             // 路由 path 默认参数再 meta.params 里
             meta: { title: "动态参数页面", params: { id: 1 }, cache: true },
-            component: () => import("../views/domes/dynamic-match.vue"),
+            component: () => import("@/views/domes/dynamic-match.vue"),
           },
           {
             path: "disabled",
             name: "Disabled",
             meta: { title: "禁止点击", disabled: true },
             component: () => {},
+          },
+          {
+            path: "danger",
+            name: "Danger",
+            meta: { title: "危险警告", danger: true },
+            component: () => import("@/views/dome/dome3.vue"),
           },
           {
             path: "https://github.com/TsMask",
@@ -113,8 +119,16 @@ const routes: RouteRecordRaw[] = [
 ];
 
 const router = createRouter({
+  // history: createWebHashHistory(import.meta.env.BASE_URL),
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes,
+  routes: constantRoutes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    } else {
+      return { top: 0 };
+    }
+  },
 });
 
 export default router;

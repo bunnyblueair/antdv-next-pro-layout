@@ -26,11 +26,11 @@ const loading = ref(false);
 
 const proConfig = ref<any>({
   /**导航布局 "side" | "top" | "mix" */
-  layout: "side",
-  /**导航菜单主题色 "dark" | "light" */
-  navTheme: "light",
-  /**顶部导航主题，仅导航布局为mix时生效 "dark" | "light" */
-  headerTheme: "light",
+  layout: "mix",
+  /**全局主题色*/
+  theme: "dark", // "light",
+  /**菜单导航主题色*/
+  menuTheme: "dark", // "light",
   /**固定顶部栏 */
   fixedHeader: true,
   /**固定菜单栏 */
@@ -93,10 +93,50 @@ function settingDrawer(bool: boolean) {
           <h1>Preview Pro</h1>
         </router-link>
       </template>
+      <template #menuHeaderExtraRender2>
+        <div style="height: 100px; background-color: red">
+          menuHeaderExtraRender
+        </div>
+      </template>
+      <template #collapsedButtonRender2="collapsed">
+        <div style="height: 100px; background-color: green">
+          collapsedButtonRender
+          <button @click="() => (state.collapsed = !state.collapsed)">
+            {{ String(collapsed) }}
+          </button>
+        </div>
+      </template>
+      <template #menuFooterRender2>
+        <div style="height: 100px; background-color: blue">
+          menuFooterRender
+        </div>
+      </template>
+      <template #menuItemRender2="menuItem">
+        <a-menu-item
+          :disabled="menuItem.meta?.disabled"
+          :danger="menuItem.meta?.danger"
+          :key="menuItem.path"
+        >
+          {{ menuItem.name }}
+        </a-menu-item>
+      </template>
+      <template #subMenuItemRender2="menuItem">
+        <template v-if="menuItem.meta?.type === 'group'">
+          <a-menu-item-group :title="menuItem.meta?.title" :key="menuItem.path">
+            {{ menuItem.children.length }}
+          </a-menu-item-group>
+        </template>
+        <template v-else>
+          <a-sub-menu :title="menuItem.meta?.title" :key="menuItem.path">
+            {{ menuItem.children.length }}
+          </a-sub-menu>
+        </template>
+      </template>
 
       <template #rightContentRender>
         <RightContent @drawer="settingDrawer" />
       </template>
+
       <SettingDrawer
         v-model:config="proConfig"
         :open="settingDrawerOpen"

@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { changePrimaryColor, getLocalColor } from "@/hooks/useTheme";
+import { MenuTheme } from "ant-design-vue";
 import { PropType, ref } from "vue";
 
 type ConfigType = {
   /**导航布局 */
   layout: "side" | "top" | "mix";
-  /**导航菜单主题色 */
-  navTheme: "dark" | "light";
-  /**顶部导航主题，仅导航布局为mix时生效 */
-  headerTheme: "dark" | "light";
+  /**全局主题色*/
+  theme: "dark" | "light";
+  /**菜单导航主题色 */
+  menuTheme: MenuTheme;
   /**固定顶部栏 */
   fixedHeader: boolean;
   /**固定菜单栏 */
@@ -111,15 +112,29 @@ function fnColorChange(e: Event) {
           </template>
         </a-list-item>
         <a-list-item>
+          主题明亮
+          <template #actions> 全局主题色 </template>
+          <template #extra>
+            <a-switch
+              checked-children="是"
+              un-checked-children="否"
+              :checked="config.theme === 'dark'"
+              @change="
+            (checked:any) => changeConf('theme', checked ? 'dark' : 'light')
+          "
+            ></a-switch>
+          </template>
+        </a-list-item>
+        <a-list-item>
           深色菜单
           <template #actions> 只能改变导航模式的菜单 </template>
           <template #extra>
             <a-switch
               checked-children="是"
               un-checked-children="否"
-              :checked="config.navTheme === 'dark'"
+              :checked="config.menuTheme === 'dark'"
               @change="
-            (checked:any) => changeConf('navTheme', checked ? 'dark' : 'light')
+            (checked:any) => changeConf('menuTheme', checked ? 'dark' : 'light')
           "
             ></a-switch>
           </template>

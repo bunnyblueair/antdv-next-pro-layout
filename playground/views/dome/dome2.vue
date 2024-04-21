@@ -19,7 +19,7 @@
         <a-breadcrumb-item>List</a-breadcrumb-item>
         <a-breadcrumb-item>App</a-breadcrumb-item>
       </a-breadcrumb>
-      <div :style="{ background: '#fff', padding: '24px', minHeight: '280px' }">
+      <div :style="{ background: '#ccc', padding: '24px', minHeight: '280px' }">
         Content {{ selectedKeys }}
       </div>
     </a-layout-content>

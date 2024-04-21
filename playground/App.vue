@@ -1,17 +1,51 @@
 <template>
-  <ConfigProvider :locale="zhCN" component-size="middle">
+  <!-- component-size="middle" -->
+  <a-config-provider :locale="zhCN" :theme="themeConfig">
     <router-view />
-  </ConfigProvider>
+  </a-config-provider>
 </template>
 
 <script setup lang="ts">
-import { ConfigProvider } from "ant-design-vue/lib";
-import { usePrimaryColor } from "@/hooks/useTheme";
+import { ConfigProvider, theme } from "ant-design-vue/lib";
+import { ThemeConfig } from "ant-design-vue/lib/config-provider/context";
+import { usePrimaryColor, getRandomColor } from "@/hooks/useTheme";
 import zhCN from "ant-design-vue/lib/locale/zh_CN";
 import dayjs from "dayjs";
 import "dayjs/locale/zh-cn";
+import { ref } from "vue";
 dayjs.locale("zh-cn"); // 默认中文
 usePrimaryColor(); // 载入用户自定义主题色
+
+const themeColor = {
+  light: theme.defaultAlgorithm,
+  compact: theme.compactAlgorithm,
+  dark: theme.darkAlgorithm,
+};
+
+const themeConfig = ref<ThemeConfig>({
+  // algorithm: themeColor["light"],
+  algorithm: themeColor["dark"],
+
+  token: {
+    // colorBgContainer: "#fff",
+    colorPrimary: "#1668dc",// "#722ED1",
+    borderRadius: 6,
+  },
+});
+
+// setInterval(() => {
+//   const color = getRandomColor();
+//   ConfigProvider.config({
+//     theme: {
+//       primaryColor: color,
+//     },
+//   });
+//   if (themeConfig.value && themeConfig.value.token) {
+//     themeConfig.value.token.colorPrimary = color;
+//     const theme = Math.random() > 0.5 ? "light" : "dark";
+//     themeConfig.value.algorithm = themeColor[theme];
+//   }
+// }, 10000);
 </script>
 
 <style>

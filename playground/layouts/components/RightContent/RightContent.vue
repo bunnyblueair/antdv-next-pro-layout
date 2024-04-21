@@ -60,7 +60,7 @@ function fnDrawerOpen() {
         <template #title>改变颜色</template>
         <a-button type="text" @click="changePrimaryColor()">
           <template #icon>
-            <BgColorsOutlined :style="{ color: getLocalColor() }" />
+            <BgColorsOutlined style="color: var(--ant-primary-color)" />
           </template>
         </a-button>
       </a-tooltip>
