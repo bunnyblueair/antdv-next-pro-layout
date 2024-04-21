@@ -1,5 +1,6 @@
-import type { PropType, ExtractPropTypes } from 'vue';
-import type { MenuTheme, ContentWidth } from './typings';
+import type { PropType, ExtractPropTypes } from "vue";
+import type { ContentWidth, LayoutType, Theme } from "./typings";
+import { MenuTheme } from "ant-design-vue";
 
 export interface RenderSetting {
   headerRender?: false;
@@ -8,22 +9,14 @@ export interface RenderSetting {
   menuHeaderRender?: false;
 }
 export interface PureSettings {
-  /**
-   * theme for nav menu
-   */
-  navTheme: MenuTheme | 'realDark' | undefined;
-  /**
-   * @name 顶部菜单的颜色，mix 模式下生效
-   */
-  headerTheme?: MenuTheme;
-  /**
-   * nav menu position: `side` or `top`
-   */
+  /**全局主题色*/
+  theme: Theme;
+  /**菜单导航主题色*/
+  menuTheme: MenuTheme;
+  /**customize header height */
   headerHeight?: number;
-  /**
-   * customize header height
-   */
-  layout: 'side' | 'top' | 'mix';
+  /**菜单布局 */
+  layout: LayoutType;
   /**
    * layout of content: `Fluid` or `Fixed`, only works when layout is top
    */
@@ -51,43 +44,48 @@ export interface PureSettings {
 export type ProSettings = PureSettings & RenderSetting;
 
 export const defaultSettings = {
-  navTheme: 'dark',
-  layout: 'side',
-  contentWidth: 'Fluid',
+  theme: "light",
+  menuTheme: "light",
+  layout: "side",
+  contentWidth: "Fluid",
   fixedHeader: false,
   fixSiderbar: false,
   menu: {
     locale: true,
   },
   headerHeight: 48,
-  title: 'Ant Design Pro',
-  iconfontUrl: '',
-  primaryColor: '#1890ff',
+  title: "Ant Design Vue Pro",
+  iconfontUrl: "",
+  primaryColor: "#1890ff",
 };
 
 export const defaultSettingProps = {
-  navTheme: {
-    type: String as PropType<PureSettings['navTheme']>,
-    default: defaultSettings.navTheme,
+  theme: {
+    type: String as PropType<PureSettings["theme"]>,
+    default: defaultSettings.theme,
+  },
+  menuTheme: {
+    type: String as PropType<PureSettings["menuTheme"]>,
+    default: defaultSettings.menuTheme,
   },
   layout: {
-    type: String as PropType<PureSettings['layout']>,
+    type: String as PropType<PureSettings["layout"]>,
     default: defaultSettings.layout,
   },
   contentWidth: {
-    type: String as PropType<PureSettings['contentWidth']>,
+    type: String as PropType<PureSettings["contentWidth"]>,
     default: defaultSettings.contentWidth,
   },
   fixedHeader: {
-    type: Boolean as PropType<PureSettings['fixedHeader']>,
+    type: Boolean as PropType<PureSettings["fixedHeader"]>,
     default: defaultSettings.fixedHeader,
   },
   fixSiderbar: {
-    type: Boolean as PropType<PureSettings['fixSiderbar']>,
+    type: Boolean as PropType<PureSettings["fixSiderbar"]>,
     default: defaultSettings.fixSiderbar,
   },
   menu: {
-    type: Object as PropType<PureSettings['menu']>,
+    type: Object as PropType<PureSettings["menu"]>,
     default: () => {
       return {
         locale: true,
@@ -95,19 +93,19 @@ export const defaultSettingProps = {
     },
   },
   headerHeight: {
-    type: Number as PropType<PureSettings['headerHeight']>,
+    type: Number as PropType<PureSettings["headerHeight"]>,
     default: defaultSettings.headerHeight,
   },
   title: {
-    type: String as PropType<PureSettings['title']>,
+    type: String as PropType<PureSettings["title"]>,
     default: () => defaultSettings.title,
   },
   iconfontUrl: {
-    type: String as PropType<PureSettings['iconfontUrl']>,
+    type: String as PropType<PureSettings["iconfontUrl"]>,
     default: () => defaultSettings.iconfontUrl,
   },
   primaryColor: {
-    type: String as PropType<PureSettings['primaryColor']>,
+    type: String as PropType<PureSettings["primaryColor"]>,
     default: () => defaultSettings.primaryColor,
   },
   /**

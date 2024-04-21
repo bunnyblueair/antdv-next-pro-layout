@@ -5,12 +5,9 @@ import {
   defineComponent,
   toRefs,
   provide,
-  type App,
-  type Plugin,
   type CSSProperties,
   type PropType,
   type ExtractPropTypes,
-  type DefineComponent,
   watchEffect,
 } from "vue";
 
@@ -25,19 +22,13 @@ import {
   defaultRouteContext,
   type RouteContextProps,
 } from "./RouteContext";
-import SiderMenuWrapper, { siderMenuProps } from "./components/SiderMenu";
+import SiderMenuWrapper from "./components/SiderMenu";
 import { WrapContent } from "./WrapContent";
-import { HeaderView as Header, headerViewProps } from "./Header";
+import { HeaderView, headerViewProps } from "./Header";
 import { getSlot, getMenuFirstChildren, pick } from "./utils";
-import globalHeaderProps from "./components/GlobalHeader/headerProps";
 
 import type { BreadcrumbProps, Route } from "./RouteContext";
-import type {
-  CustomRender,
-  FormatLocale,
-  MenuDataItem,
-  WithFalse,
-} from "./typings";
+import type { CustomRender } from "./typings";
 import type {
   BreadcrumbRender,
   HeaderContentRender,
@@ -48,14 +39,15 @@ import type {
   MenuItemRender,
   SubMenuItemRender,
   MenuContentRender,
-  MenuFooterRender,
-  MenuExtraRender,
+  CustomRenderProps,
   MenuHeaderRender,
   CollapsedButtonRender,
 } from "./RenderTypings";
 
 import PageLoading from "./components/PageLoading";
 import "./BasicLayout.css";
+import { siderMenuProps } from "./components/SiderMenu/SiderMenu";
+import { globalHeaderProps } from "./components/GlobalHeader";
 
 export const basicLayoutProps = {
   ...defaultSettingProps,
@@ -102,9 +94,7 @@ export const basicLayoutProps = {
     default: () => null,
   },
   collapsedButtonRender: {
-    type: [Function, Object, Boolean] as PropType<
-      WithFalse<(collapsed?: boolean) => CustomRender>
-    >,
+    type: [Function, Object, Boolean] as PropType<CollapsedButtonRender>,
     default: () => undefined,
   },
   breadcrumbRender: {
@@ -194,11 +184,12 @@ const ProLayout = defineComponent({
     const className = computed(() => {
       return {
         [baseClassName.value]: true,
-        [`screen-${colSize.value}`]: colSize.value,
         [`${baseClassName.value}-top-menu`]: isTop.value,
         [`${baseClassName.value}-is-children`]: props.isChildrenLayout,
         [`${baseClassName.value}-fix-siderbar`]: props.fixSiderbar,
-        [`${baseClassName.value}-${props.layout}`]: props.layout,
+        [`screen-${colSize.value}`]: colSize.value,
+        [`layout-${props.layout}`]: true,
+        [`theme-${props.theme}`]: true,
       };
     });
 
@@ -221,14 +212,14 @@ const ProLayout = defineComponent({
       p: BasicLayoutProps & {
         hasSiderMenu: boolean;
         headerRender: HeaderRender;
-        rightContentRender: RightContentRender;
+        rightContentRender: CustomRenderProps;
       },
       matchMenuKeys?: string[]
     ): CustomRender | null => {
       if (p.headerRender === false || p.pure) {
         return null;
       }
-      return <Header {...p} matchMenuKeys={matchMenuKeys || []} />;
+      return <HeaderView {...p} matchMenuKeys={matchMenuKeys || []} />;
     };
 
     const breadcrumb = computed<BreadcrumbProps>(() => ({
@@ -293,7 +284,7 @@ const ProLayout = defineComponent({
         props,
         "headerContentRender"
       );
-      const rightContentRender = getSlot<RightContentRender>(
+      const rightContentRender = getSlot<CustomRenderProps>(
         slots,
         props,
         "rightContentRender"
@@ -312,17 +303,17 @@ const ProLayout = defineComponent({
         props,
         "menuHeaderRender"
       );
-      const menuExtraRender = getSlot<MenuExtraRender>(
+      const menuHeaderExtraRender = getSlot<CustomRenderProps>(
         slots,
         props,
-        "menuExtraRender"
+        "menuHeaderExtraRender"
       );
       const menuContentRender = getSlot<MenuContentRender>(
         slots,
         props,
         "menuContentRender"
       );
-      const menuFooterRender = getSlot<MenuFooterRender>(
+      const menuFooterRender = getSlot<CustomRenderProps>(
         slots,
         props,
         "menuFooterRender"
@@ -354,15 +345,10 @@ const ProLayout = defineComponent({
             rightContentRender,
             collapsedButtonRender,
             headerTitleRender: menuHeaderRender,
-            menuExtraRender,
+            menuHeaderExtraRender,
             menuContentRender,
             headerContentRender,
             headerRender: customHeaderRender,
-            theme: (props.navTheme || "dark")
-              .toLocaleLowerCase()
-              .includes("dark")
-              ? "dark"
-              : "light",
           },
           props.matchMenuKeys
         )
@@ -413,7 +399,8 @@ const ProLayout = defineComponent({
         return {
           [`${baseClassName.value}-content`]: true,
           [`${baseClassName.value}-has-header`]: headerDom,
-          [`${baseClassName.value}-content-disable-margin`]: props.disableContentMargin,
+          [`${baseClassName.value}-content-disable-margin`]:
+            props.disableContentMargin,
         };
       });
 
@@ -434,7 +421,7 @@ const ProLayout = defineComponent({
                     {...restProps}
                     isMobile={isMobile.value}
                     menuHeaderRender={menuHeaderRender}
-                    menuExtraRender={menuExtraRender}
+                    menuHeaderExtraRender={menuHeaderExtraRender}
                     menuContentRender={menuContentRender}
                     menuFooterRender={menuFooterRender}
                     menuItemRender={menuItemRender}
@@ -466,5 +453,5 @@ const ProLayout = defineComponent({
     };
   },
 });
- 
+
 export default withInstall(ProLayout);
