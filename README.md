@@ -84,22 +84,22 @@ const layoutConf = reactive({
 | title                   | layout in the upper left corner title                                 | VNode \| String                                                        | `'Ant Design Pro'` |
 | logo                    | layout top left logo url                                              | VNode \| render                                                        | -                  |
 | loading                 | layout loading status                                                 | boolean                                                                | -                  |
-| layout                  | layout menu mode, sidemenu: right navigation, topmenu: top navigation | 'side' \| 'top' \| 'mix'                                               | `'side'`           |
+| layout                  | 菜单布局              | 'side' \| 'top' \| 'mix'                     | `'side'`           |
 | contentWidth            | content mode of layout, Fluid: adaptive, Fixed: fixed width 1200px    | 'Fixed' \| 'Fluid'                                                     | `Fluid`            |
-| navTheme                | Navigation theme                                                      | 'light' \|'dark'                                                       | `'light'`          |
-| headerTheme             | Header Bar theme                                                      | 'light' \|'dark'                                                       | `'light'`          |
+| theme                 | 全局主题色              | 'light' \|'dark'                                                       | `'light'`          |
+| menuTheme             | 菜单导航主题色          | 'light' \|'dark'                                                       | `'light'`          |
 | menuData                | Vue-router `routes` prop                                              | Object                                                                 | `[{}]`             |
 | collapsed               | control menu's collapse and expansion                                 | boolean                                                                | true               |
 | selectedKeys            | menu selected keys                                                    | string[]                                                               | `[]`               |
 | openKeys                | menu openKeys                                                         | string[]                                                               | `[]`               |
 | isMobile                | is mobile                                                             | boolean                                                                | false              |
 | onCollapse \| @collapse | folding collapse event of menu                                        | (collapsed: boolean) => void                                           | -                  |
-| menuHeaderRender        | render header logo and title                                          | v-slot \| VNode \| (logo,title)=>VNode \| false                        | -                  |
-| menuExtraRender         | render extra menu item                                                | v-slot \| VNode \| (props)=>VNode \| false                             | -                  |
-| menuFooterRender        | render footer menu item                                               | v-slot \| VNode \| (props)=>VNode \| false                             | -                  |
-| menuItemRender          | custom render Menu.Item                                               | v-slot#menuItemRender="{ item, icon }" \| ({ item, icon }) => VNode    | null               |
-| subMenuItemRender       | custom render Menu.SubItem                                            | v-slot#subMenuItemRender="{ item, icon }" \| ({ item, icon }) => VNode | null               |
-| collapsedButtonRender   | custom collapsed button method                                        | `slot` \| (collapsed: boolean) => VNode                                | -                  |
+| menuHeaderRender        | 渲染菜单头logo和标题区域       | v-slot \| VNode \| (logo,title)=>VNode \| false                        | -                  |
+| menuHeaderExtraRender   | 渲染菜单头拓展区域             | v-slot \| VNode \| (props)=>VNode \| false                             | -                  |
+| menuFooterRender        | 渲染菜单底脚区域               | v-slot \| VNode \| (props)=>VNode \| false                             | -                  |
+| menuItemRender          | 渲染菜单项 Menu.Item          | v-slot#menuItemRender="menuItem"          | -               |
+| subMenuItemRender       | 渲染菜嵌套子项 Menu.SubItem   | v-slot#subMenuItemRender="menuItem"       | -               |
+| collapsedButtonRender   | 渲染菜单收起按钮区域           | v-slot#collapsedButtonRender="collapsed"  | -               |
 | headerRender            | custom header render method                                           | `slot` \| (props: BasicLayoutProps) => VNode                           | -                  |
 | headerContentRender     | header content render method only layout side                         | `slot` \| (props: BasicLayoutProps) => VNode                           | -                  |
 | rightContentRender      | header right content render method                                    | `slot` \| (props: BasicLayoutProps) => VNode                           | -                  |
@@ -148,22 +148,6 @@ const layoutConf = reactive({
 </template>
 ```
 
-##### Custom menuExtraRender
-
-```vue
-<template #menuExtraRender="{ collapsed }">
-  <a-input-search v-if="!collapsed" />
-</template>
-```
-
-##### Custom menuFooterRender
-
-```vue
-<template #menuFooterRender>
-  <div>menu footer</div>
-</template>
-```
-
 ##### Custom breadcrumbRender
 
 ```vue
@@ -174,15 +158,6 @@ const layoutConf = reactive({
   <router-link v-else :to="{ path: route.path, params }">
     {{ route.breadcrumbName }}
   </router-link>
-</template>
-```
-
-##### Custom collapsedButtonRender
-
-```vue
-<template #collapsedButtonRender="collapsed">
-  <HeartOutlined v-if="collapsed" />
-  <SmileOutlined v-else />
 </template>
 ```
 
