@@ -11,6 +11,10 @@
 .ant-pro-global-header > * {
   height: 100%;
 }
+.theme-dark .ant-pro-global-header {
+  color: #fff;
+  background: #000000d9;
+}
 .ant-pro-global-header-layout-mix {
   background-color: #fff;
 }

@@ -3,25 +3,30 @@ import {
   computed,
   type FunctionalComponent,
   type ExtractPropTypes,
+  PropType,
 } from "vue";
 import { default as ResizeObserver } from "ant-design-vue/es/vc-resize-observer";
-import globalHeaderProps from "../GlobalHeader/headerProps";
-import {
-  BaseMenu,
-  siderMenuProps,
-  defaultRenderLogoAndTitle,
-} from "../SiderMenu";
-import type { SiderMenuProps } from "../SiderMenu/SiderMenu";
 import { useRouteContext } from "../../RouteContext";
 
 import "./index.css";
+import {
+  defaultRenderLogoAndTitle,
+  siderMenuProps,
+} from "../SiderMenu/SiderMenu";
+import BaseMenu from "../SiderMenu/BaseMenu";
+import type { RightContentRender } from "../../RenderTypings";
 
-export const topNavHeaderProps = { ...siderMenuProps, ...globalHeaderProps };
+export const topNavHeaderProps = {
+  ...siderMenuProps,
+  rightContentRender: {
+    type: [Object, Function] as PropType<RightContentRender>,
+    default: () => undefined,
+  },
+};
 
 export type TopNavHeaderProps = Partial<
   ExtractPropTypes<typeof topNavHeaderProps>
-> &
-  Partial<SiderMenuProps>;
+>;
 
 const RightContent: FunctionalComponent<TopNavHeaderProps> = ({
   rightContentRender,
@@ -60,7 +65,7 @@ const RightContent: FunctionalComponent<TopNavHeaderProps> = ({
   );
 };
 
-export const TopNavHeader: FunctionalComponent<TopNavHeaderProps> = (props) => {
+const TopNavHeader: FunctionalComponent<TopNavHeaderProps> = (props) => {
   const headerRef = ref();
   const {
     prefixCls: propPrefixCls,
@@ -76,7 +81,7 @@ export const TopNavHeader: FunctionalComponent<TopNavHeaderProps> = (props) => {
   const context = useRouteContext();
   const prefixCls = `${propPrefixCls || "ant-pro"}-top-nav-header`;
   const headerDom = defaultRenderLogoAndTitle(
-    { ...props, collapsed: false } as SiderMenuProps,
+    { ...props, collapsed: false },
     // REMARK:: Any time render header title
     // layout === 'mix' ? 'headerTitleRender' : undefined,
     layout !== "side" ? "headerTitleRender" : undefined
@@ -99,7 +104,7 @@ export const TopNavHeader: FunctionalComponent<TopNavHeaderProps> = (props) => {
           <BaseMenu
             prefixCls={propPrefixCls}
             locale={props.locale || context.locale}
-            theme={props.theme === "realDark" ? "dark" : props.theme}
+            theme={props.menuTheme}
             mode={props.mode}
             collapsed={props.collapsed}
             iconfontUrl={props.iconfontUrl}
@@ -126,3 +131,5 @@ export const TopNavHeader: FunctionalComponent<TopNavHeaderProps> = (props) => {
 };
 
 TopNavHeader.inheritAttrs = false;
+
+export default TopNavHeader;

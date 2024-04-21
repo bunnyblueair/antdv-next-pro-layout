@@ -4,20 +4,59 @@ import type { CustomRender } from "../../typings";
 import {
   defaultRenderLogo,
   defaultRenderLogoAndTitle,
-  defaultRenderCollapsedButton,
-  type SiderMenuProps,
+  siderMenuProps,
 } from "../SiderMenu/SiderMenu";
-import { TopNavHeader } from "../TopNavHeader";
+import TopNavHeader from "../TopNavHeader";
 import { clearMenuItem } from "../../utils";
 import { useRouteContext } from "../../RouteContext";
-import type headerProps from "./headerProps";
 
 import "./index.css";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons-vue";
 
-export type GlobalHeaderProps = ExtractPropTypes<typeof headerProps>;
+import type { PropType } from "vue";
+import type { MenuDataItem } from "../../typings";
+import { defaultSettingProps } from "../../defaultSettings";
+import PropTypes from "ant-design-vue/es/_util/vue-types";
+import type {
+  MenuContentRender,
+  RightContentRender,
+} from "../../RenderTypings";
+
+export const globalHeaderProps = {
+  ...defaultSettingProps,
+  prefixCls: PropTypes.string.def("ant-pro"),
+  collapsed: PropTypes.looseBool,
+  isMobile: PropTypes.looseBool,
+  logo: siderMenuProps.logo,
+  logoStyle: siderMenuProps.logoStyle,
+  menuData: {
+    type: Array as PropType<MenuDataItem[]>,
+    default: () => [],
+  },
+  splitMenus: siderMenuProps.splitMenus,
+  menuRender: {
+    type: [Object, Function] as PropType<MenuContentRender>,
+    default: () => undefined,
+  },
+  menuHeaderRender: siderMenuProps.menuHeaderRender,
+  menuItemRender: siderMenuProps.menuItemRender,
+  subMenuItemRender: siderMenuProps.subMenuItemRender,
+  rightContentRender: {
+    type: [Object, Function] as PropType<RightContentRender>,
+    default: () => undefined,
+  },
+  collapsedButtonRender: siderMenuProps.collapsedButtonRender,
+  matchMenuKeys: siderMenuProps.matchMenuKeys,
+
+  // events
+  onMenuHeaderClick: PropTypes.func,
+  onCollapse: siderMenuProps.onCollapse,
+  onOpenKeys: siderMenuProps.onOpenKeys,
+  onSelect: siderMenuProps.onSelect,
+};
 
 const renderLogo = (
-  menuHeaderRender: SiderMenuProps["menuHeaderRender"],
+  menuHeaderRender: ExtractPropTypes<typeof siderMenuProps>["menuHeaderRender"],
   logoDom: CustomRender
 ) => {
   if (menuHeaderRender === false) {
@@ -29,20 +68,22 @@ const renderLogo = (
   return logoDom;
 };
 
-export const GlobalHeader: FunctionalComponent<GlobalHeaderProps> = (
+export type GlobalHeaderProps = Partial<
+  ExtractPropTypes<typeof globalHeaderProps>
+>;
+
+const GlobalHeader: FunctionalComponent<GlobalHeaderProps> = (
   props,
   { slots, emit }
 ) => {
   const {
     isMobile,
     logo,
-    collapsed,
-    collapsedButtonRender = defaultRenderCollapsedButton,
     rightContentRender,
     menuHeaderRender,
     onMenuHeaderClick,
     layout,
-    headerTheme = "dark",
+    menuTheme,
     splitMenus,
     menuData,
     prefixCls: customPrefixCls,
@@ -54,22 +95,21 @@ export const GlobalHeader: FunctionalComponent<GlobalHeaderProps> = (
     return {
       [baseClassName.value]: true,
       [`${baseClassName.value}-layout-${layout}`]:
-        layout && headerTheme === "dark",
+        layout && menuTheme === "dark",
     };
   });
   if (layout === "mix" && !isMobile && splitMenus) {
-    const noChildrenMenuData = (menuData || []).map((item) => ({
+    const noChildrenMenuData = (menuData || []).map((item: any) => ({
       ...item,
       children: undefined,
     })) as RouteRecordRaw[];
     const clearMenuData = clearMenuItem(noChildrenMenuData);
     return (
       <TopNavHeader
-        mode="horizontal"
         {...props}
+        mode="horizontal"
         splitMenus={false}
         menuData={clearMenuData}
-        theme={headerTheme as "light" | "dark"}
       />
     );
   }
@@ -86,8 +126,10 @@ export const GlobalHeader: FunctionalComponent<GlobalHeaderProps> = (
   return (
     <div class={className.value}>
       {isMobile && renderLogo(menuHeaderRender, logoDom)}
-      {isMobile && collapsedButtonRender && (
-        <span onClick={onCollapse}>{collapsedButtonRender(collapsed)}</span>
+      {isMobile && (
+        <span onClick={onCollapse}>
+          {props.collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}{" "}
+        </span>
       )}
       {layout === "mix" && !isMobile && (
         <>
@@ -111,3 +153,5 @@ export const GlobalHeader: FunctionalComponent<GlobalHeaderProps> = (
 };
 GlobalHeader.inheritAttrs = false;
 GlobalHeader.emits = ["menuHeaderClick", "collapse", "openKeys", "select"];
+
+export default GlobalHeader;
