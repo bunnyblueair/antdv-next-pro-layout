@@ -1,0 +1,102 @@
+.ant-pro-sider {
+  position: relative;
+  background-color: #fff;
+  border-right: 0;
+  z-index: 20;
+}
+.ant-pro-sider.ant-pro-sider-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  height: 100%;
+  overflow: auto;
+  overflow-x: hidden;
+  box-shadow: 2px 0 8px #1d23290d;
+}
+
+/*默认BaseMenu*/
+.ant-pro-sider-menu {
+  position: relative;
+  z-index: 10;
+  min-height: 100%;
+  box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
+}
+
+.ant-pro-sider-icon {
+  width: 14px;
+  vertical-align: baseline;
+}
+
+/*menuHeaderRender区域*/
+.ant-pro-sider-logo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 16px 16px;
+  cursor: pointer;
+  transition: padding 0.2s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+.ant-pro-sider-logo > a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+}
+.ant-pro-sider-logo > a > img {
+  display: inline-block;
+  height: 32px;
+  vertical-align: middle;
+}
+.ant-pro-sider-logo > a > h1 {
+  display: inline-block;
+  height: 32px;
+  margin: 0 0 0 12px;
+  color: white;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 32px;
+  vertical-align: middle;
+  animation: pro-layout-title-hide 0.3s;
+  text-overflow: ellipsis;
+  word-break: normal;
+  overflow: hidden;
+}
+@keyframes pro-layout-title-hide {
+  0% {
+    display: none;
+    opacity: 0;
+  }
+  60% {
+    display: none;
+    opacity: 0;
+  }
+  100% {
+    display: unset;
+    opacity: 1;
+  }
+}
+
+.theme-light .ant-pro-sider-logo > a > h1 {
+  color: var(--ant-primary-color);
+}
+.ant-pro-sider.ant-layout-sider-collapsed .ant-pro-sider-logo {
+  padding: 16px 8px;
+}
+
+/*menuHeaderExtraRenderDom区域*/
+.ant-pro-sider-extra {
+  margin-bottom: 16px;
+  padding: 0 16px;
+}
+.ant-pro-sider-extra-no-logo {
+  margin-top: 16px;
+}
+
+/*collapsedButtonRender区域*/
+.ant-pro-sider-links {
+  width: 100%;
+}
+.ant-pro-sider-links ul.ant-menu-root {
+  height: auto;
+}
