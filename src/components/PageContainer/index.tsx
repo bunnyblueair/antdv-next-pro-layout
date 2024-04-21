@@ -9,7 +9,13 @@ import {
 } from "vue";
 /* replace antd ts define */
 import PageHeader, { pageHeaderProps } from "ant-design-vue/es/page-header";
-import { Tabs, Affix, AffixProps, TabPaneProps } from "ant-design-vue";
+import {
+  Tabs,
+  Affix,
+  AffixProps,
+  TabPaneProps,
+  TabsProps,
+} from "ant-design-vue";
 import { TabBarExtraContent } from "ant-design-vue/es/tabs/src/interface";
 import { withInstall } from "ant-design-vue/es/_util/type";
 /* replace antd ts define end */
@@ -46,7 +52,7 @@ export const pageHeaderTabConfig = {
    * @name tabs 的其他配置
    */
   tabProps: {
-    type: Object, //as PropType<TabsProps>,
+    type: Object as PropType<TabsProps>,
     default: () => undefined,
   },
   /**
@@ -217,16 +223,9 @@ const PageContainer = defineComponent({
   inheritAttrs: false,
   props: pageContainerProps,
   setup(props, { slots }) {
-    const value = useRouteContext();
-    const { getPrefixCls } = value;
-    const prefixCls = props.prefixCls || getPrefixCls();
-    const prefixedClassName = computed(() => `${prefixCls}-page-container`);
-    const classNames = computed(() => {
-      return {
-        [prefixedClassName.value]: true,
-        [`${prefixCls}-page-container-ghost`]: Boolean(props.ghost),
-      };
-    });
+    const context = useRouteContext();
+    const prefixCls = `${props.prefixCls || "ant-pro"}-page-container`;
+
     const headerDom = computed(() => {
       // 渲染页头
       if (slots.pageHeader) {
@@ -245,7 +244,8 @@ const PageContainer = defineComponent({
       return (
         <ProPageHeader
           {...props}
-          prefixedClassName={prefixedClassName.value}
+          ghost={Boolean(props.ghost)}
+          prefixedClassName={prefixCls}
           content={content}
           tags={tags}
           footer={footer}
@@ -258,12 +258,14 @@ const PageContainer = defineComponent({
     return () => {
       const { fixedHeader, affixProps, loading } = props;
       return (
-        <div class={classNames.value}>
+        <div class={prefixCls}>
           {fixedHeader && headerDom.value ? (
             <Affix
               {...(affixProps as any)}
               offsetTop={
-                value.hasHeader && value.fixedHeader ? value.headerHeight : 0
+                context.hasHeader && context.fixedHeader
+                  ? context.headerHeight
+                  : 0
               }
             >
               {headerDom.value}
@@ -279,7 +281,7 @@ const PageContainer = defineComponent({
               ) : // 默认插槽
               slots.default ? (
                 <div>
-                  <div class={`${prefixedClassName.value}-children-content`}>
+                  <div class={`${prefixCls}-children-content`}>
                     {slots.default()}
                   </div>
                 </div>
