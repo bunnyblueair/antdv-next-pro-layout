@@ -36,63 +36,70 @@ function fnDrawerOpen() {
 </script>
 
 <template>
-  <div style="margin-right: 12px">
-    <a-space :size="12" align="center">
-      <a-tooltip>
-        <template #title>开源仓库</template>
-        <a-button type="text" href="https://gitee.com/TsMask" target="_blank">
-          <template #icon>
-            <GithubOutlined />
-          </template>
-        </a-button>
-      </a-tooltip>
-
-      <a-tooltip>
-        <template #title>变更布局</template>
-        <a-button type="text" @click="fnDrawerOpen()">
-          <template #icon>
-            <BuildOutlined />
-          </template>
-        </a-button>
-      </a-tooltip>
-
-      <a-tooltip>
-        <template #title>改变颜色</template>
-        <a-button type="text" @click="changePrimaryColor()">
-          <template #icon>
-            <BgColorsOutlined style="color: var(--ant-primary-color)" />
-          </template>
-        </a-button>
-      </a-tooltip>
-
-      <a-dropdown placement="bottomRight" :trigger="['click', 'hover']">
-        <div class="user">
-          <a-avatar
-            shape="circle"
-            size="default"
-            src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"
-            alt="头像"
-          ></a-avatar>
-          <span class="nick"> ProLayout </span>
-        </div>
-        <template #overlay>
-          <a-menu @click="fnClick">
-            <a-menu-item key="settings">
-              <template #icon>
-                <SettingOutlined />
-              </template>
-              <span>个人设置</span>
-            </a-menu-item>
-            <a-menu-divider />
-            <a-menu-item key="logout">
-              <template #icon>
-                <LogoutOutlined />
-              </template>
-              <span>退出登录</span>
-            </a-menu-item>
-          </a-menu>
+  <a-space :size="12" align="center">
+    <a-tooltip>
+      <template #title>开源仓库</template>
+      <a-button
+        type="text"
+        style="color: inherit"
+        href="https://gitee.com/TsMask"
+        target="_blank"
+      >
+        <template #icon>
+          <GithubOutlined />
         </template>
-      </a-dropdown>
-    </a-space>
-  </div>
+      </a-button>
+    </a-tooltip>
+
+    <a-tooltip>
+      <template #title>变更布局</template>
+      <a-button type="text" style="color: inherit" @click="fnDrawerOpen()">
+        <template #icon>
+          <BuildOutlined />
+        </template>
+      </a-button>
+    </a-tooltip>
+
+    <a-tooltip>
+      <template #title>改变颜色</template>
+      <a-button
+        type="text"
+        style="color: inherit"
+        @click="changePrimaryColor()"
+      >
+        <template #icon>
+          <BgColorsOutlined style="color: var(--ant-primary-color)" />
+        </template>
+      </a-button>
+    </a-tooltip>
+
+    <a-dropdown placement="bottomRight" :trigger="['click', 'hover']">
+      <div class="user">
+        <a-avatar
+          shape="circle"
+          size="default"
+          src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"
+          alt="头像"
+        ></a-avatar>
+        <span class="nick"> ProLayout </span>
+      </div>
+      <template #overlay>
+        <a-menu @click="fnClick">
+          <a-menu-item key="settings">
+            <template #icon>
+              <SettingOutlined />
+            </template>
+            <span>个人设置</span>
+          </a-menu-item>
+          <a-menu-divider />
+          <a-menu-item key="logout">
+            <template #icon>
+              <LogoutOutlined />
+            </template>
+            <span>退出登录</span>
+          </a-menu-item>
+        </a-menu>
+      </template>
+    </a-dropdown>
+  </a-space>
 </template>
