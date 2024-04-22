@@ -61,8 +61,8 @@ function tabChange(key: string) {
   tabActiveKey.value = key;
 }
 
-function tabEdit(key: string) {
-  console.log("tabEdit", key);
+function tabEdit(key: any, action: any) {
+  console.log("tabEdit", key, action);
   loading.value = true;
   // 移除项
   const keyIndex = tabList.value.findIndex((s) => s.key === key);
