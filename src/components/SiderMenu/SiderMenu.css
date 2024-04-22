@@ -28,7 +28,7 @@
   vertical-align: baseline;
 }
 
-/*menuHeaderRender区域*/
+/*menuHeaderRender LOGO区域 side*/
 .ant-pro-sider-logo {
   position: relative;
   display: flex;
@@ -52,7 +52,7 @@
   display: inline-block;
   height: 32px;
   margin: 0 0 0 12px;
-  color: white;
+  color: var(--ant-primary-color);
   font-weight: 600;
   font-size: 18px;
   line-height: 32px;
@@ -77,9 +77,23 @@
   }
 }
 
-.theme-light .ant-pro-sider-logo > a > h1 {
-  color: var(--ant-primary-color);
+.theme-light.theme-menu-dark .ant-pro-sider-logo {
+  color: rgba(255, 255, 255, 0.65);
+  background: #001529;
 }
+.theme-light.theme-menu-light .ant-pro-sider-logo {
+  color: rgba(0, 0, 0, 0.88);
+  background: #ffffff;
+}
+.theme-dark.theme-menu-dark .ant-pro-sider-logo {
+  color: rgba(255, 255, 255, 0.65);
+  background: #001529;
+}
+.theme-dark.theme-menu-light .ant-pro-sider-logo {
+  color: rgba(255, 255, 255, 0.85);
+  background: #141414;
+}
+
 .ant-pro-sider.ant-layout-sider-collapsed .ant-pro-sider-logo {
   padding: 16px 8px;
 }

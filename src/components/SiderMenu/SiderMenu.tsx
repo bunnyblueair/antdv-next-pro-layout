@@ -15,7 +15,6 @@ import { useRouteContext } from "../../RouteContext";
 import PropTypes from "ant-design-vue/es/_util/vue-types";
 import "./SiderMenu.css";
 import type {
-  MenuHeaderRender,
   MenuContentRender,
   CollapsedButtonRender,
   LogoRender,
@@ -40,13 +39,17 @@ export const defaultRenderLogo = (
 
 export const defaultRenderLogoAndTitle = (
   props: SiderMenuProps,
-  renderKey: string | undefined = "menuHeaderRender"
+  renderKey:
+    | "headerTitleRender"
+    | "menuHeaderRender"
+    | undefined = "menuHeaderRender"
 ): CustomRender | null => {
   const {
     logo = "https://gw.alipayobjects.com/zos/antfincdn/PmY%24TNNDBI/logo.svg",
     logoStyle,
     title,
     layout,
+    isMobile,
   } = props;
   const renderFunction = (props as Record<string, CustomRender>)[
     renderKey || ""
@@ -56,7 +59,7 @@ export const defaultRenderLogoAndTitle = (
   }
   const logoDom = defaultRenderLogo(logo, logoStyle);
   const titleDom = <h1>{title}</h1>;
-  if (layout === "mix" && renderKey === "menuHeaderRender") {
+  if (layout === "mix" && !isMobile && renderKey === "menuHeaderRender") {
     return null;
   }
   // call menuHeaderRender
@@ -91,7 +94,7 @@ export const siderMenuProps = {
   headerHeight: PropTypes.number.def(48),
   collapsedWidth: PropTypes.number.def(48),
   menuHeaderRender: {
-    type: [Function, Object, Boolean] as PropType<MenuHeaderRender>,
+    type: [Function, Boolean] as PropType<CustomRenderProps>,
     default: () => undefined,
   },
   menuFooterRender: {
@@ -147,8 +150,7 @@ const SiderMenu: FunctionalComponent<SiderMenuProps> = (props, { attrs }) => {
     collapsedButtonRender,
   } = props;
   const context = useRouteContext();
-  const { getPrefixCls } = context;
-  const baseClassName = getPrefixCls("sider");
+  const baseClassName = `${props.prefixCls || "ant-pro"}-sider`;
   const hasSplitMenu = computed(
     () => props.layout === "mix" && props.splitMenus
   );
@@ -171,6 +173,9 @@ const SiderMenu: FunctionalComponent<SiderMenuProps> = (props, { attrs }) => {
     return {
       [baseClassName]: true,
       [`${baseClassName}-fixed`]: context.fixSiderbar,
+      [`layout-${props.layout}`]: true,
+      [`theme-${props.theme}`]: true,
+      [`theme-menu-${props.menuTheme}`]: true,
     };
   });
 
@@ -197,7 +202,7 @@ const SiderMenu: FunctionalComponent<SiderMenuProps> = (props, { attrs }) => {
   // 菜单
   const baseMenuDom = (
     <BaseMenu
-      prefixCls={getPrefixCls()}
+      prefixCls={baseClassName}
       locale={props.locale || context.locale}
       theme={props.menuTheme}
       mode="inline"
