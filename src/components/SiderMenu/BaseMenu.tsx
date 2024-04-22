@@ -27,7 +27,7 @@ import type {
 } from "ant-design-vue/es/menu/src/interface";
 import type { Key } from "ant-design-vue/es/_util/type";
 import type { MenuDataItem, LayoutType } from "../../typings";
-import type { MenuItemRender, SubMenuItemRender } from "../../RenderTypings";
+import type { MenuRender } from "../../RenderTypings";
 
 import "./BaseMenu.css";
 import { MenuMode, MenuTheme } from "ant-design-vue/lib/menu";
@@ -239,11 +239,11 @@ export const baseMenuProps = {
     default: () => undefined,
   },
   menuItemRender: {
-    type: [Object, Function, Boolean] as PropType<MenuItemRender>,
+    type: [Function, Boolean] as PropType<MenuRender>,
     default: () => undefined,
   },
   subMenuItemRender: {
-    type: [Object, Function, Boolean] as PropType<SubMenuItemRender>,
+    type: [Function, Boolean] as PropType<MenuRender>,
     default: () => undefined,
   },
 
