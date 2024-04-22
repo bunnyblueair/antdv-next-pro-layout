@@ -8,10 +8,10 @@ import GlobalHeader, {
 import { useRouteContext } from "./RouteContext";
 import type { CustomRender, WithFalse } from "./typings";
 import { clearMenuItem } from "./utils";
-import "./Header.css";
-import { Layout } from "ant-design-vue";
+import { LayoutHeader } from "ant-design-vue";
 import PropTypes from "ant-design-vue/es/_util/vue-types";
 import TopNavHeader from "./components/TopNavHeader";
+import "./Header.css";
 
 export const headerViewProps = {
   ...globalHeaderProps,
@@ -56,6 +56,7 @@ export const HeaderView = defineComponent({
       onCollapse,
     } = toRefs(props);
     const context = useRouteContext();
+    const baseClassName = `${props.prefixCls}-header`;
     const needFixedHeader = computed(
       () => fixedHeader.value || context.fixedHeader || layout.value === "mix"
     );
@@ -78,15 +79,16 @@ export const HeaderView = defineComponent({
 
     const className = computed(() => {
       return {
-        [`${prefixCls.value}-fixed-header`]: needFixedHeader.value,
-        [`${prefixCls.value}-top-menu`]: isTop.value,
+        [`${baseClassName}`]: true,
+        [`${baseClassName}-${layout.value}`]: true,
+        [`${baseClassName}-fixed`]: needFixedHeader.value,
       };
     });
     const renderContent = () => {
       let defaultDom = (
         <GlobalHeader
           {...props}
-          onCollapse={onCollapse.value}
+          onCollapse={props.onCollapse}
           menuData={clearMenuData.value}
         >
           {!isMix.value
@@ -102,7 +104,7 @@ export const HeaderView = defineComponent({
           <TopNavHeader
             {...props}
             mode="horizontal"
-            onCollapse={onCollapse.value}
+            onCollapse={props.onCollapse}
             menuData={clearMenuData.value}
           />
         );
@@ -126,7 +128,7 @@ export const HeaderView = defineComponent({
       return (
         <>
           {needFixedHeader.value && (
-            <Layout.Header
+            <LayoutHeader
               style={{
                 height: `${headerHeight.value}px`,
                 lineHeight: `${headerHeight.value}px`,
@@ -134,7 +136,7 @@ export const HeaderView = defineComponent({
               }}
             />
           )}
-          <Layout.Header
+          <LayoutHeader
             style={{
               padding: 0,
               height: `${headerHeight.value}px`,
@@ -146,7 +148,7 @@ export const HeaderView = defineComponent({
             class={className.value}
           >
             {renderContent()}
-          </Layout.Header>
+          </LayoutHeader>
         </>
       );
     };
