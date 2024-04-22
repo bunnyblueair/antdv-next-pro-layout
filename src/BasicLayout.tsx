@@ -34,13 +34,10 @@ import type {
   HeaderContentRender,
   HeaderRender,
   FooterRender,
-  TabRender,
-  RightContentRender,
-  MenuItemRender,
-  SubMenuItemRender,
+  TabRender, 
+  MenuRender, 
   MenuContentRender,
   CustomRenderProps,
-  MenuHeaderRender,
   CollapsedButtonRender,
 } from "./RenderTypings";
 
@@ -190,6 +187,7 @@ const ProLayout = defineComponent({
         [`screen-${colSize.value}`]: colSize.value,
         [`layout-${props.layout}`]: true,
         [`theme-${props.theme}`]: true,
+        [`theme-menu-${props.menuTheme}`]: true,
       };
     });
 
@@ -298,7 +296,7 @@ const ProLayout = defineComponent({
       const tabRender = getSlot<TabRender>(slots, props, "tabRender");
 
       // menu
-      const menuHeaderRender = getSlot<MenuHeaderRender>(
+      const menuHeaderRender = getSlot<CustomRenderProps>(
         slots,
         props,
         "menuHeaderRender"
@@ -318,12 +316,12 @@ const ProLayout = defineComponent({
         props,
         "menuFooterRender"
       );
-      const menuItemRender = getSlot<MenuItemRender>(
+      const menuItemRender = getSlot<MenuRender>(
         slots,
         props,
         "menuItemRender"
       );
-      const subMenuItemRender = getSlot<SubMenuItemRender>(
+      const subMenuItemRender = getSlot<MenuRender>(
         slots,
         props,
         "subMenuItemRender"
