@@ -9,7 +9,7 @@ const SiderMenuWrapper: FunctionalComponent<SiderMenuProps> = (
   if (props.isMobile) {
     return (
       <Drawer
-        visible={!props.collapsed}
+        open={!props.collapsed}
         closable={false}
         placement={"left"}
         style={{
