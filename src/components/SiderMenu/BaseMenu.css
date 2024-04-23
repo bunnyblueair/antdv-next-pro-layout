@@ -18,3 +18,33 @@
   border-radius: 3px;
   box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.05);
 }
+
+/* 菜单项图标img */
+.ant-pro-menu-item-icon {
+  width: 14px;
+  min-width: 14px;
+  vertical-align: -0.125em;
+  line-height: 0;
+}
+
+.ant-pro-menu-item-icon + span {
+  margin-inline-start: 10px;
+  opacity: 1;
+  transition: opacity 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), margin 0.3s,
+    color 0.3s;
+}
+
+.ant-menu-inline-collapsed .ant-pro-menu-item-icon {
+  margin: 0;
+  width: 16px;
+  min-width: 16px;
+  line-height: 40px;
+}
+.ant-menu-inline-collapsed .ant-pro-menu-item-title {
+  display: inline-block;
+  opacity: 0;
+}
+
+.ant-menu-inline-collapsed .ant-pro-menu-item-title-no-icon{
+
+}
