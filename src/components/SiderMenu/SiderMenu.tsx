@@ -144,13 +144,14 @@ export type SiderMenuProps = Partial<ExtractPropTypes<typeof siderMenuProps>>;
 
 const SiderMenu: FunctionalComponent<SiderMenuProps> = (props, { attrs }) => {
   const {
+    prefixCls,
     menuHeaderExtraRender = false,
     menuContentRender = false,
     menuFooterRender = false,
     collapsedButtonRender,
   } = props;
   const context = useRouteContext();
-  const baseClassName = `${props.prefixCls || "ant-pro"}-sider`;
+  const baseClassName = `${prefixCls || "ant-pro"}-sider`;
   const hasSplitMenu = computed(
     () => props.layout === "mix" && props.splitMenus
   );
@@ -190,9 +191,6 @@ const SiderMenu: FunctionalComponent<SiderMenuProps> = (props, { attrs }) => {
   };
   // 菜单头
   const menuHeaderRenderDom = defaultRenderLogoAndTitle(props);
-  // 菜单头拓展
-  const menuHeaderExtraRenderDom =
-    menuHeaderExtraRender && menuHeaderExtraRender(props);
 
   // 混合布局拆分菜单
   if (hasSplitMenu.value && unref(context.flatMenuData).length === 0) {
@@ -202,7 +200,7 @@ const SiderMenu: FunctionalComponent<SiderMenuProps> = (props, { attrs }) => {
   // 菜单
   const baseMenuDom = (
     <BaseMenu
-      prefixCls={baseClassName}
+      prefixCls={prefixCls}
       locale={props.locale || context.locale}
       theme={props.menuTheme}
       mode="inline"
@@ -214,10 +212,7 @@ const SiderMenu: FunctionalComponent<SiderMenuProps> = (props, { attrs }) => {
       subMenuItemRender={props.subMenuItemRender}
       iconfontUrl={props.iconfontUrl}
       onClick={props.onMenuClick}
-      style={{
-        width: "100%",
-      }}
-      class={`${baseClassName}-menu`}
+      class={`${baseClassName}-content-menu`}
       {...{
         "onUpdate:openKeys": ($event: string[]) =>
           props.onOpenKeys && props.onOpenKeys($event),
@@ -260,36 +255,38 @@ const SiderMenu: FunctionalComponent<SiderMenuProps> = (props, { attrs }) => {
       >
         {menuHeaderRenderDom && (
           <div
-            class={`${baseClassName}-logo`}
+            class={`${baseClassName}-header`}
             onClick={
               props.layout !== "mix" ? props.onMenuHeaderClick : undefined
             }
-            id="logo"
           >
             {menuHeaderRenderDom}
           </div>
         )}
 
-        {menuHeaderExtraRenderDom && (
-          <div
-            class={{
-              [`${baseClassName}-extra`]: true,
-              [`${baseClassName}-extra-no-logo`]: !menuHeaderRenderDom,
-            }}
-          >
-            {menuHeaderExtraRenderDom}
-          </div>
-        )}
-        <div style="flex: 1; overflow: hidden auto;">
+        {menuHeaderExtraRender &&
+          typeof menuHeaderExtraRender === "function" && (
+            <div
+              class={{
+                [`${baseClassName}-header-extra`]: true,
+                [`${baseClassName}-header-extra-no-header`]:
+                  !menuHeaderRenderDom,
+              }}
+            >
+              {menuHeaderExtraRender(props)}
+            </div>
+          )}
+
+        <div class={`${baseClassName}-content`}>
           {(menuContentRender &&
             menuContentRender(props, unref(baseMenuDom))) ||
             unref(baseMenuDom)}
         </div>
 
         {(collapsedButtonRender && collapsedButtonRender(props.collapsed)) || (
-          <div class={`${baseClassName}-links`}>
+          <div class={`${baseClassName}-collapsed`}>
             <Menu
-              class={`${baseClassName}-link-menu`}
+              class={`${baseClassName}-collapsed-menu`}
               inlineIndent={16}
               theme={props.menuTheme}
               selectedKeys={[]}

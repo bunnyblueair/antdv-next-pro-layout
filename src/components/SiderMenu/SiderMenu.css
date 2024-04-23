@@ -15,12 +15,8 @@
   box-shadow: 2px 0 8px #1d23290d;
 }
 
-/*默认BaseMenu*/
-.ant-pro-sider-menu {
-  position: relative;
-  z-index: 10;
-  min-height: 100%;
-  box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
+.ant-pro-sider .ant-menu.ant-menu-root {
+  border-inline-end: unset;
 }
 
 .ant-pro-sider-icon {
@@ -29,7 +25,7 @@
 }
 
 /*menuHeaderRender LOGO区域 side*/
-.ant-pro-sider-logo {
+.ant-pro-sider-header {
   position: relative;
   display: flex;
   align-items: center;
@@ -37,18 +33,18 @@
   cursor: pointer;
   transition: padding 0.2s cubic-bezier(0.215, 0.61, 0.355, 1);
 }
-.ant-pro-sider-logo > a {
+.ant-pro-sider-header > a {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 32px;
 }
-.ant-pro-sider-logo > a > img {
+.ant-pro-sider-header > a > img {
   display: inline-block;
   height: 32px;
   vertical-align: middle;
 }
-.ant-pro-sider-logo > a > h1 {
+.ant-pro-sider-header > a > h1 {
   display: inline-block;
   height: 32px;
   margin: 0 0 0 12px;
@@ -77,40 +73,55 @@
   }
 }
 
-.theme-light.theme-menu-dark .ant-pro-sider-logo {
+.theme-light.theme-menu-dark .ant-pro-sider-header {
   color: rgba(255, 255, 255, 0.65);
   background: #001529;
 }
-.theme-light.theme-menu-light .ant-pro-sider-logo {
+.theme-light.theme-menu-light .ant-pro-sider-header {
   color: rgba(0, 0, 0, 0.88);
   background: #ffffff;
 }
-.theme-dark.theme-menu-dark .ant-pro-sider-logo {
+.theme-dark.theme-menu-dark .ant-pro-sider-header {
   color: rgba(255, 255, 255, 0.65);
   background: #001529;
 }
-.theme-dark.theme-menu-light .ant-pro-sider-logo {
+.theme-dark.theme-menu-light .ant-pro-sider-header {
   color: rgba(255, 255, 255, 0.85);
   background: #141414;
 }
 
-.ant-pro-sider.ant-layout-sider-collapsed .ant-pro-sider-logo {
+.ant-pro-sider.ant-layout-sider-collapsed .ant-pro-sider-header {
   padding: 16px 8px;
 }
 
-/*menuHeaderExtraRenderDom区域*/
-.ant-pro-sider-extra {
+/*menuHeaderExtraRender区域*/
+.ant-pro-sider-header-extra {
   margin-bottom: 16px;
   padding: 0 16px;
 }
-.ant-pro-sider-extra-no-logo {
+.ant-pro-sider-header-extra-no-header {
   margin-top: 16px;
 }
 
+/*menuContentRender区域*/
+.ant-pro-sider-content {
+  flex: 1;
+  overflow: hidden auto;
+}
+
+.ant-pro-sider-content-menu {
+  min-height: 100%;
+}
+
 /*collapsedButtonRender区域*/
-.ant-pro-sider-links {
+.ant-pro-sider-collapsed {
   width: 100%;
 }
-.ant-pro-sider-links ul.ant-menu-root {
+.ant-pro-sider-collapsed ul.ant-menu-root {
   height: auto;
+}
+
+/*menuFooterRender区域*/
+.ant-pro-sider-footer {
+  width: 100%;
 }
