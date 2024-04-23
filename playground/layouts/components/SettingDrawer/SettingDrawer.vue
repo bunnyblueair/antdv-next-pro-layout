@@ -1,30 +1,10 @@
 <script setup lang="ts">
-import { changePrimaryColor, getLocalColor } from "@/hooks/useTheme";
-import { MenuTheme } from "ant-design-vue";
+import {
+  ConfigType,
+  changePrimaryColor,
+  getLocalColor,
+} from "@/hooks/useTheme";
 import { PropType, ref } from "vue";
-
-type ConfigType = {
-  /**导航布局 */
-  layout: "side" | "top" | "mix";
-  /**全局主题色*/
-  theme: "dark" | "light";
-  /**菜单导航主题色 */
-  menuTheme: MenuTheme;
-  /**固定顶部栏 */
-  fixedHeader: boolean;
-  /**固定菜单栏 */
-  fixSiderbar: boolean;
-  /**自动分割菜单 */
-  splitMenus: boolean;
-  /**内容区域-顶栏 */
-  headerRender?: any | boolean | undefined;
-  /**内容区域-页脚 */
-  footerRender?: any | boolean | undefined;
-  /**内容区域-菜单头 */
-  menuHeaderRender?: any | boolean | undefined;
-  /**内容区域-导航标签项 */
-  tabRender?: any | boolean | undefined;
-};
 
 const emit = defineEmits(["update:open", "update:config", "close"]);
 const props = defineProps({
@@ -51,10 +31,7 @@ const props = defineProps({
 function changeConf(key: string, value: boolean | string | number | undefined) {
   const config = Object.assign({}, props.config);
   if (Reflect.has(config, key)) {
-    // 同时修改mix混合菜单的导航主题
-    if (key === "navTheme") {
-      Reflect.set(config, "headerTheme", value);
-    }
+    console.log(key, value);
     Reflect.set(config, key, value);
     emit("update:config", config);
   }
@@ -75,12 +52,7 @@ function fnColorChange(e: Event) {
 </script>
 
 <template>
-  <a-drawer
-    :open="open"
-    :width="600"
-    placement="right"
-    @close="() => emit('close', false)"
-  >
+  <a-drawer :open="open" placement="right" @close="() => emit('close', false)">
     <div>
       <a-divider orientation="left">布局属性</a-divider>
       <a-list item-layout="vertical" size="large" row-key="title">
@@ -88,8 +60,8 @@ function fnColorChange(e: Event) {
           整体布局
           <template #actions> 导航模式模块设置 </template>
           <template #extra>
-            <a-radio-group 
-              style="margin-bottom: 12px; width: 136px;"
+            <a-radio-group
+              style="margin-bottom: 12px; width: 136px"
               :value="config.layout"
               @change="(e:any) => changeConf('layout', e.target.value)"
             >

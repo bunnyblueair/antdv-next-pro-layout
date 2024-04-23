@@ -12,58 +12,46 @@ import { SmileOutlined, HeartOutlined } from "@ant-design/icons-vue";
 import { reactive, ref, computed, watch } from "vue";
 import RightContent from "./components/RightContent/RightContent.vue";
 import SettingDrawer from "./components/SettingDrawer/SettingDrawer.vue";
+import { proConfig } from "@/hooks/useTheme";
 
 const router = useRouter();
 const { menuData } = getMenuData(clearMenuItem(router.getRoutes()));
+const loading = ref(false);
+const locale = (menuData: MenuDataItem) => menuData.meta?.title;
 
+/**菜单面板 */
 const state = reactive<Omit<RouteContextProps, "menuData">>({
   collapsed: false, // default collapsed
   openKeys: [], // defualt openKeys
   selectedKeys: [], // default selectedKeys
 });
 
-const loading = ref(false);
-
-const proConfig = ref<any>({
-  /**导航布局 "side" | "top" | "mix" */
-  layout: "mix",
-  /**全局主题色*/
-  theme: "dark", // "light",
-  /**菜单导航主题色*/
-  menuTheme: "dark", // "light",
-  /**固定顶部栏 */
-  fixedHeader: true,
-  /**固定菜单栏 */
-  fixSiderbar: true,
-  /**自动分割菜单 mix */
-  splitMenus: true,
+/**面包屑数据对象，排除根节点和首页不显示 */
+const breadcrumb = computed(() => {
+  const matched = router.currentRoute.value.matched.concat();
+  return matched
+    .filter((r) => !["Root", "Index"].includes(r.name as string))
+    .map((item) => {
+      return {
+        path: item.path,
+        breadcrumbName: item.meta.title || "-",
+      };
+    });
 });
 
-const locale = (menuData: MenuDataItem) => menuData.meta?.title;
-
-const breadcrumb = computed(() =>
-  router.currentRoute.value.matched.concat().map((item) => {
-    return {
-      path: item.path,
-      breadcrumbName: item.meta.title || "",
-    };
-  })
-);
-
+/**监听路由变化改变菜单面板选项 */
 watch(
   router.currentRoute,
-  () => {
-    const matched = router.currentRoute.value.matched.concat();
+  (v) => {
+    const matched = v.matched.concat();
+    state.openKeys = matched
+      .filter((r) => r.path !== v.path)
+      .map((r) => r.path);
     state.selectedKeys = matched
       .filter((r) => r.name !== "Root")
       .map((r) => r.path);
-    state.openKeys = matched
-      .filter((r) => r.path !== router.currentRoute.value.path)
-      .map((r) => r.path);
   },
-  {
-    immediate: true,
-  }
+  { immediate: true }
 );
 
 /**抽屉设置 */

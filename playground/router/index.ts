@@ -109,7 +109,7 @@ const constantRoutes: RouteRecordRaw[] = [
         name: "TestTab",
         meta: {
           title: "测试Tab标签",
-          icon: "icon-huifu",
+          icon: "https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png",
           hideInMenu: false,
         },
         component: () => import("../views/TestTab.vue"),
