@@ -54,7 +54,12 @@ const LazyIcon: FunctionalComponent<{
   if (typeof icon === "string" && icon !== "") {
     if (isUrl(icon) || isImg(icon)) {
       return (
-        <img src={icon} alt="icon" class={`${prefixCls}-sider-menu-icon`} />
+        <img
+          src={icon}
+          alt="icon"
+          role="img"
+          class={`${prefixCls}-menu-item-icon`}
+        />
       );
     }
     if (icon.startsWith(iconPrefixes)) {
@@ -168,7 +173,7 @@ class MenuUtil {
       </CustomTag>
     ) : (
       <CustomTag {...attrs} {...props} class={`${prefixCls}-menu-item`}>
-        <span>{menuTitle}</span>
+        <span class={`${prefixCls}-menu-item-title-no-icon`}>{menuTitle}</span>
       </CustomTag>
     );
 
