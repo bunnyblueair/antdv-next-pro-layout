@@ -12,17 +12,23 @@
   padding-left: 16px;
   padding-right: 16px;
 }
+
+/* 导航菜单区 */
+.ant-pro-top-nav-header-main-menu {
+  min-width: auto;
+  flex: 1;
+}
+.ant-pro-top-nav-header-main-menu .ant-menu.ant-menu-horizontal {
+  border-bottom: unset;
+}
+
+/* 左侧区域 */
 .ant-pro-top-nav-header-main-left {
   display: flex;
   min-width: 192px;
 }
 
-.ant-pro-top-nav-header-main-menu {
-  min-width: auto;
-  flex: 1;
-}
-
-/* LOGO区域 mix top */
+/* 左侧区域-LOGO区域 mix top */
 .ant-pro-top-nav-header-logo {
   position: relative;
   min-width: 165px;
