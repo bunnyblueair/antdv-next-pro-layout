@@ -252,6 +252,7 @@ const SiderMenu: FunctionalComponent<SiderMenuProps> = (props, { attrs }) => {
         width={sSideWidth.value}
         theme={props.menuTheme}
         class={classNames.value}
+        data-theme={props.theme}
       >
         {menuHeaderRenderDom && (
           <div

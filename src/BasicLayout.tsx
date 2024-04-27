@@ -24,7 +24,9 @@ import {
 } from "./RouteContext";
 import SiderMenuWrapper from "./components/SiderMenu";
 import { WrapContent } from "./WrapContent";
-import HeaderView, { headerViewProps } from "./components/GlobalHeader";
+import HeaderView, {
+  headerViewProps,
+} from "./components/GlobalHeader/HeaderView";
 import { getSlot, getMenuFirstChildren, pick } from "./utils";
 
 import type { BreadcrumbProps } from "./RouteContext";
@@ -44,7 +46,7 @@ import type {
 import PageLoading from "./components/PageLoading";
 import "./BasicLayout.css";
 import { siderMenuProps } from "./components/SiderMenu/SiderMenu";
-import { globalHeaderProps } from "./components/GlobalHeader/GlobalHeader";
+import { globalHeaderProps } from "./components/GlobalHeader";
 
 export const basicLayoutProps = {
   ...defaultSettingProps,
@@ -407,7 +409,7 @@ const ProLayout = defineComponent({
           {pure ? (
             slots.default?.()
           ) : (
-            <div class={className.value}>
+            <div class={className.value} data-theme={props.theme}>
               <Layout
                 style={{
                   minHeight: "100%",

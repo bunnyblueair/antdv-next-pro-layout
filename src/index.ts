@@ -1,4 +1,3 @@
-
 export * from "./RouteContext";
 export * from "./typings";
 export * from "./utils/getMenuData";
@@ -21,8 +20,8 @@ export type { BaseMenuProps } from "./components/SiderMenu/BaseMenu";
 export { default as GridContent } from "./components/GridContent";
 export { WrapContent } from "./WrapContent";
 
-export type { GlobalHeaderProps } from "./components/GlobalHeader/GlobalHeader";
-export { default as GlobalHeader} from "./components/GlobalHeader/GlobalHeader";
+export type { GlobalHeaderProps } from "./components/GlobalHeader";
+export { default as GlobalHeader } from "./components/GlobalHeader";
 
 export type { GlobalFooterProps } from "./components/GlobalFooter";
 export { default as GlobalFooter } from "./components/GlobalFooter";
