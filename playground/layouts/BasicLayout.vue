@@ -74,18 +74,25 @@ function settingDrawer(bool: boolean) {
       :disable-content-margin="true"
       v-bind="proConfig"
       iconfont-url="//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js"
+      title="Preview Pro"
+      logo="https://alicdn.antdv.com/v2/assets/logo.1ef800a8.svg"
+      :logoStyle="{ borderRadius: '6px' }"
+      @collapse="(v) => console.log(v)"
     >
-      <template #menuHeaderRender>
+      <!-- 渲染菜单头logo和标题区域 -->
+      <template #menuHeaderRender2>
         <router-link :to="{ path: '/' }">
           <img src="https://alicdn.antdv.com/v2/assets/logo.1ef800a8.svg" />
-          <h1>Preview Pro</h1>
+          <h1>Header Render</h1>
         </router-link>
       </template>
+      <!-- 渲染菜单头拓展区域 -->
       <template #menuHeaderExtraRender2>
         <div style="height: 100px; background-color: red">
           menuHeaderExtraRender
         </div>
       </template>
+      <!-- 渲染菜单收起按钮区域 -->
       <template #collapsedButtonRender2="collapsed">
         <div style="height: 100px; background-color: green">
           collapsedButtonRender
@@ -94,11 +101,13 @@ function settingDrawer(bool: boolean) {
           </button>
         </div>
       </template>
+      <!-- 渲染菜单底脚区域 -->
       <template #menuFooterRender2>
         <div style="height: 100px; background-color: blue">
           menuFooterRender
         </div>
       </template>
+      <!-- 渲染菜单项 Menu.Item -->
       <template #menuItemRender2="menuItem">
         <a-menu-item
           :disabled="menuItem.meta?.disabled"
@@ -108,6 +117,7 @@ function settingDrawer(bool: boolean) {
           {{ menuItem.name }}
         </a-menu-item>
       </template>
+      <!-- 渲染菜嵌套子项 Menu.SubItem -->
       <template #subMenuItemRender2="menuItem">
         <template v-if="menuItem.meta?.type === 'group'">
           <a-menu-item-group :title="menuItem.meta?.title" :key="menuItem.path">
@@ -121,35 +131,34 @@ function settingDrawer(bool: boolean) {
         </template>
       </template>
 
+      <!-- 渲染顶部头区域 -->
+      <template #headerRender2>
+        <div style="background-color: #1677ff">headerRender</div>
+      </template>
       <template #rightContentRender>
         <RightContent @drawer="settingDrawer" />
       </template>
 
-      <SettingDrawer
-        v-model:config="proConfig"
-        :open="settingDrawerOpen"
-        @close="settingDrawer"
-      ></SettingDrawer>
-
-      <!-- custom breadcrumb itemRender  -->
+      <!-- 渲染面包屑导航区域  -->
       <template #breadcrumbRender="{ route, params, routes }">
         <span v-if="routes.indexOf(route) === routes.length - 1">
           <HeartOutlined />
           {{ route.breadcrumbName }}
         </span>
-        <router-link v-else :to="{ path: route.path, params }">
+        <RouterLink v-else :to="{ path: route.path, params }">
           <SmileOutlined />
           {{ route.breadcrumbName }}
-        </router-link>
+        </RouterLink>
       </template>
 
+      <!--默认插槽-->
       <RouterView v-slot="{ Component, route }">
         <transition name="slide-left" mode="out-in">
           <component :is="Component" :key="route.path" />
         </transition>
       </RouterView>
 
-      <!--插槽-内容底部-->
+      <!--渲染底部区域-->
       <template #footerRender>
         <GlobalFooter
           :links="[
@@ -174,6 +183,13 @@ function settingDrawer(bool: boolean) {
         </GlobalFooter>
       </template>
     </ProLayout>
+
+    <!-- 布局设置抽屉 -->
+    <SettingDrawer
+      v-model:config="proConfig"
+      :open="settingDrawerOpen"
+      @close="settingDrawer"
+    ></SettingDrawer>
   </a-watermark>
 </template>
 
