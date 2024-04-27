@@ -34,6 +34,7 @@
         status="404"
         title="Hello World"
         sub-title="Sorry, you are not authorized to access this page."
+        class="result-box"
       >
         <template #extra>
           <a-button type="primary">Back Home</a-button>
@@ -53,3 +54,13 @@ const route = useRoute();
 /**路由标题 */
 let title = ref<string>(route.meta?.title as any);
 </script>
+
+<style scoped lang="css">
+.result-box {
+  height: 100%;
+  background: rgb(255, 255, 255);
+}
+[data-theme="dark"] .result-box {
+  background: #141414;
+}
+</style>

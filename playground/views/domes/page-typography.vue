@@ -1,5 +1,5 @@
 <template>
-  <a-card>
+  <a-card title="typography" style="margin: 24px;">
     <a-typography>
       <a-typography-title>Introduction</a-typography-title>
       <a-typography-paragraph>
