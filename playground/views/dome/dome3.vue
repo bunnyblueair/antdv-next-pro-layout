@@ -7,6 +7,7 @@
     }"
     @back="() => $router.go(-1)"
     :ghost="false"
+    :flex="true"
     :loading="loading"
   >
     <template #extra>
