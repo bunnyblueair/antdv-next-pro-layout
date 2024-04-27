@@ -72,7 +72,6 @@ export const getPrefixCls = (
 export const defaultRouteContext = reactive({
   getPrefixCls,
   locale: false,
-  contentWidth: "Fluid",
 });
 
 export const routeContextInjectKey: InjectionKey<RouteContextProps> =

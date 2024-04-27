@@ -27,7 +27,6 @@ const TopNavHeader: FunctionalComponent<TopNavHeaderProps> = (props) => {
     onMenuHeaderClick,
     onOpenKeys,
     onSelect,
-    contentWidth,
     rightContentRender,
     layout,
     menuData,

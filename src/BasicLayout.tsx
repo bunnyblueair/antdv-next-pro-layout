@@ -231,7 +231,6 @@ const ProLayout = defineComponent({
         "menuData",
         "openKeys",
         "selectedKeys",
-        "contentWidth",
         "fixSiderbar",
         "fixedHeader",
         "headerHeight",

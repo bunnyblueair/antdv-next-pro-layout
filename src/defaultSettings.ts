@@ -1,5 +1,5 @@
 import type { PropType, ExtractPropTypes } from "vue";
-import type { ContentWidth, LayoutType, Theme } from "./typings";
+import type { LayoutType, Theme } from "./typings";
 import { MenuTheme } from "ant-design-vue";
 
 export interface RenderSetting {
@@ -17,10 +17,6 @@ export interface PureSettings {
   headerHeight?: number;
   /**菜单布局 */
   layout: LayoutType;
-  /**
-   * layout of content: `Fluid` or `Fixed`, only works when layout is top
-   */
-  contentWidth: ContentWidth;
   /**
    * sticky header
    */
@@ -47,7 +43,6 @@ export const defaultSettings = {
   theme: "light",
   menuTheme: "light",
   layout: "side",
-  contentWidth: "Fluid",
   fixedHeader: false,
   fixSiderbar: false,
   menu: {
@@ -71,10 +66,6 @@ export const defaultSettingProps = {
   layout: {
     type: String as PropType<PureSettings["layout"]>,
     default: defaultSettings.layout,
-  },
-  contentWidth: {
-    type: String as PropType<PureSettings["contentWidth"]>,
-    default: defaultSettings.contentWidth,
   },
   fixedHeader: {
     type: Boolean as PropType<PureSettings["fixedHeader"]>,

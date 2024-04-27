@@ -22,8 +22,6 @@ export type LayoutType = "side" | "top" | "mix";
 
 export type TargetType = "_blank" | "_self" | unknown;
 
-export type ContentWidth = "Fluid" | "Fixed";
-
 export interface MetaRecord {
   /**
    * @name 菜单的icon
