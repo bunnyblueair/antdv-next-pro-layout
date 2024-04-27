@@ -55,8 +55,9 @@
   vertical-align: middle;
   animation: pro-layout-title-hide 0.3s;
   text-overflow: ellipsis;
-  word-break: normal;
   overflow: hidden;
+  white-space: nowrap;
+  max-width: 132px;
 }
 @keyframes pro-layout-title-hide {
   0% {
