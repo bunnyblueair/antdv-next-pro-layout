@@ -24,18 +24,18 @@ import {
 } from "./RouteContext";
 import SiderMenuWrapper from "./components/SiderMenu";
 import { WrapContent } from "./WrapContent";
-import { HeaderView, headerViewProps } from "./Header";
+import HeaderView, { headerViewProps } from "./components/GlobalHeader";
 import { getSlot, getMenuFirstChildren, pick } from "./utils";
 
-import type { BreadcrumbProps, Route } from "./RouteContext";
+import type { BreadcrumbProps } from "./RouteContext";
 import type { CustomRender } from "./typings";
 import type {
   BreadcrumbRender,
   HeaderContentRender,
   HeaderRender,
   FooterRender,
-  TabRender, 
-  MenuRender, 
+  TabRender,
+  MenuRender,
   MenuContentRender,
   CustomRenderProps,
   CollapsedButtonRender,
@@ -44,7 +44,7 @@ import type {
 import PageLoading from "./components/PageLoading";
 import "./BasicLayout.css";
 import { siderMenuProps } from "./components/SiderMenu/SiderMenu";
-import { globalHeaderProps } from "./components/GlobalHeader";
+import { globalHeaderProps } from "./components/GlobalHeader/GlobalHeader";
 
 export const basicLayoutProps = {
   ...defaultSettingProps,
@@ -103,7 +103,7 @@ export const basicLayoutProps = {
     default: () => undefined,
   },
   headerRender: {
-    type: [Object, Function, Boolean] as PropType<HeaderRender>,
+    type: [Object, Function, Boolean] as PropType<CustomRenderProps>,
     default: () => undefined,
   },
   footerRender: {
@@ -287,7 +287,7 @@ const ProLayout = defineComponent({
         props,
         "rightContentRender"
       );
-      const customHeaderRender = getSlot<HeaderRender>(
+      const customHeaderRender = getSlot<CustomRenderProps>(
         slots,
         props,
         "headerRender"

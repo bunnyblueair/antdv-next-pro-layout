@@ -12,9 +12,10 @@ export type TabRender = WithFalse<(props: ProProps) => CustomRender>;
 export type MenuContentRender = WithFalse<
 (props: ProProps, defaultDom: CustomRender) => CustomRender
 >;
-export type MenuRender = WithFalse<(item: MenuDataItem) => CustomRender>; 
+export type MenuRender = WithFalse<(item: MenuDataItem) => CustomRender>;
+ 
 export type CustomRenderProps = WithFalse<(props?: ProProps) => CustomRender>;
-export type LogoRender = WithFalse<CustomRender>;
+export type CustomRenderFalse = WithFalse<CustomRender>;
 
 export type CollapsedButtonRender = WithFalse<
   (collapsed?: boolean) => CustomRender

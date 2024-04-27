@@ -17,7 +17,7 @@ import "./SiderMenu.css";
 import type {
   MenuContentRender,
   CollapsedButtonRender,
-  LogoRender,
+  CustomRenderFalse,
   CustomRenderProps,
 } from "../../RenderTypings";
 
@@ -83,7 +83,7 @@ export const siderMenuProps = {
   ...defaultSettingProps,
   ...baseMenuProps,
   logo: {
-    type: [Object, String, Function] as PropType<LogoRender>,
+    type: [Object, String, Function] as PropType<CustomRenderFalse>,
     default: () => undefined,
   },
   logoStyle: {
