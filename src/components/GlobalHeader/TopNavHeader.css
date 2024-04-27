@@ -15,7 +15,7 @@
 
 /* 导航菜单区 */
 .ant-pro-top-nav-header-main-menu {
-  min-width: auto;
+  min-width: 360px;
   flex: 1;
 }
 .ant-pro-top-nav-header-main-menu .ant-menu.ant-menu-horizontal {
