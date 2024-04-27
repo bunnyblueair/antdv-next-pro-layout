@@ -65,7 +65,7 @@ export const defaultRenderLogoAndTitle = (
   // call menuHeaderRender
   if (typeof renderFunction === "function") {
     // when collapsed, no render title
-    return renderFunction(logoDom, props.collapsed ? null : titleDom, props);
+    return renderFunction(props);
   }
   if (Array.isArray(renderFunction)) {
     return <>{renderFunction}</>;

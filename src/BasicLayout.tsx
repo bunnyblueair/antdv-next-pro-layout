@@ -11,7 +11,7 @@ import {
   watchEffect,
 } from "vue";
 
-import { Layout } from "ant-design-vue";
+import { Layout, LayoutContent } from "ant-design-vue";
 import { withInstall } from "ant-design-vue/es/_util/type";
 // import useConfigInject from "ant-design-vue/es/config-provider/hooks/useConfigInject";
 import useMediaQuery from "./hooks/useMediaQuery";
@@ -23,7 +23,6 @@ import {
   type RouteContextProps,
 } from "./RouteContext";
 import SiderMenuWrapper from "./components/SiderMenu";
-import { WrapContent } from "./WrapContent";
 import HeaderView, {
   headerViewProps,
 } from "./components/GlobalHeader/HeaderView";
@@ -34,9 +33,6 @@ import type { CustomRender } from "./typings";
 import type {
   BreadcrumbRender,
   HeaderContentRender,
-  HeaderRender,
-  FooterRender,
-  TabRender,
   MenuRender,
   MenuContentRender,
   CustomRenderProps,
@@ -60,20 +56,11 @@ export const basicLayoutProps = {
     type: [Function, Boolean] as PropType<any>,
     default: false,
   },
-  /**
-   * 是否禁用移动端模式，有的管理系统不需要移动端模式，此属性设置为true即可
-   */
-  disableMobile: {
-    type: Boolean,
-    required: false,
-  },
   isChildrenLayout: {
     type: Boolean,
     required: false,
   },
-  /**
-   * 兼用 content 的 margin
-   */
+  /**布局内容禁用外边距*/
   disableContentMargin: {
     type: Boolean,
     required: false,
@@ -109,11 +96,11 @@ export const basicLayoutProps = {
     default: () => undefined,
   },
   footerRender: {
-    type: [Object, Function, Boolean] as PropType<FooterRender>,
+    type: [Object, Function, Boolean] as PropType<CustomRenderProps>,
     default: () => undefined,
   },
   tabRender: {
-    type: [Object, Function, Boolean] as PropType<TabRender>,
+    type: [Object, Function, Boolean] as PropType<CustomRenderProps>,
     default: () => undefined,
   },
 };
@@ -174,9 +161,7 @@ const ProLayout = defineComponent({
 
     const colSize = useMediaQuery();
     const isMobile = computed(
-      () =>
-        (colSize.value === "sm" || colSize.value === "xs") &&
-        !props.disableMobile
+      () => colSize.value === "sm" || colSize.value === "xs"
     );
     const baseClassName = computed(() => `${props.prefixCls}-basicLayout`);
     // gen className
@@ -211,7 +196,7 @@ const ProLayout = defineComponent({
     const headerRender = (
       p: BasicLayoutProps & {
         hasSiderMenu: boolean;
-        headerRender: HeaderRender;
+        headerRender: CustomRenderProps;
         rightContentRender: CustomRenderProps;
       },
       matchMenuKeys?: string[]
@@ -247,7 +232,6 @@ const ProLayout = defineComponent({
         "openKeys",
         "selectedKeys",
         "contentWidth",
-        "disableMobile",
         "fixSiderbar",
         "fixedHeader",
         "headerHeight",
@@ -294,8 +278,12 @@ const ProLayout = defineComponent({
         props,
         "headerRender"
       );
-      const footerRender = getSlot<FooterRender>(slots, props, "footerRender");
-      const tabRender = getSlot<TabRender>(slots, props, "tabRender");
+      const footerRender = getSlot<CustomRenderProps>(
+        slots,
+        props,
+        "footerRender"
+      );
+      const tabRender = getSlot<CustomRenderProps>(slots, props, "tabRender");
 
       // menu
       const menuHeaderRender = getSlot<CustomRenderProps>(
@@ -354,35 +342,23 @@ const ProLayout = defineComponent({
         )
       );
 
-      const tabDom = computed(() => {
-        if (props.tabRender === false || !tabRender) {
-          return null;
-        }
-        let layout = props.layout;
-        let fixedHeader = props.fixedHeader;
-        // 计算侧边栏的宽度，不然导致左边的样式会出问题
-        let width = "100%";
-        if (
-          layout === "mix" &&
-          hasSplitMenu.value &&
-          flatMenuData.value.length === 0
-        ) {
-          width = "100%";
-        } else if (fixedHeader && !isTop.value && !isMobile.value) {
-          width = `calc(100% - ${siderWidth.value}px)`;
-        }
-        return tabRender({ width, ...props });
+      routeContext.hasHeader = !!headerDom.value;
+
+      const contentClassName = computed(() => {
+        return {
+          [`${baseClassName.value}-content`]: true,
+          [`${baseClassName.value}-has-header`]: headerDom,
+          [`${baseClassName.value}-children-layout`]: props.isChildrenLayout,
+          [`${baseClassName.value}-content-disable-margin`]:
+            props.disableContentMargin,
+        };
       });
 
-      const footerDom = computed(() => {
-        if (props.footerRender === false || !footerRender) {
-          return null;
-        }
-        let layout = props.layout;
+      const contentWidth = computed(() => {
         // 计算侧边栏的宽度，不然导致左边的样式会出问题
         let width = "100%";
         if (
-          layout === "mix" &&
+          props.layout === "mix" &&
           hasSplitMenu.value &&
           flatMenuData.value.length === 0
         ) {
@@ -390,18 +366,21 @@ const ProLayout = defineComponent({
         } else if (!isTop.value && !isMobile.value) {
           width = `calc(100% - ${siderWidth.value}px)`;
         }
-        return footerRender({ width, ...props });
+        return width;
       });
 
-      routeContext.hasHeader = !!headerDom.value;
+      const tabDom = computed(() => {
+        if (props.tabRender === false || !tabRender) {
+          return null;
+        }
+        return tabRender({ width: contentWidth.value, ...props });
+      });
 
-      const contentClassName = computed(() => {
-        return {
-          [`${baseClassName.value}-content`]: true,
-          [`${baseClassName.value}-has-header`]: headerDom,
-          [`${baseClassName.value}-content-disable-margin`]:
-            props.disableContentMargin,
-        };
+      const footerDom = computed(() => {
+        if (props.footerRender === false || !footerRender) {
+          return null;
+        }
+        return footerRender({ width: contentWidth.value, ...props });
       });
 
       return (
@@ -436,13 +415,12 @@ const ProLayout = defineComponent({
                 <Layout style={genLayoutStyle}>
                   {headerDom.value}
                   {tabDom.value}
-                  <WrapContent
-                    isChildrenLayout={props.isChildrenLayout}
+                  <LayoutContent
                     class={contentClassName.value}
                     style={props.contentStyle}
                   >
                     {props.loading ? <PageLoading /> : slots.default?.()}
-                  </WrapContent>
+                  </LayoutContent>
                   {footerDom.value}
                 </Layout>
               </Layout>
