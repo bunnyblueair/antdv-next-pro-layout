@@ -45,6 +45,18 @@
   opacity: 0;
 }
 
-.ant-menu-inline-collapsed .ant-pro-menu-item-title-no-icon{
-
+/* 菜单项文字无图标前缀时取首个字符 */
+.ant-menu-inline-collapsed .ant-pro-menu-item-title-no-icon {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  display: inline-block;
+  width: 14px;
+  min-width: 14px;
+  transition: opacity 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+.ant-menu-inline-collapsed .ant-pro-menu-item-title-no-icon::first-letter {
+  font-size: 14px;
+  font-weight: 500;
+  margin-right: 12px;
 }
