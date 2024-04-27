@@ -1,13 +1,7 @@
-import {
-  ref,
-  computed,
-  type FunctionalComponent,
-  type ExtractPropTypes,
-  PropType,
-} from "vue";
+import { FunctionalComponent, ExtractPropTypes, PropType } from "vue";
 import { useRouteContext } from "../../RouteContext";
 
-import "./index.css";
+import "./TopNavHeader.css";
 import {
   defaultRenderLogoAndTitle,
   siderMenuProps,
