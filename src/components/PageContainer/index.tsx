@@ -22,7 +22,6 @@ import { withInstall } from "ant-design-vue/es/_util/type";
 import { useRouteContext } from "../../RouteContext";
 import { getSlotVNode } from "../../utils";
 import PageLoading from "../PageLoading";
-import GridContent from "../GridContent";
 import type { CustomRender, VueNode } from "../../typings";
 import type { DefaultPropRender } from "../../RenderTypings";
 import "./index.css";
@@ -81,9 +80,13 @@ export const pageContainerProps = {
   affixProps: {
     type: [Object, Function] as PropType<AffixProps>,
   },
+  flex: {
+    type: Boolean,
+    default: false,
+  },
   loading: {
     type: Boolean,
-    default: () => null,
+    default: false,
   },
 };
 
@@ -164,27 +167,25 @@ const ProPageHeader: FunctionalComponent<
   }
 
   return (
-    <div class={`${prefixedClassName}-warp`}>
-      <PageHeader
-        {...restProps}
-        title={pageHeaderTitle}
-        breadcrumb={pageHeaderBreadcrumb}
-        footer={
-          footer ||
-          renderFooter({
-            ...restProps,
-            tabList,
-            tabActiveKey,
-            prefixedClassName,
-          })
-        }
-        prefixCls={prefixCls}
-        tags={tags}
-        extra={extra}
-      >
-        {renderPageHeader(content, contentExtra, prefixedClassName)}
-      </PageHeader>
-    </div>
+    <PageHeader
+      {...restProps}
+      title={pageHeaderTitle}
+      breadcrumb={pageHeaderBreadcrumb}
+      footer={
+        footer ||
+        renderFooter({
+          ...restProps,
+          tabList,
+          tabActiveKey,
+          prefixedClassName,
+        })
+      }
+      prefixCls={prefixCls}
+      tags={tags}
+      extra={extra}
+    >
+      {renderPageHeader(content, contentExtra, prefixedClassName)}
+    </PageHeader>
   );
 };
 
@@ -225,7 +226,6 @@ const PageContainer = defineComponent({
   setup(props, { slots }) {
     const context = useRouteContext();
     const prefixCls = `${props.prefixCls || "ant-pro"}-page-container`;
-
     const headerDom = computed(() => {
       // 渲染页头
       if (slots.pageHeader) {
@@ -255,46 +255,46 @@ const PageContainer = defineComponent({
       );
     });
 
-    return () => {
-      const { fixedHeader, affixProps, loading } = props;
-      return (
-        <div class={prefixCls}>
-          {fixedHeader && headerDom.value ? (
-            <Affix
-              {...(affixProps as any)}
-              offsetTop={
-                context.hasHeader && context.fixedHeader
-                  ? context.headerHeight
-                  : 0
-              }
-            >
-              {headerDom.value}
-            </Affix>
-          ) : (
-            headerDom.value
-          )}
-          <GridContent>
-            {
-              // 加载状态
-              loading ? (
-                <PageLoading />
-              ) : // 默认插槽
-              slots.default ? (
-                <div>
-                  <div class={`${prefixCls}-children-content`}>
-                    {slots.default()}
-                  </div>
-                </div>
-              ) : null
+    return () => (
+      <div class={prefixCls}>
+        {props.fixedHeader && headerDom.value ? (
+          <Affix
+            {...(props.affixProps as any)}
+            offsetTop={
+              context.hasHeader && context.fixedHeader
+                ? context.headerHeight
+                : 0
             }
-          </GridContent>
-          {
-            /* 渲染页脚 */
-            slots.pageFooter && slots.pageFooter({ ...props })
-          }
+          >
+            {headerDom.value}
+          </Affix>
+        ) : (
+          headerDom.value
+        )}
+
+        <div
+          class={{
+            [`${prefixCls}-content`]: true,
+            [`${prefixCls}-flex`]: props.flex,
+          }}
+        >
+          {props.loading ? (
+            // 加载状态
+            <PageLoading />
+          ) : (
+            // 默认插槽
+            slots.default && (
+              <div class={`${prefixCls}-main`}>{slots.default()}</div>
+            )
+          )}
         </div>
-      );
-    };
+
+        {
+          /* 渲染页脚 */
+          slots.pageFooter && slots.pageFooter({ ...props })
+        }
+      </div>
+    );
   },
 });
 

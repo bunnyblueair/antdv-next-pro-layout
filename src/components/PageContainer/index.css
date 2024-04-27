@@ -1,15 +1,14 @@
-.ant-pro-grid-content-children {
+.ant-pro-page-container-content {
+  max-width: 1224px;
+  margin: 0 auto;
+}
+.ant-pro-page-container-content.ant-pro-page-container-flex {
+  width: 100%;
+}
+.ant-pro-page-container-content > .ant-pro-page-container-main {
   margin: 24px 24px 0;
 }
-.ant-pro-page-container-warp {
-  background-color: #fff;
-}
-.ant-pro-page-container-warp .ant-tabs-bar {
-  margin: 0;
-}
-.ant-pro-page-container-ghost .ant-pro-page-container-warp {
-  background-color: transparent;
-}
+
 .ant-pro-page-container-main .ant-pro-page-container-detail {
   display: flex;
 }
@@ -24,13 +23,10 @@
 .ant-pro-page-container-main .ant-pro-page-container-content {
   flex: auto;
 }
-.ant-pro-page-container-main .ant-pro-page-container-contentExtra,
-.ant-pro-page-container-main .ant-pro-page-container-main {
+.ant-pro-page-container-main .ant-pro-page-container-contentExtra {
   flex: 0 1 auto;
 }
-.ant-pro-page-container-main .ant-pro-page-container-main {
-  width: 100%;
-}
+
 .ant-pro-page-container-main .ant-pro-page-container-title {
   margin-bottom: 16px;
 }
