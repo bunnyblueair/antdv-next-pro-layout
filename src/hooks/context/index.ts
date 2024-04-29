@@ -11,14 +11,11 @@ import {
   type DefineComponent,
 } from "vue";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ContextType<T> = any;
 
 export type CreateContext<T> = DefineComponent<
-  // eslint-disable-next-line @typescript-eslint/ban-types
   {},
   () => VNode | VNode[] | undefined,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   any
 >;
 
@@ -49,24 +46,3 @@ export const useContext = <T>(
 ): T => {
   return inject(contextInjectKey, defaultValue || ({} as T));
 };
-
-// :: examples ::
-//
-// interface MyContextProps {
-//   param1: string;
-//   param2: boolean;
-//   someData?: string[];
-// }
-//
-// const [ state, ContextProvider ] = createContext<MyContextProps>({
-//   param1: 'abc',
-//   param2: false,
-//   someData: ['a', 'b', 'c', 'd']
-// });
-//
-// const value = useContext<MyContextProps>();
-//
-// console.log('value', toRaw(value));
-// console.log('param1', value.param1); // 'abc'
-// console.log('param2', value.param2); // false
-// console.log('someData', value.someData); // ['a', 'b', 'c', 'd']
