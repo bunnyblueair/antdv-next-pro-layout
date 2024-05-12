@@ -108,17 +108,24 @@ function settingDrawer(bool: boolean) {
         </div>
       </template>
       <!-- 渲染菜单项 Menu.Item -->
-      <template #menuItemRender2="menuItem">
+      <template #menuItemRender2="{ path, meta }">
         <a-menu-item
-          :disabled="menuItem.meta?.disabled"
-          :danger="menuItem.meta?.danger"
-          :key="menuItem.path"
+          :key="path"
+          :disabled="meta?.disabled"
+          :danger="meta?.danger"
+          :icon="meta?.icon"
         >
-          {{ menuItem.name }}
+          <router-link :to="path">
+            <span class="ant-pro-menu-item">
+              <a-badge count="5" dot>
+                <span class="ant-pro-menu-item-title">{{ meta?.title }}</span>
+              </a-badge>
+            </span>
+          </router-link>
         </a-menu-item>
       </template>
       <!-- 渲染菜嵌套子项 Menu.SubItem -->
-      <template #subMenuItemRender2="menuItem">
+      <template #menuSubItemRender2="menuItem">
         <template v-if="menuItem.meta?.type === 'group'">
           <a-menu-item-group :title="menuItem.meta?.title" :key="menuItem.path">
             {{ menuItem.children.length }}
@@ -135,7 +142,10 @@ function settingDrawer(bool: boolean) {
       <template #headerRender2>
         <div style="background-color: #1677ff">headerRender</div>
       </template>
-      <template #rightContentRender>
+      <template #headerContentRender2>
+        <div style="background-color: #ff7875">headerContentRender</div>
+      </template>
+      <template #headerContentRightRender>
         <RightContent @drawer="settingDrawer" />
       </template>
 
@@ -151,6 +161,36 @@ function settingDrawer(bool: boolean) {
         </RouterLink>
       </template>
 
+      <!--渲染顶部标签页区域-->
+      <template #tabRender2="{ width, fixedHeader }">
+        <div>
+          <header
+            class="ant-layout-header"
+            style="height: 36px; line-height: 36px; background: transparent"
+            v-if="fixedHeader"
+          ></header>
+          <div
+            :style="{
+              margin: '0',
+              height: '36px',
+              lineHeight: '36px',
+              right: '0px',
+              top: '48px',
+              position: fixedHeader ? 'fixed' : 'unset',
+              width: fixedHeader ? width : '100%',
+              overflow: 'hidden',
+              zIndex: 14,
+              padding: '4px 16px',
+              background: '#fff',
+              boxShadow: '0 1px 4px #0015291f',
+              transition: 'background 0.3s, width 0.2s',
+            }"
+          >
+            tabRender fixedHeader：{{ fixedHeader }} width：{{ width }}
+          </div>
+        </div>
+      </template>
+
       <!--默认插槽-->
       <RouterView v-slot="{ Component, route }">
         <transition name="slide-left" mode="out-in">
@@ -159,28 +199,49 @@ function settingDrawer(bool: boolean) {
       </RouterView>
 
       <!--渲染底部区域-->
-      <template #footerRender>
-        <GlobalFooter
-          :links="[
-            {
-              blankTarget: true,
-              title: '开发手册',
-              href: 'https://juejin.cn/column/7188761626017792056',
-            },
-            {
-              blankTarget: true,
-              title: '开源仓库',
-              href: 'https://gitee.com/TsMask/',
-            },
-            {
-              blankTarget: true,
-              title: '接口文档',
-              href: 'https://mask-api-midwayjs.apifox.cn/',
-            },
-          ]"
-          copyright="Copyright © 2023 Gitee For TsMask"
-        >
-        </GlobalFooter>
+      <template #footerRender="{ width, fixedHeader }">
+        <div>
+          <footer
+            class="ant-layout-footer"
+            style="height: 48px; line-height: 48px; background: transparent"
+            v-if="fixedHeader"
+          ></footer>
+          <GlobalFooter
+            :style="{
+              margin: '0',
+              height: '48px',
+              lineHeight: '48px',
+              right: '0px',
+              bottom: '0px',
+              position: fixedHeader ? 'fixed' : 'unset',
+              width: fixedHeader ? width : '100%',
+              overflow: 'hidden',
+              zIndex: 14,
+              background: '#fff',
+              boxShadow: '0 1px 4px #0015291f',
+              transition: 'background 0.3s, width 0.2s',
+            }"
+            :links="[
+              {
+                blankTarget: true,
+                title: '开发手册',
+                href: 'https://juejin.cn/column/7188761626017792056',
+              },
+              {
+                blankTarget: true,
+                title: '开源仓库',
+                href: 'https://gitee.com/TsMask/',
+              },
+              {
+                blankTarget: true,
+                title: '接口文档',
+                href: 'https://mask-api-midwayjs.apifox.cn/',
+              },
+            ]"
+            copyright="Copyright © 2023 Gitee For TsMask"
+          >
+          </GlobalFooter>
+        </div>
       </template>
     </ProLayout>
 

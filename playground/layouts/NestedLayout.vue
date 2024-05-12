@@ -33,7 +33,7 @@
         disable-content-margin
       >
         <!-- custom right-content -->
-        <template #rightContentRender>
+        <template #headerContentRightRender>
           <div style="margin-right: 12px">
             <a-avatar shape="square" size="small">
               <template #icon>
