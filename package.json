@@ -1,10 +1,11 @@
 {
   "name": "antdv-pro-layout",
   "type": "module",
-  "version": "4.0.8",
+  "version": "4.0.9",
   "description": "Ant Design Pro Layout of Vue, easy to use pro scaffolding.",
   "keywords": [
     "Ant Design Vue",
+    "vueComponent",
     "antdv",
     "pro-layout",
     "antdv-pro"
@@ -49,11 +50,11 @@
     "@vitejs/plugin-vue": "^5.0.4",
     "@vitejs/plugin-vue-jsx": "^3.1.0",
     "@ant-design/icons-vue": "^7.0.1",
-    "ant-design-vue": "^4.2.0",
-    "vue": "^3.4.23",
+    "ant-design-vue": "^4.2.1",
+    "vue": "^3.4.27",
     "vue-router": "^4.3.2",
-    "vite": "^5.2.10",
-    "vite-plugin-dts": "^3.8.3",
-    "vue-tsc": "^2.0.14"
+    "vite": "^5.2.11",
+    "vite-plugin-dts": "^3.9.1",
+    "vue-tsc": "^2.0.17"
   }
 }
