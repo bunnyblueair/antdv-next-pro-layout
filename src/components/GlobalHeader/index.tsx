@@ -5,7 +5,7 @@ import {
   siderMenuProps,
 } from "../SiderMenu/SiderMenu";
 import TopNavHeader from "./TopNavHeader";
-import { clearMenuItem } from "../../utils";
+import { clearMenuItem } from "../../utils/getMenuData";
 
 import "./index.css";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons-vue";
@@ -34,8 +34,8 @@ export const globalHeaderProps = {
   },
   menuHeaderRender: siderMenuProps.menuHeaderRender,
   menuItemRender: siderMenuProps.menuItemRender,
-  subMenuItemRender: siderMenuProps.subMenuItemRender,
-  rightContentRender: {
+  menuSubItemRender: siderMenuProps.menuSubItemRender,
+  headerContentRightRender: {
     type: [Object, Function] as PropType<CustomRenderProps>,
     default: () => undefined,
   },
@@ -59,7 +59,7 @@ const GlobalHeader: FunctionalComponent<GlobalHeaderProps> = (
 ) => {
   const {
     isMobile,
-    rightContentRender,
+    headerContentRightRender,
     onMenuHeaderClick,
     layout,
     splitMenus,
@@ -105,9 +105,9 @@ const GlobalHeader: FunctionalComponent<GlobalHeaderProps> = (
         </>
       )}
       <div class={`${baseClassName}-flex`}>{slots.default?.()}</div>
-      {rightContentRender && typeof rightContentRender === "function"
-        ? rightContentRender(props)
-        : rightContentRender}
+      {headerContentRightRender && typeof headerContentRightRender === "function"
+        ? headerContentRightRender(props)
+        : headerContentRightRender}
     </div>
   );
 };

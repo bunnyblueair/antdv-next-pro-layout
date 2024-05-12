@@ -99,12 +99,12 @@ class MenuUtil {
       !item?.meta?.hideInMenu &&
       !item?.meta?.hideChildrenInMenu
     ) {
-      if (this.props.subMenuItemRender) {
-        const subMenuItemRender = withCtx(
-          this.props.subMenuItemRender,
+      if (this.props.menuSubItemRender) {
+        const menuSubItemRender = withCtx(
+          this.props.menuSubItemRender,
           this.ctx
         );
-        return subMenuItemRender(item) as VNode;
+        return menuSubItemRender(item) as VNode;
       }
       const { prefixCls, locale } = this.props;
       const menuTitle = (locale && locale(item)) || item.meta?.title;
@@ -247,7 +247,7 @@ export const baseMenuProps = {
     type: [Function, Boolean] as PropType<MenuRender>,
     default: () => undefined,
   },
-  subMenuItemRender: {
+  menuSubItemRender: {
     type: [Function, Boolean] as PropType<MenuRender>,
     default: () => undefined,
   },

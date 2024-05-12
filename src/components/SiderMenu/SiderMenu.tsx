@@ -209,7 +209,7 @@ const SiderMenu: FunctionalComponent<SiderMenuProps> = (props, { attrs }) => {
       openKeys={context.openKeys}
       selectedKeys={context.selectedKeys}
       menuItemRender={props.menuItemRender}
-      subMenuItemRender={props.subMenuItemRender}
+      menuSubItemRender={props.menuSubItemRender}
       iconfontUrl={props.iconfontUrl}
       onClick={props.onMenuClick}
       class={`${baseClassName}-content-menu`}

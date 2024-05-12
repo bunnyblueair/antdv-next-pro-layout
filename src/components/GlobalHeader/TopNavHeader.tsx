@@ -11,7 +11,7 @@ import type { CustomRenderProps } from "../../RenderTypings";
 
 export const topNavHeaderProps = {
   ...siderMenuProps,
-  rightContentRender: {
+  headerContentRightRender: {
     type: [Object, Function] as PropType<CustomRenderProps>,
     default: () => undefined,
   },
@@ -27,7 +27,7 @@ const TopNavHeader: FunctionalComponent<TopNavHeaderProps> = (props) => {
     onMenuHeaderClick,
     onOpenKeys,
     onSelect,
-    rightContentRender,
+    headerContentRightRender,
     layout,
     menuData,
   } = props;
@@ -60,7 +60,7 @@ const TopNavHeader: FunctionalComponent<TopNavHeaderProps> = (props) => {
             iconfontUrl={props.iconfontUrl}
             menuData={menuData}
             menuItemRender={props.menuItemRender}
-            subMenuItemRender={props.subMenuItemRender}
+            menuSubItemRender={props.menuSubItemRender}
             openKeys={context.openKeys}
             selectedKeys={context.selectedKeys}
             class={`${baseClassName}-menu`}
@@ -73,9 +73,9 @@ const TopNavHeader: FunctionalComponent<TopNavHeaderProps> = (props) => {
           />
         </div>
 
-        {rightContentRender &&
-          typeof rightContentRender === "function" &&
-          rightContentRender(props)}
+        {headerContentRightRender &&
+          typeof headerContentRightRender === "function" &&
+          headerContentRightRender(props)}
       </div>
     </div>
   );

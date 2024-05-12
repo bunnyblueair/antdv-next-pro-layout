@@ -197,7 +197,7 @@ const ProLayout = defineComponent({
       p: BasicLayoutProps & {
         hasSiderMenu: boolean;
         headerRender: CustomRenderProps;
-        rightContentRender: CustomRenderProps;
+        headerContentRightRender: CustomRenderProps;
       },
       matchMenuKeys?: string[]
     ): CustomRender | null => {
@@ -267,10 +267,10 @@ const ProLayout = defineComponent({
         props,
         "headerContentRender"
       );
-      const rightContentRender = getSlot<CustomRenderProps>(
+      const headerContentRightRender = getSlot<CustomRenderProps>(
         slots,
         props,
-        "rightContentRender"
+        "headerContentRightRender"
       );
       const customHeaderRender = getSlot<CustomRenderProps>(
         slots,
@@ -310,10 +310,10 @@ const ProLayout = defineComponent({
         props,
         "menuItemRender"
       );
-      const subMenuItemRender = getSlot<MenuRender>(
+      const menuSubItemRender = getSlot<MenuRender>(
         slots,
         props,
-        "subMenuItemRender"
+        "menuSubItemRender"
       );
 
       const headerDom = computed(() =>
@@ -321,7 +321,7 @@ const ProLayout = defineComponent({
           {
             ...props,
             menuItemRender,
-            subMenuItemRender,
+            menuSubItemRender,
             hasSiderMenu: !isTop.value,
             menuData: props.menuData,
             isMobile: unref(isMobile),
@@ -329,7 +329,7 @@ const ProLayout = defineComponent({
             onOpenKeys,
             onSelect,
             onMenuHeaderClick,
-            rightContentRender,
+            headerContentRightRender,
             collapsedButtonRender,
             headerTitleRender: menuHeaderRender,
             menuHeaderExtraRender,
@@ -403,7 +403,7 @@ const ProLayout = defineComponent({
                     menuContentRender={menuContentRender}
                     menuFooterRender={menuFooterRender}
                     menuItemRender={menuItemRender}
-                    subMenuItemRender={subMenuItemRender}
+                    menuSubItemRender={menuSubItemRender}
                     collapsedButtonRender={collapsedButtonRender}
                     onCollapse={onCollapse}
                     onSelect={onSelect}
