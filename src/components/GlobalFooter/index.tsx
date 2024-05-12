@@ -1,4 +1,4 @@
-import { defineComponent, SetupContext, PropType, ExtractPropTypes } from "vue";
+import { defineComponent, PropType, ExtractPropTypes } from "vue";
 import { CustomRenderFalse } from "src/RenderTypings";
 import "./index.css";
 

@@ -1,39 +1,39 @@
-import { ref } from 'vue';
+import { ref } from "vue";
 
-export const MediaQueryEnum /* : {
-  [key: string]: {
-    matchMedia: string;
-    minWidth?: number;
-    maxWidth?: number;
-  };
-} */ = {
+export const MediaQueryEnum = {
   xs: {
+    minWidth: 375,
     maxWidth: 575,
-    matchMedia: '(max-width: 575px)',
+    matchMedia: "(max-width: 575px)",
   },
   sm: {
     minWidth: 576,
     maxWidth: 767,
-    matchMedia: '(min-width: 576px) and (max-width: 767px)',
+    matchMedia: "(min-width: 576px) and (max-width: 767px)",
   },
   md: {
     minWidth: 768,
     maxWidth: 991,
-    matchMedia: '(min-width: 768px) and (max-width: 991px)',
+    matchMedia: "(min-width: 768px) and (max-width: 991px)",
   },
   lg: {
     minWidth: 992,
     maxWidth: 1199,
-    matchMedia: '(min-width: 992px) and (max-width: 1199px)',
+    matchMedia: "(min-width: 992px) and (max-width: 1199px)",
   },
   xl: {
     minWidth: 1200,
     maxWidth: 1599,
-    matchMedia: '(min-width: 1200px) and (max-width: 1599px)',
+    matchMedia: "(min-width: 1200px) and (max-width: 1599px)",
   },
   xxl: {
     minWidth: 1600,
-    matchMedia: '(min-width: 1600px)',
+    maxWidth: 1999,
+    matchMedia: "(min-width: 1600px) and (max-width: 1999px)",
+  },
+  xxxl: {
+    minWidth: 2000,
+    matchMedia: "(min-width: 2000px)",
   },
 };
 
@@ -46,18 +46,20 @@ export type MediaQueryKey = keyof typeof MediaQueryEnum;
  * So should use Array.forEach
  */
 export const getScreenClassName = () => {
-  let className: MediaQueryKey = 'md';
+  let className: MediaQueryKey = "md";
   // support ssr
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     return className;
   }
-  const mediaQueryKey = (Object.keys(MediaQueryEnum) as MediaQueryKey[]).find((key) => {
-    const { matchMedia } = MediaQueryEnum[key];
-    if (window.matchMedia(matchMedia).matches) {
-      return true;
+  const mediaQueryKey = (Object.keys(MediaQueryEnum) as MediaQueryKey[]).find(
+    (key) => {
+      const { matchMedia } = MediaQueryEnum[key];
+      if (window.matchMedia(matchMedia).matches) {
+        return true;
+      }
+      return false;
     }
-    return false;
-  });
+  );
   className = mediaQueryKey as unknown as MediaQueryKey;
   return className;
 };

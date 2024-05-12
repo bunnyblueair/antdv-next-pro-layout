@@ -1,13 +1,20 @@
-import type { RouteRecordRaw } from 'vue-router';
-import isUrl from './isUrl';
+import type { RouteRecordRaw } from "vue-router";
+import isUrl from "./isUrl";
 
-export { clearMenuItem, flatMap, getMenuFirstChildren } from './index';
+export { clearMenuItem, flatMap, getMenuFirstChildren } from "./index";
 
 export type MenuData = {
   menuData: RouteRecordRaw[];
   breadcrumb: Record<string, RouteRecordRaw>;
 };
 
+/**
+ * 格式化路由路径地址
+ * @param routes
+ * @param breadcrumb
+ * @param parent
+ * @returns
+ */
 const formatRelativePath = (
   routes: RouteRecordRaw[],
   breadcrumb: Record<string, RouteRecordRaw>,
@@ -23,17 +30,17 @@ const formatRelativePath = (
     // Note that nested paths that start with / will be treated as a root path.
     // This allows you to leverage the component nesting without having to use a nested URL.
     // @ref https://router.vuejs.org/guide/essentials/nested-routes.html#nested-routes
-    const hasRelativePath = route.path.startsWith('/');
+    const hasRelativePath = route.path.startsWith("/");
     if (!hasRelativePath) {
       if (parent) {
-        route.path = `${parent.path || ''}/${route.path}`;
+        route.path = `${parent.path || ""}/${route.path}`;
       } else {
         route.path = `/${route.path}`;
       }
     }
 
     // reformat path
-    route.path = route.path.replace('//', '/');
+    route.path = route.path.replace("//", "/");
     // format children routes
     if (route.children && route.children.length > 0) {
       route.children = formatRelativePath(route.children, breadcrumb, route);
@@ -43,11 +50,19 @@ const formatRelativePath = (
   });
 };
 
+/**
+ * 路由表转出系统菜单
+ * @param routes 路由表取根路径"/"下节点数据
+ * @returns 菜单数据和面包屑数据
+ */
 export const getMenuData = (routes: RouteRecordRaw[]): MenuData => {
-  const childrenRoute = routes.find((route) => route.path === '/');
+  const childrenRoute = routes.find((route) => route.path === "/");
   const breadcrumb: Record<string, RouteRecordRaw> = {};
   return {
-    menuData: formatRelativePath(childrenRoute?.children || ([] as RouteRecordRaw[]), breadcrumb),
+    menuData: formatRelativePath(
+      childrenRoute?.children || ([] as RouteRecordRaw[]),
+      breadcrumb
+    ),
     breadcrumb,
   };
 };

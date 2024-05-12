@@ -8,12 +8,12 @@ import {
 import type { RouteRecordRaw } from "vue-router";
 import GlobalHeader, { GlobalHeaderProps, globalHeaderProps } from ".";
 import { useRouteContext } from "../../RouteContext";
+import { CustomRenderProps } from "../../RenderTypings";
 import { clearMenuItem } from "../../utils";
 import { LayoutHeader } from "ant-design-vue";
 import PropTypes from "ant-design-vue/es/_util/vue-types";
 import TopNavHeader from "./TopNavHeader";
 import "./HeaderView.css";
-import { CustomRenderProps } from "../../RenderTypings";
 
 export const headerViewProps = {
   ...globalHeaderProps,
@@ -42,15 +42,8 @@ const HeaderView = defineComponent({
   inheritAttrs: false,
   props: headerViewProps,
   setup(props) {
-    const {
-      prefixCls,
-      isMobile,
-      fixedHeader,
-      hasSiderMenu,
-      headerHeight,
-      layout,
-      onCollapse,
-    } = toRefs(props);
+    const { isMobile, fixedHeader, hasSiderMenu, headerHeight, layout } =
+      toRefs(props);
     const context = useRouteContext();
     const baseClassName = `${props.prefixCls}-header`;
     const needFixedHeader = computed(
