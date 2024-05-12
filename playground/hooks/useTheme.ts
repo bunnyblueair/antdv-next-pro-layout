@@ -29,8 +29,8 @@ export type ConfigType = {
 
 export const proConfig = ref<ConfigType>({
   layout: "side",
-  theme: "light", // "light",
-  menuTheme: "light", // "light",
+  theme: "light", // "dark" | "light",
+  menuTheme: "light", // "dark" | "light",
   fixedHeader: true,
   fixSiderbar: true,
   splitMenus: true,

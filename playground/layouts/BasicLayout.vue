@@ -224,21 +224,21 @@ function settingDrawer(bool: boolean) {
             :links="[
               {
                 blankTarget: true,
-                title: '开发手册',
-                href: 'https://juejin.cn/column/7188761626017792056',
+                title: 'Link 1',
+                href: '#',
               },
               {
-                blankTarget: true,
-                title: '开源仓库',
+                blankTarget: false,
+                title: 'Link 2',
                 href: 'https://gitee.com/TsMask/',
               },
               {
                 blankTarget: true,
-                title: '接口文档',
-                href: 'https://mask-api-midwayjs.apifox.cn/',
+                title: 'Link 3',
+                href: '#',
               },
             ]"
-            copyright="Copyright © 2023 Gitee For TsMask"
+            copyright="Copyright &copy; 2023 Gitee For TsMask"
           >
           </GlobalFooter>
         </div>
