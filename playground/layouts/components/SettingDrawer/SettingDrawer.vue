@@ -4,6 +4,7 @@ import {
   changePrimaryColor,
   getLocalColor,
 } from "@/hooks/useTheme";
+import { prefersColorScheme, viewTransitionTheme } from "antdv-pro-layout";
 import { PropType, ref } from "vue";
 
 const emit = defineEmits(["update:open", "update:config", "close"]);
@@ -49,6 +50,28 @@ function fnColorChange(e: Event) {
   }
   color.value = getLocalColor();
 }
+
+// 偏好设置-过渡动画
+prefersColorScheme(() => {
+  viewTransitionTheme((isDarkMode) => {
+    changeConf("theme", isDarkMode ? "light" : "dark");
+  });
+});
+
+// 偏好设置-普通
+// mediaTheme.prefersColorScheme((isDarkMode) => {
+//   const theme = isDarkMode ? "dark" : "light";
+//   const root = document.documentElement;
+//   root.setAttribute("data-theme", theme);
+//   changeConf("theme", theme);
+// });
+
+// 手动变更主题-过渡动画
+function changeTheme(e: any) {
+  viewTransitionTheme((isDarkMode) => {
+    changeConf("theme", isDarkMode ? "light" : "dark");
+  }, e);
+}
 </script>
 
 <template>
@@ -87,14 +110,13 @@ function fnColorChange(e: Event) {
           主题明亮
           <template #actions> 全局主题色 </template>
           <template #extra>
-            <a-switch
-              checked-children="是"
-              un-checked-children="否"
-              :checked="config.theme === 'dark'"
-              @change="
-            (checked:any) => changeConf('theme', checked ? 'dark' : 'light')
-          "
-            ></a-switch>
+            <a-button
+              :type="config.theme === 'dark' ? 'primary' : 'default'"
+              size="small"
+              @click="changeTheme"
+            >
+              {{ config.theme }}
+            </a-button>
           </template>
         </a-list-item>
         <a-list-item>

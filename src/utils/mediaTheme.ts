@@ -1,0 +1,94 @@
+/**
+ * 媒体主题颜色模式偏好监听
+ */
+export function prefersColorScheme(listener: (isDark: boolean) => void) {
+  // 检测浏览器是否支持prefers-color-scheme媒体查询
+  if (window.matchMedia("(prefers-color-scheme)").media !== "not all") {
+    // 添加事件监听器，当颜色模式偏好发生变化时执行相应的操作
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", (e) => listener(e.matches));
+  }
+}
+
+/**
+ * 主题切换视图过渡
+ *
+ * https://developer.mozilla.org/zh-CN/docs/Web/API/View_Transitions_API
+ *
+ * 请将以下样式到 `App.vue` ，如遇到style层级问题可以去除 `scoped`
+ * @example
+ * <style>
+ * ::view-transition-old(root),
+ * ::view-transition-new(root) {
+ *   animation: none;
+ *   mix-blend-mode: normal;
+ * }
+ *
+ * [data-theme="dark"]::view-transition-old(root) {
+ *   z-index: 1;
+ * }
+ * [data-theme="dark"]::view-transition-new(root) {
+ *   z-index: 999;
+ * }
+ *
+ * ::view-transition-old(root) {
+ *   z-index: 999;
+ * }
+ * ::view-transition-new(root) {
+ *   z-index: 1;
+ * }
+ * </style>
+ */
+export function viewTransitionTheme(
+  listener: (isDark: boolean) => void,
+  e?: { clientX: number; clientY: number }
+) {
+  const root = document.documentElement;
+  /**主题data-theme 明light 暗dark */
+  const _isDark = root.getAttribute("data-theme") === "dark";
+
+  // 为不支持此 API 的浏览器提供回退方案：
+  if (!(document as any).startViewTransition) {
+    root.setAttribute("data-theme", _isDark ? "light" : "dark");
+    listener(_isDark);
+    return;
+  }
+
+  // 获取点击位置，或者 左上角0   // 屏幕中间
+  const x = e?.clientX ?? 0; // innerWidth / 2;
+  const y = e?.clientY ?? 0; // innerHeight / 2;
+  // 获取到最远角的距离
+  const endRadius = Math.hypot(
+    Math.max(x, innerWidth - x),
+    Math.max(y, innerHeight - y)
+  );
+
+  // startViewTransition 调用的时候 会获取当前页面的状态 ::view-transition-old(root)
+  // 通过 startViewTransition 的回调函数，获取最新的页面的状态 ::view-transition-new(root)
+  // 旧视图的动画效果从 opacity: 1 到 opacity: 0，而新视图则从 opacity: 0 过渡到 opacity: 1，从而形成淡入淡出。
+  const transition = (document as any).startViewTransition(() => {
+    root.setAttribute("data-theme", _isDark ? "light" : "dark");
+    listener(_isDark);
+  });
+  // 两者过渡的快照准备完成时，使用 Web Animations API 进行 动画过渡
+  transition.ready.then(() => {
+    const clipPath = [
+      `circle(0% at ${x}px ${y}px)`,
+      `circle(${endRadius}px at ${x}px ${y}px)`,
+    ];
+
+    document.documentElement.animate(
+      {
+        clipPath: _isDark ? clipPath.reverse() : clipPath,
+      },
+      {
+        duration: 500,
+        easing: "ease-in",
+        pseudoElement: _isDark // 运用于伪元素的过渡
+          ? "::view-transition-old(root)"
+          : "::view-transition-new(root)",
+      }
+    );
+  });
+}

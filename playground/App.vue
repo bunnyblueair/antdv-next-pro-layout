@@ -26,6 +26,27 @@ body .ant-pro-basicLayout {
   min-height: 100vh;
 }
 
+::view-transition-old(root),
+::view-transition-new(root) {
+  /* 关闭默认的淡入淡出的效果 */
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+[data-theme="dark"]::view-transition-old(root) {
+  z-index: 1;
+}
+[data-theme="dark"]::view-transition-new(root) {
+  z-index: 999;
+}
+
+::view-transition-old(root) {
+  z-index: 999;
+}
+::view-transition-new(root) {
+  z-index: 1;
+}
+
 .ant-pro-sider {
   z-index: 20;
 }
