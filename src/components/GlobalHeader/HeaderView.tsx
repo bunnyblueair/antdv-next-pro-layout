@@ -9,7 +9,7 @@ import type { RouteRecordRaw } from "vue-router";
 import GlobalHeader, { GlobalHeaderProps, globalHeaderProps } from ".";
 import { useRouteContext } from "../../RouteContext";
 import { CustomRenderProps } from "../../RenderTypings";
-import { clearMenuItem } from "../../utils";
+import { clearMenuItem } from "../../utils/getMenuData";
 import { LayoutHeader } from "ant-design-vue";
 import PropTypes from "ant-design-vue/es/_util/vue-types";
 import TopNavHeader from "./TopNavHeader";

@@ -1,12 +1,51 @@
-import type { RouteRecordRaw } from "vue-router";
+import type { RouteRecord, RouteRecordRaw } from "vue-router";
 import isUrl from "./isUrl";
 
-export { clearMenuItem, flatMap, getMenuFirstChildren } from "./index";
+export { flatMap, getMenuFirstChildren } from "./index";
 
 export type MenuData = {
   menuData: RouteRecordRaw[];
   breadcrumb: Record<string, RouteRecordRaw>;
 };
+
+/**
+ * 清除菜单项，针对以下属性排除
+ * {
+ * name: "!name"
+ * meta: {hideChildInMenu hideInMenu}
+ * }
+ * @param menusData 菜单数据
+ * @returns
+ */
+export function clearMenuItem(
+  routes: RouteRecord[] | RouteRecordRaw[]
+): RouteRecordRaw[] {
+  return routes
+    .map((item: RouteRecord | RouteRecordRaw) => {
+      const finalItem = { ...item };
+      if (!finalItem.name || finalItem.meta?.hideInMenu) {
+        return null;
+      }
+
+      if (finalItem && finalItem?.children) {
+        if (
+          !finalItem.meta?.hideChildInMenu &&
+          finalItem.children.some(
+            (child: RouteRecord | RouteRecordRaw) =>
+              child && child.name && !child.meta?.hideInMenu
+          )
+        ) {
+          return {
+            ...item,
+            children: clearMenuItem(finalItem.children),
+          };
+        }
+        delete finalItem.children;
+      }
+      return finalItem;
+    })
+    .filter((item) => item) as RouteRecordRaw[];
+}
 
 /**
  * 格式化路由路径地址

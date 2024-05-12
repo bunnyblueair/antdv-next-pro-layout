@@ -1,38 +1,11 @@
-import type { RouteRecord, RouteRecordRaw } from 'vue-router';
-import type { MenuDataItem } from '../typings';
-import { getSlot, getSlotVNode } from './getSlot';
+import type { RouteRecord } from "vue-router";
+import type { MenuDataItem } from "../typings";
+import { getSlot, getSlotVNode } from "./getSlot";
 
-export { default as isUrl } from './isUrl';
-export { default as isImg } from './isImg'; 
+export { default as isUrl } from "./isUrl";
+export { default as isImg } from "./isImg";
 
 export { getSlot, getSlotVNode };
-
-export function clearMenuItem(menusData: RouteRecord[] | RouteRecordRaw[]): RouteRecordRaw[] {
-  return menusData
-    .map((item: RouteRecord | RouteRecordRaw) => {
-      const finalItem = { ...item };
-      if (!finalItem.name || finalItem.meta?.hideInMenu) {
-        return null;
-      }
-
-      if (finalItem && finalItem?.children) {
-        if (
-          !finalItem.meta?.hideChildInMenu &&
-          finalItem.children.some(
-            (child: RouteRecord | RouteRecordRaw) => child && child.name && !child.meta?.hideInMenu
-          )
-        ) {
-          return {
-            ...item,
-            children: clearMenuItem(finalItem.children),
-          };
-        }
-        delete finalItem.children;
-      }
-      return finalItem;
-    })
-    .filter((item) => item) as RouteRecordRaw[];
-}
 
 export function flatMap(menusData: RouteRecord[]): MenuDataItem[] {
   return menusData
@@ -50,7 +23,10 @@ export function flatMap(menusData: RouteRecord[]): MenuDataItem[] {
 }
 
 export function getMenuFirstChildren(menus: MenuDataItem[], key?: string) {
-  return key === undefined ? [] : (menus[menus.findIndex((menu) => menu.path === key)] || {}).children || [];
+  return key === undefined
+    ? []
+    : (menus[menus.findIndex((menu) => menu.path === key)] || {}).children ||
+        [];
 }
 
 export const PropRenderType = {
