@@ -259,12 +259,12 @@ const PageContainer = defineComponent({
       <div class={prefixCls}>
         {props.fixedHeader && headerDom.value ? (
           <Affix
-            {...(props.affixProps as any)}
             offsetTop={
               context.hasHeader && context.fixedHeader
                 ? context.headerHeight
                 : 0
             }
+            {...(props.affixProps as any)}
           >
             {headerDom.value}
           </Affix>
