@@ -1,4 +1,3 @@
-/* eslint-disable */
 import {
   provide,
   inject,
@@ -11,12 +10,12 @@ import {
   type DefineComponent,
 } from "vue";
 
-export type ContextType<T> = any;
+type ContextType<T> = T;
 
-export type CreateContext<T> = DefineComponent<
+type CreateContext<T> = DefineComponent<
   {},
   () => VNode | VNode[] | undefined,
-  any
+  T
 >;
 
 export const createContext = <T>(
@@ -31,7 +30,7 @@ export const createContext = <T>(
         required: true,
       },
     },
-    setup(props: { value: ContextType<T> }, { slots }: SetupContext) {
+    setup(props: { value: ContextType<any> }, { slots }: SetupContext) {
       provide(contextInjectKey, readonly(props.value));
       return () => slots.default?.();
     },
