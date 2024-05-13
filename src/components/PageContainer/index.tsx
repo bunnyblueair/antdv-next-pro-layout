@@ -7,8 +7,7 @@ import {
   type ExtractPropTypes,
   VNodeChild,
 } from "vue";
-/* replace antd ts define */
-import PageHeader, { pageHeaderProps } from "ant-design-vue/es/page-header";
+/* antd ts define */
 import {
   Tabs,
   Affix,
@@ -16,14 +15,14 @@ import {
   TabPaneProps,
   TabsProps,
 } from "ant-design-vue";
+import PageHeader, { pageHeaderProps } from "ant-design-vue/es/page-header";
 import { TabBarExtraContent } from "ant-design-vue/es/tabs/src/interface";
 import { withInstall } from "ant-design-vue/es/_util/type";
-/* replace antd ts define end */
+/* antd ts define end */
 import { useRouteContext } from "../../RouteContext";
 import { getSlotVNode } from "../../utils";
 import PageLoading from "../PageLoading";
-import type { CustomRender, VueNode } from "../../typings";
-import type { DefaultPropRender } from "../../RenderTypings";
+import type { CustomRender, VueNode, DefaultPropRender } from "../../typings";
 import "./index.css";
 
 export const pageHeaderTabConfig = {
@@ -82,7 +81,7 @@ export const pageContainerProps = {
   },
   flex: {
     type: Boolean,
-    default: false,
+    default: true,
   },
   loading: {
     type: Boolean,

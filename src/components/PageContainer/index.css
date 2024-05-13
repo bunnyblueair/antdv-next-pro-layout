@@ -22,6 +22,7 @@
 .ant-pro-page-container-main .ant-pro-page-container-title,
 .ant-pro-page-container-main .ant-pro-page-container-content {
   flex: auto;
+  max-width: 100%;
 }
 .ant-pro-page-container-main .ant-pro-page-container-contentExtra {
   flex: 0 1 auto;
