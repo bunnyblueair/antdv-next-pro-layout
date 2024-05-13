@@ -9,8 +9,6 @@ export type VueNode =
   | ((...props: any[]) => Slot)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | ((...props: any[]) => VNode)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  | ((...args: any[]) => VNode)
   | VNode[]
   | string
   | null
@@ -82,3 +80,20 @@ export type WithFalse<T> = T | false;
 export type CustomRender = VueNode;
 
 export type FormatLocale = (menuDataItem?: MenuDataItem) => string;
+
+export type ProProps = Record<never, never>;
+// Custom render or slot
+export type DefaultPropRender = WithFalse<CustomRender> | any;
+
+export type HeaderContentRender = WithFalse<() => CustomRender>;
+export type MenuContentRender = WithFalse<
+  (props: ProProps, defaultDom: CustomRender) => CustomRender
+>;
+export type MenuRender = WithFalse<(item: MenuDataItem) => CustomRender>;
+
+export type CustomRenderProps = WithFalse<(props?: ProProps) => CustomRender>;
+export type CustomRenderFalse = WithFalse<CustomRender>;
+
+export type CollapsedButtonRender = WithFalse<
+  (collapsed?: boolean) => CustomRender
+>;
