@@ -1,5 +1,6 @@
 import { ref } from "vue";
 
+/**屏幕尺寸媒体查询枚举对象 */
 export const MediaQueryEnum = {
   xs: {
     minWidth: 375,
@@ -40,16 +41,17 @@ export const MediaQueryEnum = {
 export type MediaQueryKey = keyof typeof MediaQueryEnum;
 
 /**
- * loop query screen className
+ * 屏幕尺寸
+ * Screen Media Query
  * Array.find will throw a error
  * `Rendered more hooks than during the previous render.`
  * So should use Array.forEach
  */
-export const getScreenClassName = () => {
-  let className: MediaQueryKey = "md";
+export const getMediaScreen = () => {
+  let screen: MediaQueryKey = "md";
   // support ssr
   if (typeof window === "undefined") {
-    return className;
+    return screen;
   }
   const mediaQueryKey = (Object.keys(MediaQueryEnum) as MediaQueryKey[]).find(
     (key) => {
@@ -60,12 +62,15 @@ export const getScreenClassName = () => {
       return false;
     }
   );
-  className = mediaQueryKey as unknown as MediaQueryKey;
-  return className;
+  if (!mediaQueryKey) {
+    return screen;
+  }
+  return mediaQueryKey;
 };
 
-const useMedia = () => {
-  const colSpan = ref<string>(getScreenClassName());
+/**屏幕尺寸 ref响应监听 */
+export const useMediaScreen = () => {
+  const colSpan = ref<string>(getMediaScreen());
 
   Object.keys(MediaQueryEnum).forEach((key) => {
     const { matchMedia } = MediaQueryEnum[key as MediaQueryKey];
@@ -82,5 +87,3 @@ const useMedia = () => {
 
   return colSpan;
 };
-
-export default useMedia;
