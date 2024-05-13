@@ -7,7 +7,7 @@ import {
   siderMenuProps,
 } from "../SiderMenu/SiderMenu";
 import BaseMenu from "../SiderMenu/BaseMenu";
-import type { CustomRenderProps } from "../../RenderTypings";
+import type { CustomRenderProps } from "../../typings";
 
 export const topNavHeaderProps = {
   ...siderMenuProps,

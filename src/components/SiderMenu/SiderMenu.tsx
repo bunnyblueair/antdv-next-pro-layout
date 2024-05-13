@@ -8,18 +8,19 @@ import {
 } from "vue";
 import { LayoutSider, Menu, MenuItem, SiderProps } from "ant-design-vue";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons-vue";
+import PropTypes from "ant-design-vue/es/_util/vue-types";
 import BaseMenu, { baseMenuProps } from "./BaseMenu";
-import type { WithFalse, CustomRender } from "../../typings";
 import { defaultSettingProps } from "../../defaultSettings";
 import { useRouteContext } from "../../RouteContext";
-import PropTypes from "ant-design-vue/es/_util/vue-types";
 import "./SiderMenu.css";
 import type {
   MenuContentRender,
   CollapsedButtonRender,
   CustomRenderFalse,
   CustomRenderProps,
-} from "../../RenderTypings";
+  WithFalse,
+  CustomRender,
+} from "../../typings";
 
 export const defaultRenderLogo = (
   logo?: CustomRender,

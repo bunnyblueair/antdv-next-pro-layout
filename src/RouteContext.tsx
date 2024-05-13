@@ -1,13 +1,11 @@
 import {
-  provide,
   reactive,
   type InjectionKey,
-  type Ref,
   type VNodeChild,
   type ComputedRef,
 } from "vue";
-import { createContext, useContext } from "./hooks/context";
-import type { MenuDataItem, FormatLocale, WithFalse } from "./typings";
+import { createContext, useContext } from "./hooks/useContext";
+import type { MenuDataItem, FormatLocale } from "./typings";
 import type { PureSettings } from "./defaultSettings";
 
 export interface Route {
@@ -41,7 +39,7 @@ export interface MenuState {
 
 export interface RouteContextProps extends Partial<PureSettings>, MenuState {
   menuData: MenuDataItem[];
-  flatMenuData?: MenuDataItem[];
+  flatMenuData: MenuDataItem[];
 
   getPrefixCls?: (suffixCls?: string, customizePrefixCls?: string) => string;
   locale?: FormatLocale;
@@ -69,9 +67,12 @@ export const getPrefixCls = (
 };
 
 // set default context
-export const defaultRouteContext = reactive({
+export const defaultRouteContext = reactive<RouteContextProps>({
   getPrefixCls,
-  locale: false,
+  menuData: [],
+  flatMenuData: [],
+  selectedKeys: [],
+  openKeys: [],
 });
 
 export const routeContextInjectKey: InjectionKey<RouteContextProps> =
@@ -84,10 +85,7 @@ export const createRouteContext = () =>
   );
 
 export const useRouteContext = () =>
-  useContext<Required<RouteContextProps>>(
-    routeContextInjectKey,
-    defaultRouteContext
-  );
+  useContext<RouteContextProps>(routeContextInjectKey, defaultRouteContext);
 
 const Provider = createRouteContext();
 

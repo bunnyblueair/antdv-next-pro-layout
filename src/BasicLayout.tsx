@@ -13,8 +13,7 @@ import {
 
 import { Layout, LayoutContent } from "ant-design-vue";
 import { withInstall } from "ant-design-vue/es/_util/type";
-// import useConfigInject from "ant-design-vue/es/config-provider/hooks/useConfigInject";
-import useMediaQuery from "./hooks/useMediaQuery";
+import { useMediaScreen } from "./hooks/useMediaScreen";
 
 import { defaultSettingProps } from "./defaultSettings";
 import {
@@ -31,13 +30,12 @@ import { getSlot, getMenuFirstChildren, pick } from "./utils";
 import type { BreadcrumbProps } from "./RouteContext";
 import type { CustomRender } from "./typings";
 import type {
-  BreadcrumbRender,
   HeaderContentRender,
   MenuRender,
   MenuContentRender,
   CustomRenderProps,
   CollapsedButtonRender,
-} from "./RenderTypings";
+} from "./typings";
 
 import PageLoading from "./components/PageLoading";
 import "./BasicLayout.css";
@@ -84,7 +82,7 @@ export const basicLayoutProps = {
     default: () => undefined,
   },
   breadcrumbRender: {
-    type: [Object, Function, Boolean] as PropType<BreadcrumbRender>,
+    type: [Object, Function, Boolean] as PropType<BreadcrumbProps["itemRender"]>,
     default: () => null,
   },
   headerContentRender: {
@@ -159,9 +157,9 @@ const ProLayout = defineComponent({
       emit("menuClick", args);
     };
 
-    const colSize = useMediaQuery();
+    const screenSize = useMediaScreen();
     const isMobile = computed(
-      () => colSize.value === "sm" || colSize.value === "xs"
+      () => screenSize.value === "sm" || screenSize.value === "xs"
     );
     const baseClassName = computed(() => `${props.prefixCls}-basicLayout`);
     // gen className
@@ -171,7 +169,7 @@ const ProLayout = defineComponent({
         [`${baseClassName.value}-top-menu`]: isTop.value,
         [`${baseClassName.value}-is-children`]: props.isChildrenLayout,
         [`${baseClassName.value}-fix-siderbar`]: props.fixSiderbar,
-        [`screen-${colSize.value}`]: colSize.value,
+        [`screen-${screenSize.value}`]: true,
         [`layout-${props.layout}`]: true,
         [`theme-${props.theme}`]: true,
         [`theme-menu-${props.menuTheme}`]: true,
@@ -209,11 +207,11 @@ const ProLayout = defineComponent({
 
     const breadcrumb = computed<BreadcrumbProps>(() => ({
       ...props.breadcrumb,
-      itemRender: getSlot<BreadcrumbRender>(
+      itemRender: getSlot<BreadcrumbProps["itemRender"]>(
         slots,
         props,
         "breadcrumbRender"
-      ) as BreadcrumbRender,
+      ),
     }));
 
     const flatMenuData = computed(

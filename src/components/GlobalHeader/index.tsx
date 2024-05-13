@@ -9,12 +9,15 @@ import { clearMenuItem } from "../../utils/getMenuData";
 
 import "./index.css";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons-vue";
+import PropTypes from "ant-design-vue/es/_util/vue-types";
 
 import type { PropType } from "vue";
-import type { MenuDataItem } from "../../typings";
 import { defaultSettingProps } from "../../defaultSettings";
-import PropTypes from "ant-design-vue/es/_util/vue-types";
-import type { CustomRenderProps, MenuContentRender } from "../../RenderTypings";
+import type {
+  CustomRenderProps,
+  MenuContentRender,
+  MenuDataItem,
+} from "../../typings";
 
 export const globalHeaderProps = {
   ...defaultSettingProps,
@@ -105,7 +108,8 @@ const GlobalHeader: FunctionalComponent<GlobalHeaderProps> = (
         </>
       )}
       <div class={`${baseClassName}-flex`}>{slots.default?.()}</div>
-      {headerContentRightRender && typeof headerContentRightRender === "function"
+      {headerContentRightRender &&
+      typeof headerContentRightRender === "function"
         ? headerContentRightRender(props)
         : headerContentRightRender}
     </div>

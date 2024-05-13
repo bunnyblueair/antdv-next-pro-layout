@@ -1,5 +1,5 @@
 import { defineComponent, PropType, ExtractPropTypes } from "vue";
-import { CustomRenderFalse } from "src/RenderTypings";
+import { CustomRenderFalse } from "../../typings";
 import "./index.css";
 
 export const globalFooterProps = {

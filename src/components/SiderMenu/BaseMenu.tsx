@@ -15,22 +15,22 @@ import {
   type FunctionalComponent,
   type ComponentInternalInstance,
 } from "vue";
-import { createFromIconfontCN } from "@ant-design/icons-vue";
-import { Menu, MenuItem, MenuItemGroup, SubMenu } from "ant-design-vue";
-import { defaultSettingProps, defaultSettings } from "../../defaultSettings";
-import { isImg, isUrl } from "../../utils";
+
 import type {
   SelectEventHandler,
   MenuClickEventHandler,
   SelectInfo,
   MenuInfo,
 } from "ant-design-vue/es/menu/src/interface";
+import type { MenuMode, MenuTheme } from "ant-design-vue/es/menu";
 import type { Key } from "ant-design-vue/es/_util/type";
-import type { MenuDataItem, LayoutType } from "../../typings";
-import type { MenuRender } from "../../RenderTypings";
+import { createFromIconfontCN } from "@ant-design/icons-vue";
+import { Menu, MenuItem, MenuItemGroup, SubMenu } from "ant-design-vue";
 
+import type { MenuDataItem, LayoutType, MenuRender } from "../../typings";
+import { defaultSettingProps, defaultSettings } from "../../defaultSettings";
+import { isImg, isUrl } from "../../utils";
 import "./BaseMenu.css";
-import { MenuMode, MenuTheme } from "ant-design-vue/lib/menu";
 
 export function useRootSubmenuKeys(
   menus: MenuDataItem[]

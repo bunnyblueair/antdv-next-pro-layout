@@ -6,10 +6,10 @@ import {
   ExtractPropTypes,
 } from "vue";
 import type { RouteRecordRaw } from "vue-router";
-import GlobalHeader, { GlobalHeaderProps, globalHeaderProps } from ".";
 import { useRouteContext } from "../../RouteContext";
-import { CustomRenderProps } from "../../RenderTypings";
+import { CustomRenderProps } from "../../typings";
 import { clearMenuItem } from "../../utils/getMenuData";
+import GlobalHeader, { GlobalHeaderProps, globalHeaderProps } from ".";
 import { LayoutHeader } from "ant-design-vue";
 import PropTypes from "ant-design-vue/es/_util/vue-types";
 import TopNavHeader from "./TopNavHeader";
