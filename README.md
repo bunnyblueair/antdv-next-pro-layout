@@ -7,6 +7,8 @@ Ant Design Pro Vue 布局，易于使用专业脚手架。
 [![NPM downloads](https://img.shields.io/npm/dm/antdv-pro-layout.svg?style=flat)](https://www.npmjs.com/package/antdv-pro-layout)
 ![License MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 
+[中文](./README.md) | [English](./README.en.md)
+
 ## 安装 Install
 
 ```bash
@@ -77,6 +79,9 @@ const layoutConf = reactive({
 
 ### 函数布局 ProLayout
 
+- `MediaQueryEnum` 屏幕尺寸媒体查询枚举对象
+- `getMediaScreen` 屏幕尺寸
+- `useMediaScreen` 屏幕尺寸 ref响应监听
 - `prefersColorScheme` 媒体主题颜色模式偏好监听
 - `viewTransitionTheme` 主题切换视图过渡
 - `getMenuData` 路由表转出系统菜单

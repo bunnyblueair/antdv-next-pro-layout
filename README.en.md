@@ -7,6 +7,8 @@ Ant Design Pro Layout of Vue, easy to use pro scaffolding.
 [![NPM downloads](https://img.shields.io/npm/dm/antdv-pro-layout.svg?style=flat)](https://www.npmjs.com/package/antdv-pro-layout)
 ![License MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 
+[中文](./README.md) | [English](./README.en.md)
+
 ## Install
 
 ```bash
@@ -77,6 +79,9 @@ const layoutConf = reactive({
 
 ### Function Layout - ProLayout
 
+- `MediaQueryEnum` Screen size media query enumeration object
+- `getMediaScreen` Screen size
+- `useMediaScreen` Screen size ref responds to listening
 - `prefersColorScheme` Media theme color mode preference listening
 - `viewTransitionTheme` Theme switching view transitions
 - `getMenuData` The routing table exits the system menu
