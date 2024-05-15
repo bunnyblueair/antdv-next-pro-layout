@@ -58,11 +58,6 @@ export const basicLayoutProps = {
     type: Boolean,
     required: false,
   },
-  /**布局内容禁用外边距*/
-  disableContentMargin: {
-    type: Boolean,
-    required: false,
-  },
   colSize: {
     type: Number,
     required: false,
@@ -82,7 +77,9 @@ export const basicLayoutProps = {
     default: () => undefined,
   },
   breadcrumbRender: {
-    type: [Object, Function, Boolean] as PropType<BreadcrumbProps["itemRender"]>,
+    type: [Object, Function, Boolean] as PropType<
+      BreadcrumbProps["itemRender"]
+    >,
     default: () => null,
   },
   headerContentRender: {
@@ -346,8 +343,6 @@ const ProLayout = defineComponent({
           [`${baseClassName.value}-content`]: true,
           [`${baseClassName.value}-has-header`]: headerDom,
           [`${baseClassName.value}-children-layout`]: props.isChildrenLayout,
-          [`${baseClassName.value}-content-disable-margin`]:
-            props.disableContentMargin,
         };
       });
 
