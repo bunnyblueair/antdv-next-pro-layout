@@ -92,16 +92,17 @@ const layoutConf = reactive({
 | Property                | Description                   | Type                        | Default Value      |
 | ----------------------- | ----------------------  | -------------------------------- | ------------------ |
 | title                   | Text to the right of the layout LOGO               | string       | `'Ant Design Pro'` |
-| logo                    | Link to layout LOGO diagram               | string      | `https://gw.alipayobjects.com/zos/antfincdn/PmY%24TNNDBI/logo.svg`                |
-| logoStyle               | Layout LOGO graphic style               | object      | -                  |
-| loading                 | The layout content area loads a wait state       | boolean      | false                  |
-| layout                  | Menu layout                     | 'side' \| 'top' \| 'mix'                     | `'side'`           |
-| breadcrumb              | Layout content top left corner breadcrumbs          | Object                                       | -         |
-| disableContentMargin    | Layout content disables margins             | boolean                                      | `false`         |
-| theme                   | Global theme color                    | 'light' \|'dark'                              | `'light'`          |
+| logo                    | Layout Logo Link                 | string      | -                |
+| logoStyle               | Layout Logo Style                 | object      | -                  |
+| loading                 | Layout content area loading waiting status          | boolean      | false                  |
+| layout                  | Menu Layout                       | 'side' \| 'top' \| 'mix'                     | `'side'`           |
+| breadcrumb              | Layout content: Breadcrumbs in the upper left corner            | Object                                       | -         |
+| theme                   | Global Theme Colors                     | 'light' \|'dark'                              | `'light'`          |
 | menuTheme               | Menu navigation theme color                 | 'light' \|'dark'                             | `'light'`          |
 | menuData                | The menu data is generated from Vue-router routes is root path '/'        | Object                   | `[{}]`             |
 | collapsed               | When the left side of the menu is closed and expanded             | boolean                                       | `true`               |
+| collapsedWidth          | Collapse width size on the left side of the menu          | number                                       |  48                 |
+| siderWidth              | Expand width size on the left side of the menu          | number                                       |  200                |
 | selectedKeys            | Choose highlight keys from the menu               | string[]                                     | `[]`               |
 | openKeys                | Menu select open expand keys           | string[]                                      | `[]`               |
 | fixSiderbar             | Fixed list on left side of menu                   | boolean                                      | `false`         |

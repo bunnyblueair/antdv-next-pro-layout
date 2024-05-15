@@ -92,16 +92,17 @@ const layoutConf = reactive({
 | 参数 | 说明 | 类型 | 默认值 |
 | ---- | ---- | ---- | ---- |
 | title                   | 布局LOGO右侧文本               | string       | `'Ant Design Pro'` |
-| logo                    | 布局LOGO图链接               | string      | `https://gw.alipayobjects.com/zos/antfincdn/PmY%24TNNDBI/logo.svg`                |
-| logoStyle               | 布局LOGO图样式               | object      | -                  |
-| loading                 | 布局内容区加载等待状态       | boolean      | false                  |
-| layout                  | 菜单布局                     | 'side' \| 'top' \| 'mix'                     | `'side'`           |
-| breadcrumb              | 布局内容左上角面包屑          | Object                                       | -         |
-| disableContentMargin    | 布局内容禁用外边距             | boolean                                      | `false`         |
-| theme                   | 全局主题色                    | 'light' \|'dark'                              | `'light'`          |
+| logo                    | 布局LOGO图链接                 | string      | -                |
+| logoStyle               | 布局LOGO图样式                 | object      | -                  |
+| loading                 | 布局内容区加载等待状态          | boolean      | false                  |
+| layout                  | 菜单布局                       | 'side' \| 'top' \| 'mix'                     | `'side'`           |
+| breadcrumb              | 布局内容左上角面包屑            | Object                                       | -         |
+| theme                   | 全局主题色                     | 'light' \|'dark'                              | `'light'`          |
 | menuTheme               | 菜单导航主题色                 | 'light' \|'dark'                             | `'light'`          |
 | menuData                | 菜单数据根据Vue-router `routes` 根路径'/'生成       | Object                   | `[{}]`             |
 | collapsed               | 菜单左侧时收起展开             | boolean                                       | `true`               |
+| collapsedWidth          | 菜单左侧时收起宽度大小          | number                                       |  48                 |
+| siderWidth              | 菜单左侧时展开宽度大小          | number                                       |  200                |
 | selectedKeys            | 菜单选择高亮keys               | string[]                                     | `[]`               |
 | openKeys                | 菜单选择打开展开keys           | string[]                                      | `[]`               |
 | fixSiderbar             | 菜单左侧列表固定                   | boolean                                      | `false`         |
@@ -113,6 +114,7 @@ const layoutConf = reactive({
 | menuSubItemRender       | 渲染菜单嵌套子项 Menu.SubItem    | v-slot#menuSubItemRender="menuItem"       | -               |
 | collapsedButtonRender   | 渲染菜单收起按钮区域             | v-slot#collapsedButtonRender="collapsed"   | -               |
 | fixedHeader             | 顶部区域固定                    | boolean                                      | `false`         |
+| headerHeight            | 顶部区域高度                    | number                                       | 48         |
 | headerRender            | 渲染顶部区域                    | v-slot \| VNode \| (props: BasicLayoutProps) => VNode         | -                  |
 | headerContentRender     | 渲染顶部内容区域，仅布局`side`有效                | v-slot \| (props: BasicLayoutProps) => VNode                 | -                  |
 | headerContentRightRender| 渲染顶部内容右端区域             | v-slot \| (props: BasicLayoutProps) => VNode                  | -                  |
@@ -292,6 +294,7 @@ const layoutConf = reactive({
 | 参数 | 说明 | 类型 | 默认值 |
 | ---- | ---- | ---- | ---- |
 | loading        | 加载状态                          | boolean      | false |
+| disableMargin  | 布局内容禁用外边距 `24px`          | boolean      | false |
 | flex           | 内容布局充满，默认固定宽度1200px    | boolean      | false  |
 | fixed-header   | 固定 PageHeader 到顶部            | boolean       | false  |
 | affixProps     | 固钉的配置                      | [affix](https://www.antdv.com/components/affix-cn#api) | {offsetTop: 48} |
