@@ -32,8 +32,6 @@ export interface PureSettings {
   // 注意：如果需要图标多色，Iconfont 图标项目里要进行批量去色处理
   // Usage: https://github.com/ant-design/ant-design-pro/pull/3517
   iconfontUrl: string;
-  primaryColor: string;
-  colorWeak?: boolean;
   splitMenus?: boolean;
 }
 
@@ -45,13 +43,9 @@ export const defaultSettings = {
   layout: "side",
   fixedHeader: false,
   fixSiderbar: false,
-  menu: {
-    locale: true,
-  },
   headerHeight: 48,
   title: "Ant Design Vue Pro",
   iconfontUrl: "",
-  primaryColor: "#1890ff",
 };
 
 export const defaultSettingProps = {
@@ -75,14 +69,6 @@ export const defaultSettingProps = {
     type: Boolean as PropType<PureSettings["fixSiderbar"]>,
     default: defaultSettings.fixSiderbar,
   },
-  menu: {
-    type: Object as PropType<PureSettings["menu"]>,
-    default: () => {
-      return {
-        locale: true,
-      };
-    },
-  },
   headerHeight: {
     type: Number as PropType<PureSettings["headerHeight"]>,
     default: defaultSettings.headerHeight,
@@ -95,13 +81,7 @@ export const defaultSettingProps = {
     type: String as PropType<PureSettings["iconfontUrl"]>,
     default: () => defaultSettings.iconfontUrl,
   },
-  primaryColor: {
-    type: String as PropType<PureSettings["primaryColor"]>,
-    default: () => defaultSettings.primaryColor,
-  },
-  /**
-   * 只在 mix 模式下生效
-   */
+  /**菜单布局 `mix`下生效 分割二级菜单到左侧 */
   splitMenus: {
     type: Boolean,
     default: false,
