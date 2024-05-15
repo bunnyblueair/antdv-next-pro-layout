@@ -5,10 +5,13 @@
 .ant-pro-page-container-content.ant-pro-page-container-flex {
   max-width: 100%;
 }
-.ant-pro-page-container-content > .ant-pro-page-container-main {
-  margin: 24px 24px 0;
+.ant-pro-page-container-content.ant-pro-page-container-disable-margin
+  > .ant-pro-page-container-main {
+  margin: 0;
 }
-
+.ant-pro-page-container-content > .ant-pro-page-container-main {
+  margin: 24px;
+}
 .ant-pro-page-container-main .ant-pro-page-container-detail {
   display: flex;
 }

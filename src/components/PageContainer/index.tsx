@@ -76,14 +76,22 @@ export const pageContainerProps = {
     type: [Object, String, Boolean, Function] as PropType<DefaultPropRender>,
     default: () => null,
   },
+  /**固钉的配置 */
   affixProps: {
     type: [Object, Function] as PropType<AffixProps>,
   },
+  /**内容布局充满，默认固定宽度1200px */
   flex: {
     type: Boolean,
     default: true,
   },
+  /**加载状态 */
   loading: {
+    type: Boolean,
+    default: false,
+  },
+  /**布局内容禁用外边距*/
+  disableMargin: {
     type: Boolean,
     default: false,
   },
@@ -274,6 +282,7 @@ const PageContainer = defineComponent({
         <div
           class={{
             [`${prefixCls}-content`]: true,
+            [`${prefixCls}-disable-margin`]: props.disableMargin,
             [`${prefixCls}-flex`]: props.flex,
           }}
         >
