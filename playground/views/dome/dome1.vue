@@ -1,5 +1,5 @@
 <template>
-  <PageContainer>
+  <PageContainer :disable-margin="false">
     <a-result
       status="404"
       title="Hello World"

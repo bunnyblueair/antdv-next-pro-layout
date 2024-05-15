@@ -71,13 +71,12 @@ function settingDrawer(bool: boolean) {
       :loading="loading"
       :menu-data="menuData"
       :breadcrumb="{ routes: breadcrumb }"
-      :disable-content-margin="true"
       v-bind="proConfig"
       iconfont-url="//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js"
       title="Preview Pro"
       logo="https://alicdn.antdv.com/v2/assets/logo.1ef800a8.svg"
       :logoStyle="{ borderRadius: '6px' }"
-      @collapse="(v) => console.log(v)"
+      @collapse="(v) => console.log('collapse:', v)"
     >
       <!-- 渲染菜单头logo和标题区域 -->
       <template #menuHeaderRender2>
