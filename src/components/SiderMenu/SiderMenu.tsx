@@ -45,13 +45,7 @@ export const defaultRenderLogoAndTitle = (
     | "menuHeaderRender"
     | undefined = "menuHeaderRender"
 ): CustomRender | null => {
-  const {
-    logo = "https://gw.alipayobjects.com/zos/antfincdn/PmY%24TNNDBI/logo.svg",
-    logoStyle,
-    title,
-    layout,
-    isMobile,
-  } = props;
+  const { logo, logoStyle, title, layout, isMobile } = props;
   const renderFunction = (props as Record<string, CustomRender>)[
     renderKey || ""
   ];
@@ -91,7 +85,7 @@ export const siderMenuProps = {
     type: Object as PropType<CSSProperties>,
     default: () => undefined,
   },
-  siderWidth: PropTypes.number.def(208),
+  siderWidth: PropTypes.number.def(200),
   headerHeight: PropTypes.number.def(48),
   collapsedWidth: PropTypes.number.def(48),
   menuHeaderRender: {
