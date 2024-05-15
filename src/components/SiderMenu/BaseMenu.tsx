@@ -113,7 +113,7 @@ class MenuUtil {
           <span class={`${prefixCls}-menu-item-title`}>{menuTitle}</span>
         </span>
       ) : (
-        <span class={`${prefixCls}-menu-item`}>{menuTitle}</span>
+        <span class={`${prefixCls}-menu-item-title-no-icon`}>{menuTitle}</span>
       );
 
       const hasGroup = item.meta?.type === "group";
@@ -287,7 +287,7 @@ const BaseMenu = defineComponent({
     const handleClick: MenuClickEventHandler = (args: MenuInfo) => {
       emit("click", args);
     };
-    console.log(props.openKeys, props.selectedKeys);
+
     return () => {
       return (
         <Menu
