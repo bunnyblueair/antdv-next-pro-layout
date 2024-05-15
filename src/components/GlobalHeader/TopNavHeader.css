@@ -40,9 +40,12 @@
   height: 32px;
   vertical-align: middle;
 }
+.ant-pro-top-nav-header-logo img + h1 {
+  margin-left: 12px;
+}
 .ant-pro-top-nav-header-logo h1 {
   display: inline-block;
-  margin: 0 0 0 12px;
+  margin: 0;
   color: var(--ant-primary-color);
   font-weight: 600;
   font-size: 18px;

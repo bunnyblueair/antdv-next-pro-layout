@@ -44,10 +44,13 @@
   height: 32px;
   vertical-align: middle;
 }
+.ant-pro-sider-header > a > img + h1 {
+  margin-left: 12px;
+}
 .ant-pro-sider-header > a > h1 {
   display: inline-block;
   height: 32px;
-  margin: 0 0 0 12px;
+  margin: 0;
   color: var(--ant-primary-color);
   font-weight: 600;
   font-size: 18px;
