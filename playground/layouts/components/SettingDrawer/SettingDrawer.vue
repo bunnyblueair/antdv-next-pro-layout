@@ -19,8 +19,8 @@ const props = defineProps({
     type: Object as PropType<ConfigType>,
     default: () => ({
       layout: "side",
-      headerTheme: "light",
-      navTheme: "light",
+      theme: "light",
+      menuTheme: "light",
       fixSiderbar: true,
       fixedHeader: true,
       splitMenus: true,
