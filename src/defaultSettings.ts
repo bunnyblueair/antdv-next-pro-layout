@@ -17,15 +17,10 @@ export interface PureSettings {
   headerHeight?: number;
   /**菜单布局 */
   layout: LayoutType;
-  /**
-   * sticky header
-   */
+  /**sticky header */
   fixedHeader: boolean;
-  /**
-   * sticky siderbar
-   */
+  /**sticky siderbar */
   fixSiderbar: boolean;
-  menu: { locale?: boolean; defaultOpenAll?: boolean };
   title: string;
   // Your custom iconfont Symbol script Url
   // eg：//at.alicdn.com/t/font_1039637_btcrd5co4w.js
