@@ -7,8 +7,10 @@
 /* 链接 */
 .ant-pro-global-footer-links {
   margin-bottom: 8px;
+  font-size: 14px;
 }
 .ant-pro-global-footer-links a {
+  text-decoration: none;
   color: inherit;
   transition: color 0.3s;
   opacity: 0.45;
