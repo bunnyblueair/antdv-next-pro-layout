@@ -1,4 +1,4 @@
-import { onBeforeMount, reactive, ref, watch, watchEffect } from "vue";
+import { onBeforeMount, reactive, ref, watch } from "vue";
 import { ConfigProvider, theme } from "ant-design-vue";
 import { ThemeConfig } from "ant-design-vue/lib/config-provider/context";
 
@@ -34,6 +34,10 @@ export const proConfig = ref<ConfigType>({
   fixedHeader: true,
   fixSiderbar: true,
   splitMenus: true,
+  headerRender: undefined,
+  footerRender: undefined,
+  menuHeaderRender: undefined,
+  tabRender: undefined,
 });
 
 const themeColor = {
