@@ -77,6 +77,10 @@
   }
 }
 
+.ant-pro-sider.ant-layout-sider-collapsed .ant-pro-sider-header {
+  padding: 8px;
+}
+
 .theme-light.theme-menu-dark .ant-pro-sider-header {
   color: rgba(255, 255, 255, 0.65);
   background: #001529;
@@ -92,10 +96,6 @@
 .theme-dark.theme-menu-light .ant-pro-sider-header {
   color: rgba(255, 255, 255, 0.85);
   background: #141414;
-}
-
-.ant-pro-sider.ant-layout-sider-collapsed .ant-pro-sider-header {
-  padding: 16px 8px;
 }
 
 /*menuHeaderExtraRender区域*/
