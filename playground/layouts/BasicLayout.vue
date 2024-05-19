@@ -216,7 +216,7 @@ function settingDrawer(bool: boolean) {
               width: fixedHeader ? width : '100%',
               overflow: 'hidden',
               zIndex: 14,
-              background: '#fff',
+              background: '#0015291f',
               boxShadow: '0 1px 4px #0015291f',
               transition: 'background 0.3s, width 0.2s',
             }"
