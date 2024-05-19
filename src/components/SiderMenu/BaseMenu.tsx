@@ -205,8 +205,8 @@ export type MenuOnClick = {
 export const baseMenuProps = {
   ...defaultSettingProps,
   prefixCls: {
-    type: String as PropType<string | undefined>,
-    default: () => "ant-pro",
+    type: String,
+    default: "ant-pro",
   },
   locale: {
     type: [Function, Boolean] as PropType<
@@ -223,17 +223,13 @@ export const baseMenuProps = {
     type: String as PropType<MenuMode>,
     default: "inline",
   },
-  theme: {
-    type: String as PropType<MenuTheme>,
-    default: "dark",
-  },
   layout: {
     type: String as PropType<LayoutType>,
     default: "side",
   },
   collapsed: {
     type: Boolean,
-    default: () => false,
+    default: false,
   },
   openKeys: {
     type: Array as PropType<string[]>,
