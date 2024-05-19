@@ -21,9 +21,18 @@ import type {
 
 export const globalHeaderProps = {
   ...defaultSettingProps,
-  prefixCls: PropTypes.string.def("ant-pro"),
-  collapsed: PropTypes.looseBool,
-  isMobile: PropTypes.looseBool,
+  prefixCls: {
+    type: String,
+    default: "ant-pro",
+  },
+  collapsed: {
+    type: Boolean,
+    default: false,
+  },
+  isMobile: {
+    type: Boolean,
+    default: false,
+  },
   logo: siderMenuProps.logo,
   logoStyle: siderMenuProps.logoStyle,
   menuData: {

@@ -85,9 +85,18 @@ export const siderMenuProps = {
     type: Object as PropType<CSSProperties>,
     default: () => undefined,
   },
-  siderWidth: PropTypes.number.def(200),
-  headerHeight: PropTypes.number.def(48),
-  collapsedWidth: PropTypes.number.def(48),
+  siderWidth: {
+    type: Number,
+    default: 200,
+  },
+  headerHeight: {
+    type: Number,
+    default: 48,
+  },
+  collapsedWidth: {
+    type: Number,
+    default: 48,
+  },
   menuHeaderRender: {
     type: [Function, Boolean] as PropType<CustomRenderProps>,
     default: () => undefined,
@@ -247,7 +256,6 @@ const SiderMenu: FunctionalComponent<SiderMenuProps> = (props, { attrs }) => {
         width={sSideWidth.value}
         theme={props.menuTheme}
         class={classNames.value}
-        data-theme={props.theme}
       >
         {menuHeaderRenderDom && (
           <div
