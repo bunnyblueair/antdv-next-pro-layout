@@ -1,15 +1,54 @@
-/**
- * 媒体主题颜色模式偏好监听
- */
-export function prefersColorScheme(listener: (isDark: boolean) => void) {
-  // 检测浏览器是否支持prefers-color-scheme媒体查询
-  if (window.matchMedia("(prefers-color-scheme)").media !== "not all") {
-    // 添加事件监听器，当颜色模式偏好发生变化时执行相应的操作
-    window
-      .matchMedia("(prefers-color-scheme: dark)")
-      .addEventListener("change", (e) => listener(e.matches));
+import { ref } from "vue";
+
+/**媒体主题颜色模式枚举对象 */
+export const PrefersColorSchemeEnum = {
+  light: "(prefers-color-scheme: light)",
+  dark: "(prefers-color-scheme: dark)",
+};
+
+export type PrefersColorSchemeKey = keyof typeof PrefersColorSchemeEnum;
+
+/**媒体主题颜色模式偏好 */
+export const getPrefersColorScheme = () => {
+  let screen: PrefersColorSchemeKey = "light";
+  // support ssr
+  if (typeof window === "undefined") {
+    return screen;
   }
-}
+  const mediaQueryKey = (
+    Object.keys(PrefersColorSchemeEnum) as PrefersColorSchemeKey[]
+  ).find((key) => {
+    const matchMedia = PrefersColorSchemeEnum[key];
+    if (window.matchMedia(matchMedia).matches) {
+      return true;
+    }
+    return false;
+  });
+  if (!mediaQueryKey) {
+    return screen;
+  }
+  return mediaQueryKey;
+};
+
+/**媒体主题颜色模式偏好 ref响应监听 */
+export const usePrefersColorScheme = () => {
+  const colorScheme = ref<string>(getPrefersColorScheme());
+
+  Object.keys(PrefersColorSchemeEnum).forEach((key) => {
+    const matchMedia = PrefersColorSchemeEnum[key as PrefersColorSchemeKey];
+    const query = window.matchMedia(matchMedia);
+    if (query.matches) {
+      colorScheme.value = key;
+    }
+    query.onchange = (e) => {
+      if (e.matches) {
+        colorScheme.value = key;
+      }
+    };
+  });
+
+  return colorScheme;
+};
 
 /**
  * 主题切换视图过渡
