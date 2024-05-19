@@ -24,8 +24,10 @@ First, you should add the `antdv-pro-layout` that you need into the library.
 import { createApp } from "vue";
 import App from "./App.vue";
 
-import Antd from "ant-design-vue";
 import "ant-design-vue/dist/reset.css";
+import Antd from "ant-design-vue";
+
+import 'antdv-pro-layout/dist/style.css';
 import { ProLayout, PageContainer } from "antdv-pro-layout";
 
 const app = createApp(App);
@@ -82,7 +84,9 @@ const layoutConf = reactive({
 - `MediaQueryEnum` Screen size media query enumeration object
 - `getMediaScreen` Screen size
 - `useMediaScreen` Screen size ref responds to listening
-- `prefersColorScheme` Media theme color mode preference listening
+- `PrefersColorSchemeEnum` Media theme color mode enumeration object
+- `getPrefersColorScheme` Media Theme Color Mode Preferences
+- `usePrefersColorScheme` Media Theme Color Mode Preferences ref responds to listening
 - `viewTransitionTheme` Theme switching view transitions
 - `getMenuData` The routing table exits the system menu
 - `clearMenuItem` Clear menu item, property excluded !name and meta

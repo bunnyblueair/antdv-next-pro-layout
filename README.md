@@ -24,8 +24,10 @@ npm i antdv-pro-layout
 import { createApp } from "vue";
 import App from "./App.vue";
 
-import Antd from "ant-design-vue";
 import "ant-design-vue/dist/reset.css";
+import Antd from "ant-design-vue";
+
+import 'antdv-pro-layout/dist/style.css';
 import { ProLayout, PageContainer } from "antdv-pro-layout";
 
 const app = createApp(App);
@@ -82,7 +84,9 @@ const layoutConf = reactive({
 - `MediaQueryEnum` 屏幕尺寸媒体查询枚举对象
 - `getMediaScreen` 屏幕尺寸
 - `useMediaScreen` 屏幕尺寸 ref响应监听
-- `prefersColorScheme` 媒体主题颜色模式偏好监听
+- `PrefersColorSchemeEnum` 媒体主题颜色模式枚举对象
+- `getPrefersColorScheme` 媒体主题颜色模式偏好
+- `usePrefersColorScheme` 媒体主题颜色模式偏好 ref响应监听
 - `viewTransitionTheme` 主题切换视图过渡
 - `getMenuData` 路由表转出系统菜单
 - `clearMenuItem` 清除菜单项，属性排除!name和meta隐藏标记
