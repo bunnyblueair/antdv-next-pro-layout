@@ -242,6 +242,8 @@ const ProLayout = defineComponent({
     });
     provide(routeContextInjectKey, routeContext);
 
+    // 根元素设置明暗主题模式
+    document.documentElement.setAttribute("data-theme", props.theme);
     return () => {
       const {
         pure,
@@ -380,7 +382,7 @@ const ProLayout = defineComponent({
           {pure ? (
             slots.default?.()
           ) : (
-            <div class={className.value} data-theme={props.theme}>
+            <div class={className.value}>
               <Layout
                 style={{
                   minHeight: "100%",
