@@ -48,7 +48,7 @@ const themeColor = {
 
 export const themeConfig = reactive<ThemeConfig>({
   algorithm: [],
-  // algorithm: themeColor["dark"],
+  // algorithm: themeColor["compact"],
   token: {
     // colorBgContainer: "#fff",
     colorPrimary: "#1668dc", // "#722ED1",
@@ -79,15 +79,17 @@ export function changePrimaryColor(color?: string) {
   if (!color) {
     color = getRandomColor();
   }
-  if (themeConfig && themeConfig.token) {
-    themeConfig.token.colorPrimary = color;
-  }
+
   ConfigProvider.config({
     theme: {
       primaryColor: color,
     },
   });
   localStorage.setItem(CACHE_LOCAL_PRIMARY_COLOR, color);
+
+  if (themeConfig && themeConfig.token) {
+    themeConfig.token.colorPrimary = color;
+  }
 }
 
 /**

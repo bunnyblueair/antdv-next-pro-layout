@@ -4,8 +4,8 @@ import {
   changePrimaryColor,
   getLocalColor,
 } from "@/hooks/useTheme";
-import { prefersColorScheme, viewTransitionTheme } from "antdv-pro-layout";
-import { PropType, ref } from "vue";
+import { usePrefersColorScheme, viewTransitionTheme } from "antdv-pro-layout";
+import { PropType, ref, watch } from "vue";
 
 const emit = defineEmits(["update:open", "update:config", "close"]);
 const props = defineProps({
@@ -38,38 +38,43 @@ function changeConf(key: string, value: boolean | string | number | undefined) {
   }
 }
 
+let timerId: any = null;
 let color = ref<string>(getLocalColor());
 
 /**改变主题色 */
 function fnColorChange(e: Event) {
   const target = e.target as HTMLInputElement;
-  if (target.nodeName === "INPUT") {
-    changePrimaryColor(target.value ?? "#1890ff");
-  } else {
-    changePrimaryColor();
-  }
-  color.value = getLocalColor();
+  // 需要防抖函数处理
+  clearTimeout(timerId);
+  timerId = setTimeout(() => {
+    if (target.nodeName === "INPUT") {
+      changePrimaryColor(target.value ?? "#1890ff");
+    } else {
+      changePrimaryColor();
+    }
+    color.value = getLocalColor();
+  }, 300);
 }
 
-// 偏好设置-过渡动画
-prefersColorScheme(() => {
-  viewTransitionTheme((isDarkMode) => {
-    changeConf("theme", isDarkMode ? "light" : "dark");
-  });
-});
-
-// 偏好设置-普通
-// mediaTheme.prefersColorScheme((isDarkMode) => {
-//   const theme = isDarkMode ? "dark" : "light";
-//   const root = document.documentElement;
-//   root.setAttribute("data-theme", theme);
-//   changeConf("theme", theme);
-// });
+// 偏好设置
+const colorScheme = usePrefersColorScheme();
+watch(
+  () => colorScheme.value,
+  (themeMode) => {
+    // 普通
+    changeConf("theme", themeMode);
+    document.documentElement.setAttribute("data-theme", themeMode);
+    // 过渡动画
+    // changeTheme(undefined);
+  }
+);
 
 // 手动变更主题-过渡动画
 function changeTheme(e: any) {
   viewTransitionTheme((isDarkMode) => {
-    changeConf("theme", isDarkMode ? "light" : "dark");
+    const themeMode = isDarkMode ? "light" : "dark";
+    changeConf("theme", themeMode);
+    document.documentElement.setAttribute("data-theme", themeMode);
   }, e);
 }
 </script>
