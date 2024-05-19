@@ -5,7 +5,7 @@ import {
   type FunctionalComponent,
   type PropType,
   type ExtractPropTypes,
-  VNodeChild,
+  type VNodeChild,
 } from "vue";
 /* antd ts define */
 import {
@@ -14,10 +14,11 @@ import {
   AffixProps,
   TabPaneProps,
   TabsProps,
+  PageHeader,
 } from "ant-design-vue";
-import PageHeader, { pageHeaderProps } from "ant-design-vue/es/page-header";
-import { TabBarExtraContent } from "ant-design-vue/es/tabs/src/interface";
+import { pageHeaderProps } from "ant-design-vue/es/page-header";
 import { withInstall } from "ant-design-vue/es/_util/type";
+import type { TabBarExtraContent } from "ant-design-vue/es/tabs/src/interface";
 /* antd ts define end */
 import { useRouteContext } from "../../RouteContext";
 import { getSlotVNode } from "../../utils";
@@ -64,10 +65,6 @@ export const pageHeaderTabConfig = {
 export const pageContainerProps = {
   ...pageHeaderTabConfig,
   ...pageHeaderProps(),
-  prefixCls: {
-    type: String,
-    default: "ant-pro",
-  },
   content: {
     type: [Object, String, Boolean, Function] as PropType<DefaultPropRender>,
     default: () => null,
