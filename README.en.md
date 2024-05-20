@@ -265,7 +265,6 @@ const layoutConf = reactive({
 | ---- | ---- | ---- | ---- |
 | links     | Required, link jump    | Array<{ key?: string; title: string; href: string; blankTarget?: boolean; }> | - |
 | copyright | Copyright notice area      | v-slot \| VNode \| (props: BasicLayoutProps) => VNode \| false               | undefined |
-| prefixCls | Style prefix          | string                                                                       | `ant-pro-global-footer` |
 
 ```vue
 <GlobalFooter

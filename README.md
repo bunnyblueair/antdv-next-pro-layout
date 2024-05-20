@@ -266,7 +266,6 @@ const layoutConf = reactive({
 | ---- | ---- | ---- | ---- |
 | links     | 必填，链接跳转    | Array<{ key?: string; title: string; href: string; blankTarget?: boolean; }> | - |
 | copyright | 版权声明区域      | v-slot \| VNode \| (props: BasicLayoutProps) => VNode \| false               | undefined |
-| prefixCls | 样式前缀          | string                                                                       | `ant-pro-global-footer` |
 
 ```vue
 <GlobalFooter
