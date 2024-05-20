@@ -116,6 +116,12 @@ const constantRoutes: RouteRecordRaw[] = [
       },
     ],
   },
+  {
+    path: "/:pathMatch(.*)*",
+    meta: { title: "找不到匹配页面" },
+    redirect: "/dome1", // 跳转
+    // component: () => import("@/views/dome/dome1.vue"),
+  },
 ];
 
 const router = createRouter({
