@@ -1,13 +1,16 @@
 {
   "name": "antdv-pro-layout",
   "type": "module",
-  "version": "4.1.4",
+  "version": "4.1.5",
   "description": "Ant Design Pro Layout of Vue, easy to use pro scaffolding.",
   "keywords": [
     "Ant Design Vue",
     "vueComponent",
+    "vue",
+    "antd",
     "antdv",
     "antdv-pro",
+    "component",
     "pro-layout"
   ],
   "contributors": [
