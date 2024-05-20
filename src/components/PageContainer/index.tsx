@@ -10,10 +10,11 @@ import {
 /* antd ts define */
 import {
   Tabs,
-  Affix,
-  AffixProps,
+  TabPane,
   TabPaneProps,
   TabsProps,
+  Affix,
+  AffixProps,
   PageHeader,
 } from "ant-design-vue";
 import { pageHeaderProps } from "ant-design-vue/es/page-header";
@@ -23,47 +24,30 @@ import type { TabBarExtraContent } from "ant-design-vue/es/tabs/src/interface";
 import { useRouteContext } from "../../RouteContext";
 import { getSlotVNode } from "../../utils";
 import PageLoading from "../PageLoading";
-import type { CustomRender, VueNode, DefaultPropRender } from "../../typings";
+import type { DefaultPropRender } from "../../typings";
 import "./index.css";
 
-export const pageHeaderTabConfig = {
-  /**
-   * @name tabs 的列表
-   */
+export const pageHeaderTabProps = {
+  /**tabs 的列表 */
   tabList: {
     type: [Object, Function, Array] as PropType<
       (Omit<TabPaneProps, "id"> & { key?: string; tab?: any })[]
     >,
     default: () => undefined,
   },
-  /**
-   * @name 当前选中 tab 的 key
-   */
-  tabActiveKey: String, //PropTypes.string,
-  /**
-   * @name tab 上多余的区域
-   */
-  tabBarExtraContent: {
-    type: [Object, Function] as PropType<TabBarExtraContent>,
-    default: () => undefined,
-  },
-  /**
-   * @name tabs 的其他配置
-   */
+  /**当前选中 tab 的 key */
+  tabActiveKey: String,
+  /**tabs 的其他配置 */
   tabProps: {
     type: Object as PropType<TabsProps>,
     default: () => undefined,
   },
-  /**
-   * @name 固定 PageHeader 到页面顶部
-   */
-  fixedHeader: Boolean, //PropTypes.looseBool,
   // events
-  onTabChange: Function, //PropTypes.func,
+  onTabChange: Function,
 };
 
 export const pageContainerProps = {
-  ...pageHeaderTabConfig,
+  ...pageHeaderTabProps,
   ...pageHeaderProps(),
   content: {
     type: [Object, String, Boolean, Function] as PropType<DefaultPropRender>,
@@ -92,55 +76,43 @@ export const pageContainerProps = {
     type: Boolean,
     default: false,
   },
+  /**固定 PageHeader 到页面顶部*/
+  fixedHeader: {
+    type: Boolean,
+    default: false,
+  },
 };
 
 export type PageContainerProps = Partial<
   ExtractPropTypes<typeof pageContainerProps>
 >;
 
-const renderFooter = (
-  props: Omit<
-    PageContainerProps & {
-      prefixedClassName: string;
-    },
-    "title"
-  >
-): VNodeChild | any => {
-  const {
-    tabList,
-    tabActiveKey,
-    onTabChange,
-    tabBarExtraContent,
-    tabProps,
-    prefixedClassName,
-  } = props;
-  if (tabList && tabList.length) {
-    return (
-      <Tabs
-        class={`${prefixedClassName}-tabs`}
-        activeKey={tabActiveKey}
-        onChange={(key: string | number) => {
-          if (onTabChange) {
-            onTabChange(key);
-          }
-        }}
-        tabBarExtraContent={tabBarExtraContent}
-        {...tabProps}
-      >
-        {tabList.map((item) => (
-          <Tabs.TabPane {...item} tab={item.tab} key={item.key} />
-        ))}
-      </Tabs>
-    );
+const renderFooter = (props: PageContainerProps): VNodeChild | any => {
+  const { tabList, tabActiveKey, onTabChange, tabProps } = props;
+  if (!Array.isArray(tabList) || tabList.length <= 0) {
+    return null;
   }
-  return null;
+  return (
+    <Tabs
+      activeKey={tabActiveKey}
+      onChange={(key: string | number) => {
+        if (onTabChange) onTabChange(key);
+      }}
+      {...tabProps}
+    >
+      {tabList.map((item) => (
+        <TabPane {...item} tab={item.tab} key={item.key} />
+      ))}
+    </Tabs>
+  );
 };
 
 // PageHeader 页头 https://www.antdv.com/components/page-header-cn/#api
 const ProPageHeader: FunctionalComponent<
-  PageContainerProps & { prefixedClassName: string }
+  PageContainerProps & { baseClassName: string }
 > = (props) => {
   const {
+    baseClassName,
     title,
     tabList,
     tabActiveKey,
@@ -149,8 +121,6 @@ const ProPageHeader: FunctionalComponent<
     tags,
     extra,
     contentExtra,
-    prefixedClassName,
-    prefixCls,
     fixedHeader,
     footer,
     ...restProps
@@ -181,45 +151,27 @@ const ProPageHeader: FunctionalComponent<
           ...restProps,
           tabList,
           tabActiveKey,
-          prefixedClassName,
         })
       }
-      prefixCls={prefixCls}
       tags={tags}
       extra={extra}
     >
-      {renderPageHeader(content, contentExtra, prefixedClassName)}
-    </PageHeader>
-  );
-};
-
-// 页头默认插槽内容渲染
-const renderPageHeader = (
-  content: CustomRender,
-  contentExtra: CustomRender,
-  prefixedClassName: string
-): VueNode => {
-  if (!content && !contentExtra) {
-    return null;
-  }
-  return (
-    <div class={`${prefixedClassName}-detail`}>
-      <div class={`${prefixedClassName}-main`}>
-        <div class={`${prefixedClassName}-row`}>
+      {(content || contentExtra) && (
+        <div class={`${baseClassName}-header`}>
           {content && (
-            <div class={`${prefixedClassName}-content`}>
+            <div class="content">
               {(typeof content === "function" && content()) || content}
             </div>
           )}
           {contentExtra && (
-            <div class={`${prefixedClassName}-contentExtra`}>
+            <div class="content-extra">
               {(typeof contentExtra === "function" && contentExtra()) ||
                 contentExtra}
             </div>
           )}
         </div>
-      </div>
-    </div>
+      )}
+    </PageHeader>
   );
 };
 
@@ -229,8 +181,8 @@ const PageContainer = defineComponent({
   props: pageContainerProps,
   setup(props, { slots }) {
     const context = useRouteContext();
-    const prefixCls = `${props.prefixCls || "ant-pro"}-page-container`;
-    const headerDom = computed(() => {
+    const baseClassName = "ant-pro-page-container";
+    const pageHeaderDom = computed(() => {
       // 渲染页头
       if (slots.pageHeader) {
         return slots.pageHeader({ ...props });
@@ -248,8 +200,8 @@ const PageContainer = defineComponent({
       return (
         <ProPageHeader
           {...props}
+          baseClassName={baseClassName}
           ghost={Boolean(props.ghost)}
-          prefixedClassName={prefixCls}
           content={content}
           tags={tags}
           footer={footer}
@@ -260,8 +212,8 @@ const PageContainer = defineComponent({
     });
 
     return () => (
-      <div class={prefixCls}>
-        {props.fixedHeader && headerDom.value ? (
+      <div class={baseClassName}>
+        {props.fixedHeader && pageHeaderDom.value ? (
           <Affix
             offsetTop={
               context.hasHeader && context.fixedHeader
@@ -270,17 +222,16 @@ const PageContainer = defineComponent({
             }
             {...(props.affixProps as any)}
           >
-            {headerDom.value}
+            {pageHeaderDom.value}
           </Affix>
         ) : (
-          headerDom.value
+          pageHeaderDom.value
         )}
 
         <div
           class={{
-            [`${prefixCls}-content`]: true,
-            [`${prefixCls}-disable-margin`]: props.disableMargin,
-            [`${prefixCls}-flex`]: props.flex,
+            [`${baseClassName}-content`]: true,
+            [`${baseClassName}-flex`]: props.flex,
           }}
         >
           {props.loading ? (
@@ -289,7 +240,13 @@ const PageContainer = defineComponent({
           ) : (
             // 默认插槽
             slots.default && (
-              <div class={`${prefixCls}-main`}>{slots.default()}</div>
+              <div
+                class={{
+                  [`${baseClassName}-main`]: !props.disableMargin,
+                }}
+              >
+                {slots.default()}
+              </div>
             )
           )}
         </div>

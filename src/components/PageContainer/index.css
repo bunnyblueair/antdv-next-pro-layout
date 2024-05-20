@@ -5,68 +5,22 @@
 .ant-pro-page-container-content.ant-pro-page-container-flex {
   max-width: 100%;
 }
-.ant-pro-page-container-content.ant-pro-page-container-disable-margin
-  > .ant-pro-page-container-main {
-  margin: 0;
-}
 .ant-pro-page-container-content > .ant-pro-page-container-main {
   margin: 24px;
 }
-.ant-pro-page-container-main .ant-pro-page-container-detail {
+
+/* 页头内容区 */
+.ant-pro-page-container-header {
   display: flex;
-}
-.ant-pro-page-container-main .ant-pro-page-container-row {
-  display: flex;
+  justify-content: space-between;
   width: 100%;
 }
-.ant-pro-page-container-main .ant-pro-page-container-title-content {
-  margin-bottom: 16px;
-}
-.ant-pro-page-container-main .ant-pro-page-container-title,
-.ant-pro-page-container-main .ant-pro-page-container-content {
+.ant-pro-page-container-header > .content {
   flex: auto;
   max-width: 100%;
+  overflow: hidden;
 }
-.ant-pro-page-container-main .ant-pro-page-container-contentExtra {
+.ant-pro-page-container-header > .content-extra {
   flex: 0 1 auto;
-}
-
-.ant-pro-page-container-main .ant-pro-page-container-title {
-  margin-bottom: 16px;
-}
-.ant-pro-page-container-main .ant-pro-page-container-logo {
-  margin-bottom: 16px;
-}
-.ant-pro-page-container-main .ant-pro-page-container-contentExtra {
-  min-width: 242px;
-  margin-left: 88px;
-  text-align: right;
-}
-@media screen and (max-width: 1200px) {
-  .ant-pro-page-container-main .ant-pro-page-container-contentExtra {
-    margin-left: 44px;
-  }
-}
-@media screen and (max-width: 992px) {
-  .ant-pro-page-container-main .ant-pro-page-container-contentExtra {
-    margin-left: 20px;
-  }
-}
-@media screen and (max-width: 768px) {
-  .ant-pro-page-container-main .ant-pro-page-container-row {
-    display: block;
-  }
-  .ant-pro-page-container-main .ant-pro-page-container-action,
-  .ant-pro-page-container-main .ant-pro-page-container-contentExtra {
-    margin-left: 0;
-    text-align: left;
-  }
-}
-@media screen and (max-width: 576px) {
-  .ant-pro-page-container-detail {
-    display: block;
-  }
-  .ant-pro-page-container-contentExtra {
-    margin-left: 0;
-  }
+  white-space: nowrap;
 }
