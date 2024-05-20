@@ -148,14 +148,13 @@ export type SiderMenuProps = Partial<ExtractPropTypes<typeof siderMenuProps>>;
 
 const SiderMenu: FunctionalComponent<SiderMenuProps> = (props, { attrs }) => {
   const {
-    prefixCls,
     menuHeaderExtraRender = false,
     menuContentRender = false,
     menuFooterRender = false,
     collapsedButtonRender,
   } = props;
   const context = useRouteContext();
-  const baseClassName = `${prefixCls || "ant-pro"}-sider`;
+  const baseClassName = "ant-pro-sider";
   const hasSplitMenu = computed(
     () => props.layout === "mix" && props.splitMenus
   );
@@ -204,7 +203,6 @@ const SiderMenu: FunctionalComponent<SiderMenuProps> = (props, { attrs }) => {
   // 菜单
   const baseMenuDom = (
     <BaseMenu
-      prefixCls={prefixCls}
       locale={props.locale || context.locale}
       theme={props.menuTheme}
       mode="inline"

@@ -1,30 +1,23 @@
-import { computed, type FunctionalComponent, type ExtractPropTypes } from "vue";
+import type { PropType, FunctionalComponent, ExtractPropTypes } from "vue";
 import type { RouteRecordRaw } from "vue-router";
-import {
-  defaultRenderLogoAndTitle,
-  siderMenuProps,
-} from "../SiderMenu/SiderMenu";
-import TopNavHeader from "./TopNavHeader";
-import { clearMenuItem } from "../../utils/getMenuData";
-
-import "./index.css";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons-vue";
 import PropTypes from "ant-design-vue/es/_util/vue-types";
-
-import type { PropType } from "vue";
-import { defaultSettingProps } from "../../defaultSettings";
 import type {
   CustomRenderProps,
   MenuContentRender,
   MenuDataItem,
 } from "../../typings";
+import {
+  defaultRenderLogoAndTitle,
+  siderMenuProps,
+} from "../SiderMenu/SiderMenu";
+import TopNavHeader from "./TopNavHeader";
+import { defaultSettingProps } from "../../defaultSettings";
+import { clearMenuItem } from "../../utils/getMenuData";
+import "./index.css";
 
 export const globalHeaderProps = {
   ...defaultSettingProps,
-  prefixCls: {
-    type: String,
-    default: "ant-pro",
-  },
   collapsed: {
     type: Boolean,
     default: false,
@@ -77,7 +70,7 @@ const GlobalHeader: FunctionalComponent<GlobalHeaderProps> = (
     splitMenus,
     menuData,
   } = props;
-  const baseClassName = `${props.prefixCls}-global-header`;
+  const baseClassName = "ant-pro-global-header";
 
   if (layout === "mix" && !isMobile && splitMenus) {
     const noChildrenMenuData = (menuData || []).map((item: any) => ({

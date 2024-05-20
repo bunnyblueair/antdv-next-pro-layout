@@ -45,7 +45,7 @@ const HeaderView = defineComponent({
     const { isMobile, fixedHeader, hasSiderMenu, headerHeight, layout } =
       toRefs(props);
     const context = useRouteContext();
-    const baseClassName = `${props.prefixCls}-header`;
+    const baseClassName = "ant-pro-header";
     const needFixedHeader = computed(
       () => fixedHeader.value || context.fixedHeader || layout.value === "mix"
     );
@@ -66,13 +66,6 @@ const HeaderView = defineComponent({
         []
     );
 
-    const className = computed(() => {
-      return {
-        [`${baseClassName}`]: true,
-        [`${baseClassName}-${layout.value}`]: true,
-        [`${baseClassName}-fixed`]: needFixedHeader.value,
-      };
-    });
     const renderContent = () => {
       let defaultDom = (
         <GlobalHeader
@@ -134,7 +127,11 @@ const HeaderView = defineComponent({
               zIndex: layout.value === "mix" ? 100 : 19,
               right: right.value,
             }}
-            class={className.value}
+            class={{
+              [`${baseClassName}`]: true,
+              [`${baseClassName}-${layout.value}`]: true,
+              [`${baseClassName}-fixed`]: needFixedHeader.value,
+            }}
           >
             {renderContent()}
           </LayoutHeader>

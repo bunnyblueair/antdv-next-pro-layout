@@ -18,10 +18,6 @@ export const globalFooterProps = {
     type: [Object, Function, String, Boolean] as PropType<CustomRenderFalse>,
     default: () => undefined,
   },
-  prefixCls: {
-    type: String,
-    default: "ant-pro",
-  },
 };
 
 export type GlobalFooterProps = Partial<
@@ -32,7 +28,7 @@ export default defineComponent({
   name: "GlobalFooter",
   props: globalFooterProps,
   setup(props, { slots }) {
-    const baseClassName = `${props.prefixCls}-global-footer`;
+    const baseClassName = "ant-pro-global-footer";
     const copyright = props.copyright || (slots.copyright && slots.copyright());
 
     if (

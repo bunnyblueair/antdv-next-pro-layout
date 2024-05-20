@@ -22,7 +22,7 @@ import type {
   SelectInfo,
   MenuInfo,
 } from "ant-design-vue/es/menu/src/interface";
-import type { MenuMode, MenuTheme } from "ant-design-vue/es/menu";
+import type { MenuMode } from "ant-design-vue/es/menu";
 import type { Key } from "ant-design-vue/es/_util/type";
 import { createFromIconfontCN } from "@ant-design/icons-vue";
 import { Menu, MenuItem, MenuItemGroup, SubMenu } from "ant-design-vue";
@@ -44,25 +44,17 @@ let IconFont = createFromIconfontCN({
 
 const LazyIcon: FunctionalComponent<{
   icon: VNodeChild | string;
-  iconPrefixes?: string;
-  prefixCls?: string;
-}> = (props) => {
-  const { icon, iconPrefixes = "icon-", prefixCls = "ant-pro" } = props;
+}> = ({ icon }) => {
   if (!icon) {
     return null;
   }
   if (typeof icon === "string" && icon !== "") {
     if (isUrl(icon) || isImg(icon)) {
       return (
-        <img
-          src={icon}
-          alt="icon"
-          role="img"
-          class={`${prefixCls}-menu-item-icon`}
-        />
+        <img src={icon} alt="icon" role="img" class="ant-pro-menu-item-icon" />
       );
     }
-    if (icon.startsWith(iconPrefixes)) {
+    if (icon.startsWith("icon-")) {
       return <IconFont type={icon} />;
     }
   }
@@ -106,14 +98,14 @@ class MenuUtil {
         );
         return menuSubItemRender(item) as VNode;
       }
-      const { prefixCls, locale } = this.props;
+      const locale = this.props.locale;
       const menuTitle = (locale && locale(item)) || item.meta?.title;
       const defaultTitle = item.meta?.icon ? (
-        <span class={`${prefixCls}-menu-item`}>
-          <span class={`${prefixCls}-menu-item-title`}>{menuTitle}</span>
+        <span class="ant-pro-menu-item">
+          <span class="ant-pro-menu-item-title">{menuTitle}</span>
         </span>
       ) : (
-        <span class={`${prefixCls}-menu-item-title-no-icon`}>{menuTitle}</span>
+        <span class="ant-pro-menu-item-title-no-icon">{menuTitle}</span>
       );
 
       const hasGroup = item.meta?.type === "group";
@@ -123,7 +115,7 @@ class MenuUtil {
         <MenuComponent
           title={defaultTitle}
           key={item.path}
-          popupClassName={hasGroup ? undefined : `${prefixCls}-menu-popup`}
+          popupClassName={hasGroup ? undefined : `ant-pro-menu-popup`}
           icon={hasGroup ? null : <LazyIcon icon={item.meta?.icon} />}
         >
           {this.getNavMenuItems(item.children)}
@@ -164,16 +156,16 @@ class MenuUtil {
       CustomTag = "span";
       props = null;
     }
-    const { prefixCls, locale } = this.props;
+    const locale = this.props.locale;
     const menuTitle = (locale && locale(item)) || item.meta?.title;
     const titleDom = item.meta?.icon ? (
-      <CustomTag {...attrs} {...props} class={`${prefixCls}-menu-item`}>
+      <CustomTag {...attrs} {...props} class="ant-pro-menu-item">
         {item.meta?.icon && <LazyIcon icon={item.meta.icon} />}
-        <span class={`${prefixCls}-menu-item-title`}>{menuTitle}</span>
+        <span class="ant-pro-menu-item-title">{menuTitle}</span>
       </CustomTag>
     ) : (
-      <CustomTag {...attrs} {...props} class={`${prefixCls}-menu-item`}>
-        <span class={`${prefixCls}-menu-item-title-no-icon`}>{menuTitle}</span>
+      <CustomTag {...attrs} {...props} class="ant-pro-menu-item">
+        <span class="ant-pro-menu-item-title-no-icon">{menuTitle}</span>
       </CustomTag>
     );
 
@@ -204,10 +196,6 @@ export type MenuOnClick = {
 
 export const baseMenuProps = {
   ...defaultSettingProps,
-  prefixCls: {
-    type: String,
-    default: "ant-pro",
-  },
   locale: {
     type: [Function, Boolean] as PropType<
       (menuDataItem?: MenuDataItem) => string | undefined

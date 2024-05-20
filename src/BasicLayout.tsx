@@ -38,9 +38,9 @@ import type {
 } from "./typings";
 
 import PageLoading from "./components/PageLoading";
-import "./BasicLayout.css";
 import { siderMenuProps } from "./components/SiderMenu/SiderMenu";
 import { globalHeaderProps } from "./components/GlobalHeader";
+import "./BasicLayout.css";
 
 export const basicLayoutProps = {
   ...defaultSettingProps,
@@ -158,7 +158,7 @@ const ProLayout = defineComponent({
     const isMobile = computed(
       () => screenSize.value === "sm" || screenSize.value === "xs"
     );
-    const baseClassName = computed(() => `${props.prefixCls}-basicLayout`);
+    const baseClassName = "ant-pro-basicLayout";
     // gen className
     const className = computed(() => {
       return {

@@ -15,7 +15,6 @@ export interface Route {
 }
 
 export interface BreadcrumbProps {
-  prefixCls?: string;
   routes?: Route[];
   params?: any;
   separator?: VNodeChild;
@@ -41,11 +40,9 @@ export interface RouteContextProps extends Partial<PureSettings>, MenuState {
   menuData: MenuDataItem[];
   flatMenuData: MenuDataItem[];
 
-  getPrefixCls?: (suffixCls?: string, customizePrefixCls?: string) => string;
   locale?: FormatLocale;
   breadcrumb?: BreadcrumbListReturn | ComputedRef<BreadcrumbListReturn>;
   isMobile?: boolean;
-  prefixCls?: string;
   collapsed?: boolean;
   hasSideMenu?: boolean;
   hasHeader?: boolean;
@@ -56,19 +53,8 @@ export interface RouteContextProps extends Partial<PureSettings>, MenuState {
   [key: string]: any;
 }
 
-export const defaultPrefixCls = "ant-pro";
-
-export const getPrefixCls = (
-  suffixCls?: string,
-  customizePrefixCls?: string
-) => {
-  if (customizePrefixCls) return customizePrefixCls;
-  return suffixCls ? `${defaultPrefixCls}-${suffixCls}` : defaultPrefixCls;
-};
-
 // set default context
 export const defaultRouteContext = reactive<RouteContextProps>({
-  getPrefixCls,
   menuData: [],
   flatMenuData: [],
   selectedKeys: [],

@@ -23,7 +23,6 @@ export type TopNavHeaderProps = Partial<
 
 const TopNavHeader: FunctionalComponent<TopNavHeaderProps> = (props) => {
   const {
-    prefixCls,
     onMenuHeaderClick,
     onOpenKeys,
     onSelect,
@@ -32,7 +31,7 @@ const TopNavHeader: FunctionalComponent<TopNavHeaderProps> = (props) => {
     menuData,
   } = props;
   const context = useRouteContext();
-  const baseClassName = `${prefixCls || "ant-pro"}-top-nav-header`;
+  const baseClassName = "ant-pro-top-nav-header";
   const headerDom = defaultRenderLogoAndTitle(
     { ...props, collapsed: false },
     // REMARK:: Any time render header title
@@ -52,7 +51,6 @@ const TopNavHeader: FunctionalComponent<TopNavHeaderProps> = (props) => {
 
         <div class={`${baseClassName}-main-menu`}>
           <BaseMenu
-            prefixCls={prefixCls}
             locale={props.locale || context.locale}
             theme={props.menuTheme}
             mode={props.mode}
