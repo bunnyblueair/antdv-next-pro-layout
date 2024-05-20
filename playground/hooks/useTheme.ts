@@ -1,6 +1,6 @@
 import { onBeforeMount, reactive, ref, watch } from "vue";
 import { ConfigProvider, theme } from "ant-design-vue";
-import { ThemeConfig } from "ant-design-vue/lib/config-provider/context";
+import type { ThemeConfig } from "ant-design-vue/es/config-provider/context";
 
 const CACHE_LOCAL_PRIMARY_COLOR = "cache:local:primaryColor";
 
@@ -29,8 +29,8 @@ export type ConfigType = {
 
 export const proConfig = ref<ConfigType>({
   layout: "side",
-  theme: "light", // "dark" | "light",
-  menuTheme: "light", // "dark" | "light",
+  theme: "dark", // "dark" | "light",
+  menuTheme: "dark", // "dark" | "light",
   fixedHeader: true,
   fixSiderbar: true,
   splitMenus: true,
@@ -47,7 +47,7 @@ const themeColor = {
 };
 
 export const themeConfig = reactive<ThemeConfig>({
-  algorithm: [],
+  algorithm: [themeColor['dark']],
   // algorithm: themeColor["compact"],
   token: {
     // colorBgContainer: "#fff",
@@ -64,6 +64,9 @@ export const usePrimaryColor = () => {
     () => proConfig.value.theme,
     (v) => {
       themeConfig.algorithm = [themeColor[v]];
+    },
+    {
+      immediate: true,
     }
   );
   onBeforeMount(() => {

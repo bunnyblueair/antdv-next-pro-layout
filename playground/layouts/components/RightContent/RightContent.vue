@@ -6,8 +6,8 @@ import {
   LogoutOutlined,
   BgColorsOutlined,
 } from "@ant-design/icons-vue";
-import { changePrimaryColor, getLocalColor } from "@/hooks/useTheme";
-import { MenuInfo } from "ant-design-vue/lib/menu/src/interface";
+import { changePrimaryColor } from "@/hooks/useTheme";
+import type { MenuInfo } from "ant-design-vue/es/menu/src/interface";
 const emit = defineEmits(["drawer"]);
 const props = defineProps({
   /**用户名 */
