@@ -162,10 +162,10 @@ const ProLayout = defineComponent({
     // gen className
     const className = computed(() => {
       return {
-        [baseClassName.value]: true,
-        [`${baseClassName.value}-top-menu`]: isTop.value,
-        [`${baseClassName.value}-is-children`]: props.isChildrenLayout,
-        [`${baseClassName.value}-fix-siderbar`]: props.fixSiderbar,
+        [baseClassName]: true,
+        [`${baseClassName}-top-menu`]: isTop.value,
+        [`${baseClassName}-is-children`]: props.isChildrenLayout,
+        [`${baseClassName}-fix-siderbar`]: props.fixSiderbar,
         [`screen-${screenSize.value}`]: true,
         [`layout-${props.layout}`]: true,
         [`theme-${props.theme}`]: true,
@@ -342,9 +342,9 @@ const ProLayout = defineComponent({
 
       const contentClassName = computed(() => {
         return {
-          [`${baseClassName.value}-content`]: true,
-          [`${baseClassName.value}-has-header`]: headerDom,
-          [`${baseClassName.value}-children-layout`]: props.isChildrenLayout,
+          [`${baseClassName}-content`]: true,
+          [`${baseClassName}-has-header`]: headerDom,
+          [`${baseClassName}-children-layout`]: props.isChildrenLayout,
         };
       });
 
