@@ -12,7 +12,7 @@
       tabPosition: 'top',
       type: 'editable-card',
       tabBarGutter: 8,
-      tabBarStyle: { margin: '0', height: '32px', lineHeight: '32px' },
+      tabBarStyle: { margin: '0', height: '32px', lineHeight: '16px' },
       onEdit: tabEdit,
     }"
   >
