@@ -31,14 +31,11 @@ export type BreadcrumbListReturn = Pick<
   Extract<keyof BreadcrumbProps, "routes" | "itemRender">
 >;
 
-export interface MenuState {
-  selectedKeys: string[];
-  openKeys: string[];
-}
-
-export interface RouteContextProps extends Partial<PureSettings>, MenuState {
+export interface RouteContextProps extends Partial<PureSettings> {
   menuData: MenuDataItem[];
   flatMenuData: MenuDataItem[];
+  selectedKeys: string[];
+  openKeys: string[];
 
   locale?: FormatLocale;
   breadcrumb?: BreadcrumbListReturn | ComputedRef<BreadcrumbListReturn>;

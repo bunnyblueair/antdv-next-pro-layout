@@ -27,7 +27,12 @@ import type { Key } from "ant-design-vue/es/_util/type";
 import { createFromIconfontCN } from "@ant-design/icons-vue";
 import { Menu, MenuItem, MenuItemGroup, SubMenu } from "ant-design-vue";
 
-import type { MenuDataItem, LayoutType, MenuRender } from "../../typings";
+import type {
+  MenuDataItem,
+  LayoutType,
+  MenuRender,
+  FormatLocale,
+} from "../../typings";
 import { defaultSettingProps, defaultSettings } from "../../defaultSettings";
 import { isImg, isUrl } from "../../utils";
 import "./BaseMenu.css";
@@ -197,9 +202,7 @@ export type MenuOnClick = {
 export const baseMenuProps = {
   ...defaultSettingProps,
   locale: {
-    type: [Function, Boolean] as PropType<
-      (menuDataItem?: MenuDataItem) => string | undefined
-    >,
+    type: [Function, Boolean] as PropType<FormatLocale>,
     default: false,
   },
   menuData: {
