@@ -1,8 +1,13 @@
-import { createRouter, createWebHistory } from "vue-router";
-import type { RouteRecordRaw } from "vue-router";
+import {
+  createRouter,
+  createWebHistory,
+  type RouteRecordRaw,
+} from "vue-router";
+import { createVNode } from "vue";
 import BasicLayout from "../layouts/BasicLayout.vue";
 import BlankLayout from "../layouts/BlankLayout.vue";
 import NestedLayout from "../layouts/NestedLayout.vue";
+import { AlipayOutlined } from "@ant-design/icons-vue";
 
 const constantRoutes: RouteRecordRaw[] = [
   {
@@ -22,7 +27,7 @@ const constantRoutes: RouteRecordRaw[] = [
       {
         path: "/dome2",
         name: "Dome2",
-        meta: { title: "示例二", icon: "icon-anzhuo" },
+        meta: { title: "示例二", icon: createVNode(AlipayOutlined) },
         component: () => import("@/views/dome/dome2.vue"),
       },
       {
