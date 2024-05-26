@@ -96,39 +96,39 @@ const layoutConf = reactive({
 | 参数 | 说明 | 类型 | 默认值 |
 | ---- | ---- | ---- | ---- |
 | title                   | 布局LOGO右侧文本               | string       | `'Ant Design Pro'` |
-| logo                    | 布局LOGO图链接                 | string      | -                |
-| logoStyle               | 布局LOGO图样式                 | object      | -                  |
-| loading                 | 布局内容区加载等待状态          | boolean      | false                  |
-| layout                  | 菜单布局                       | 'side' \| 'top' \| 'mix'                     | `'side'`           |
-| breadcrumb              | 布局内容左上角面包屑            | Object                                       | -         |
-| theme                   | 全局主题色                     | 'light' \|'dark'                              | `'light'`          |
-| menuTheme               | 菜单导航主题色                 | 'light' \|'dark'                             | `'light'`          |
-| menuData                | 菜单数据根据Vue-router `routes` 根路径'/'生成       | Object                   | `[{}]`             |
-| collapsed               | 菜单左侧时收起展开             | boolean                                       | `true`               |
-| collapsedWidth          | 菜单左侧时收起宽度大小          | number                                       |  48                 |
-| siderWidth              | 菜单左侧时展开宽度大小          | number                                       |  200                |
-| selectedKeys            | 菜单选择高亮keys               | string[]                                     | `[]`               |
-| openKeys                | 菜单选择打开展开keys           | string[]                                      | `[]`               |
-| fixSiderbar             | 菜单左侧列表固定                   | boolean                                      | `false`         |
+| logo                    | 布局LOGO图链接                 | string      | - |
+| logoStyle               | 布局LOGO图样式                 | object      | - |
+| loading                 | 布局内容区加载等待状态          | boolean      | false |
+| layout                  | 菜单布局                       | 'side' \| 'top' \| 'mix'                     | `'side'` |
+| breadcrumb              | 布局内容左上角面包屑            | Object                                       | - |
+| theme                   | 全局主题色                     | 'light' \|'dark'                              | `'light'` |
+| menuTheme               | 菜单导航主题色                 | 'light' \|'dark'                             | `'light'` |
+| menuData                | 菜单项数据 [`MenuDataItem[]`](dist\types\typings\index.d.ts)  | Array         | `[]` |
+| collapsed               | 菜单左侧时收起展开             | boolean                                       | `true` |
+| collapsedWidth          | 菜单左侧时收起宽度大小          | number                                       | 48 |
+| siderWidth              | 菜单左侧时展开宽度大小          | number                                       | 200 |
+| selectedKeys            | 菜单选择高亮keys               | string[]                                     | `[]` |
+| openKeys                | 菜单选择打开展开keys           | string[]                                      | `[]` |
+| fixSiderbar             | 菜单左侧列表固定               | boolean                                      | `false`         |
 | splitMenus              | 菜单布局`mix`分割二级菜单到左侧 | boolean                                      | `false`         |
-| menuHeaderRender        | 渲染菜单头logo和标题区域       | v-slot \| VNode \| (props: BasicLayoutProps) => VNode \| false           | -                  |
-| menuHeaderExtraRender   | 渲染菜单头拓展区域             | v-slot \| VNode \| (props: BasicLayoutProps) => VNode  \| false             | -                  |
-| menuFooterRender        | 渲染菜单底脚区域               | v-slot \| VNode \| (props: BasicLayoutProps) => VNode  \| false               | -                  |
+| menuHeaderRender        | 渲染菜单头logo和标题区域       | v-slot \| VNode \| (props: BasicLayoutProps) => VNode \| false          | - |
+| menuHeaderExtraRender   | 渲染菜单头拓展区域             | v-slot \| VNode \| (props: BasicLayoutProps) => VNode  \| false         | - |
+| menuFooterRender        | 渲染菜单底脚区域               | v-slot \| VNode \| (props: BasicLayoutProps) => VNode  \| false         | - |
 | menuItemRender          | 渲染菜单项 Menu.Item            | v-slot#menuItemRender="menuItem"          | -               |
 | menuSubItemRender       | 渲染菜单嵌套子项 Menu.SubItem    | v-slot#menuSubItemRender="menuItem"       | -               |
 | collapsedButtonRender   | 渲染菜单收起按钮区域             | v-slot#collapsedButtonRender="collapsed"   | -               |
 | fixedHeader             | 顶部区域固定                    | boolean                                      | `false`         |
 | headerHeight            | 顶部区域高度                    | number                                       | 48         |
-| headerRender            | 渲染顶部区域                    | v-slot \| VNode \| (props: BasicLayoutProps) => VNode         | -                  |
-| headerContentRender     | 渲染顶部内容区域，仅布局`side`有效                | v-slot \| (props: BasicLayoutProps) => VNode                 | -                  |
-| headerContentRightRender| 渲染顶部内容右端区域             | v-slot \| (props: BasicLayoutProps) => VNode                  | -                  |
-| footerRender            | 渲染底部区域                    | v-slot \| ({ width, ...props }) => VNode                       | `false`            |
-| tabRender               | 渲染顶部标签页区域               | v-slot \| ({ width, ...props }) => VNode                        | `false`            |
-| breadcrumbRender        | 渲染面包屑导航区域               | v-slot \| ({ route, params, routes, paths, h }) => VNode[]         | -                  |
-| locale                  | 菜单名国际化函数处理             | Function(menuDataItem?: MenuDataItem) => string \| `false`              | `false`            |
-| collapse                | 菜单左侧收起展开触发函数处理      | Function(collapsed: boolean) => void            | -                  |
+| headerRender            | 渲染顶部区域                    | v-slot \| VNode \| (props: BasicLayoutProps) => VNode         | - |
+| headerContentRender     | 渲染顶部内容区域，仅布局`side`有效                | v-slot \| (props: BasicLayoutProps) => VNode  | - |
+| headerContentRightRender| 渲染顶部内容右端区域             | v-slot \| (props: BasicLayoutProps) => VNode                  | - |
+| footerRender            | 渲染底部区域                    | v-slot \| ({ width, ...props }) => VNode                       | `false` |
+| tabRender               | 渲染顶部标签页区域               | v-slot \| ({ width, ...props }) => VNode                        | `false` |
+| breadcrumbRender        | 渲染面包屑导航区域               | v-slot \| ({ route, params, routes, paths, h }) => VNode[]         | - |
+| locale                  | 菜单名国际化函数处理             | Function(menuDataItem?: MenuDataItem) => string \| `false`              | `false` |
+| collapse                | 菜单左侧收起展开触发函数处理      | Function(collapsed: boolean) => void            | - |
 
-> 菜单生成需要 `getMenuData` 和 `clearMenuItem` 函数转换  
+> 菜单数据可通过提供的 `getMenuData` 和 `clearMenuItem` 函数转换  
 > 例如 `const { menuData } = getMenuData(clearMenuItem(routes))`
 
 #### 插槽渲染 Custom Render

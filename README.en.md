@@ -96,24 +96,24 @@ const layoutConf = reactive({
 | Property                | Description                   | Type                        | Default Value      |
 | ----------------------- | ----------------------  | -------------------------------- | ------------------ |
 | title                   | Text to the right of the layout LOGO               | string       | `'Ant Design Pro'` |
-| logo                    | Layout Logo Link                 | string      | -                |
-| logoStyle               | Layout Logo Style                 | object      | -                  |
+| logo                    | Layout Logo Link                                   | string      | -                |
+| logoStyle               | Layout Logo Style                                  | object      | -                  |
 | loading                 | Layout content area loading waiting status          | boolean      | false                  |
-| layout                  | Menu Layout                       | 'side' \| 'top' \| 'mix'                     | `'side'`           |
+| layout                  | Menu Layout                                         | 'side' \| 'top' \| 'mix'       | `'side'`           |
 | breadcrumb              | Layout content: Breadcrumbs in the upper left corner            | Object                                       | -         |
-| theme                   | Global Theme Colors                     | 'light' \|'dark'                              | `'light'`          |
+| theme                   | Global Theme Colors                         | 'light' \|'dark'                              | `'light'`          |
 | menuTheme               | Menu navigation theme color                 | 'light' \|'dark'                             | `'light'`          |
-| menuData                | The menu data is generated from Vue-router routes is root path '/'        | Object                   | `[{}]`             |
+| menuData                | Menu item data [`MenuDataItem[]`](dist\types\typings\index.d.ts)  | Array         | `[]` |
 | collapsed               | When the left side of the menu is closed and expanded             | boolean                                       | `true`               |
 | collapsedWidth          | Collapse width size on the left side of the menu          | number                                       |  48                 |
-| siderWidth              | Expand width size on the left side of the menu          | number                                       |  200                |
+| siderWidth              | Expand width size on the left side of the menu            | number                                       |  200                |
 | selectedKeys            | Choose highlight keys from the menu               | string[]                                     | `[]`               |
-| openKeys                | Menu select open expand keys           | string[]                                      | `[]`               |
+| openKeys                | Menu select open expand keys                      | string[]                                      | `[]`               |
 | fixSiderbar             | Fixed list on left side of menu                   | boolean                                      | `false`         |
-| splitMenus              | The menu layout 'mix' splits the secondary menu to the left | boolean                                      | `false`         |
-| menuHeaderRender        | Renders the header logo and header area of the menu       | v-slot \| VNode \| (props: BasicLayoutProps) => VNode \| false           | -                  |
-| menuHeaderExtraRender   | Render menu header expands area             | v-slot \| VNode \| (props: BasicLayoutProps) => VNode  \| false             | -                  |
-| menuFooterRender        | Render the footer area of the menu               | v-slot \| VNode \| (props: BasicLayoutProps) => VNode  \| false               | -                  |
+| splitMenus              | The menu layout `mix` splits the secondary menu to the left | boolean                            | `false`         |
+| menuHeaderRender        | Renders the header logo and header area of the menu      | v-slot \| VNode \| (props: BasicLayoutProps) => VNode \| false       | -                  |
+| menuHeaderExtraRender   | Render menu header expands area                          | v-slot \| VNode \| (props: BasicLayoutProps) => VNode \| false       | -                  |
+| menuFooterRender        | Render the footer area of the menu                       | v-slot \| VNode \| (props: BasicLayoutProps) => VNode \| false       | -                  |
 | menuItemRender          | Render menu items Menu.Item            | v-slot#menuItemRender="menuItem"          | -               |
 | menuSubItemRender       | Nested subitems of the render menu Menu.SubItem    | v-slot#menuSubItemRender="menuItem"       | -               |
 | collapsedButtonRender   | The render menu closes the button area             | v-slot#collapsedButtonRender="collapsed"   | -               |
