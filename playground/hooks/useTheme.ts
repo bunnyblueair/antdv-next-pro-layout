@@ -1,5 +1,5 @@
 import { onBeforeMount, reactive, ref, watch } from "vue";
-import { ConfigProvider, theme } from "ant-design-vue";
+import { theme } from "ant-design-vue";
 import type { ThemeConfig } from "ant-design-vue/es/config-provider/context";
 
 const CACHE_LOCAL_PRIMARY_COLOR = "cache:local:primaryColor";
@@ -29,8 +29,8 @@ export type ConfigType = {
 
 export const proConfig = ref<ConfigType>({
   layout: "side",
-  theme: "dark", // "dark" | "light",
-  menuTheme: "dark", // "dark" | "light",
+  theme: "light", // "dark" | "light",
+  menuTheme: "light", // "dark" | "light",
   fixedHeader: true,
   fixSiderbar: true,
   splitMenus: true,
@@ -47,11 +47,11 @@ const themeColor = {
 };
 
 export const themeConfig = reactive<ThemeConfig>({
-  algorithm: [themeColor['dark']],
+  algorithm: [themeColor["light"]],
   // algorithm: themeColor["compact"],
   token: {
     // colorBgContainer: "#fff",
-    colorPrimary: "#1668dc", // "#722ED1",
+    colorPrimary: localStorage.getItem(CACHE_LOCAL_PRIMARY_COLOR) || "#1890ff", // "#722ED1",
     borderRadius: 6,
   },
 });
@@ -83,15 +83,9 @@ export function changePrimaryColor(color?: string) {
     color = getRandomColor();
   }
 
-  ConfigProvider.config({
-    theme: {
-      primaryColor: color,
-    },
-  });
-  localStorage.setItem(CACHE_LOCAL_PRIMARY_COLOR, color);
-
   if (themeConfig && themeConfig.token) {
     themeConfig.token.colorPrimary = color;
+    localStorage.setItem(CACHE_LOCAL_PRIMARY_COLOR, color);
   }
 }
 
@@ -100,7 +94,11 @@ export function changePrimaryColor(color?: string) {
  * @returns 颜色
  */
 export function getLocalColor() {
-  return localStorage.getItem(CACHE_LOCAL_PRIMARY_COLOR) || "#1890ff";
+  let color = "#1890ff";
+  if (themeConfig && themeConfig.token) {
+    color = themeConfig.token.colorPrimary || color;
+  }
+  return color;
 }
 
 /**

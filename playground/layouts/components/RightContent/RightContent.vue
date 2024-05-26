@@ -6,7 +6,7 @@ import {
   LogoutOutlined,
   BgColorsOutlined,
 } from "@ant-design/icons-vue";
-import { changePrimaryColor } from "@/hooks/useTheme";
+import { changePrimaryColor, getLocalColor } from "@/hooks/useTheme";
 import type { MenuInfo } from "ant-design-vue/es/menu/src/interface";
 const emit = defineEmits(["drawer"]);
 const props = defineProps({
@@ -68,7 +68,7 @@ function fnDrawerOpen() {
         @click="changePrimaryColor()"
       >
         <template #icon>
-          <BgColorsOutlined style="color: var(--ant-primary-color)" />
+          <BgColorsOutlined :style="{ color: getLocalColor() }" />
         </template>
       </a-button>
     </a-tooltip>
