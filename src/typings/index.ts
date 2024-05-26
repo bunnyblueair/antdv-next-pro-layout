@@ -14,72 +14,12 @@ export type VueNode =
   | null
   | undefined;
 
-export type Theme = "dark" | "light";
-
-export type LayoutType = "side" | "top" | "mix";
-
-export type TargetType = "_blank" | "_self" | unknown;
-
-export interface MetaRecord {
-  /**
-   * @name 菜单的icon
-   */
-  icon?: string | VNode;
-  /**
-   * @type 有 children 的菜单的组件类型 可选值 'group'
-   */
-  type?: string;
-  /**
-   * @name 自定义菜单的国际化 key，如果没有则返回自身
-   */
-  title?: string;
-  /**
-   * @name 内建授权信息
-   */
-  authority?: string | string[];
-  /**
-   * @name 打开目标位置 '_blank' | '_self' | null | undefined
-   */
-  target?: TargetType;
-  /**
-   * @name 在菜单中隐藏子节点
-   */
-  hideChildInMenu?: boolean;
-  /**
-   * @name 在菜单中隐藏自己和子节点
-   */
-  hideInMenu?: boolean;
-  /**
-   * @name disable 菜单选项
-   */
-  disabled?: boolean;
-  /**
-   * @name 隐藏自己，并且将子节点提升到与自己平级
-   */
-  flatMenu?: boolean;
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
-}
-
-export interface MenuDataItem {
-  /**
-   * @name 用于标定选中的值，默认是 path
-   */
-  path: string;
-  name?: string | symbol;
-  meta?: MetaRecord;
-  /**
-   * @name 子菜单
-   */
-  children?: MenuDataItem[];
-}
-
 export type WithFalse<T> = T | false;
 
 export type CustomRender = VueNode;
 
-export type FormatLocale = (menuDataItem?: MenuDataItem) => string;
+/**本地化格式函数类型 */
+export type FormatLocale = WithFalse<(menuDataItem?: MenuDataItem) => string>;
 
 export type ProProps = Record<never, never>;
 // Custom render or slot
@@ -89,6 +29,8 @@ export type HeaderContentRender = WithFalse<() => CustomRender>;
 export type MenuContentRender = WithFalse<
   (props: ProProps, defaultDom: CustomRender) => CustomRender
 >;
+
+/**渲染菜单函数类型（插槽） */
 export type MenuRender = WithFalse<(item: MenuDataItem) => CustomRender>;
 
 export type CustomRenderProps = WithFalse<(props?: ProProps) => CustomRender>;
@@ -97,3 +39,47 @@ export type CustomRenderFalse = WithFalse<CustomRender>;
 export type CollapsedButtonRender = WithFalse<
   (collapsed?: boolean) => CustomRender
 >;
+
+/**明暗主题 */
+export type Theme = "dark" | "light";
+
+/**菜单布局 */
+export type LayoutType = "side" | "top" | "mix";
+
+/**链接跳转类型 */
+export type TargetType = "_blank" | "_self" | undefined;
+
+/**菜单数据项元数据 */
+export interface MetaRecord {
+  /**菜单图标，例如 "icon-github" 或 createVNode(AlipayOutlined) */
+  icon?: string | VNode;
+  /**禁用菜单选项*/
+  disabled?: boolean;
+  /**展示错误状态样式 */
+  danger?: boolean;
+  /**自定义菜单的国际化 key，如果没有则返回自身 */
+  title?: string;
+  /**链接href打开目标跳转类型 '_blank' | '_self' | undefined */
+  target?: TargetType;
+  /**有 children 的菜单的组件类型 可选值 'group' */
+  type?: string;
+  /**在菜单中隐藏子节点 */
+  hideChildInMenu?: boolean;
+  /**在菜单中隐藏自己和子节点 */
+  hideInMenu?: boolean;
+
+  // 任意值
+  [key: string]: any;
+}
+
+/**菜单数据项 */
+export interface MenuDataItem {
+  /**路由路径，用于菜单项唯一标志标定选中的值 */
+  path: string;
+  /**路由名称 */
+  name?: string | symbol;
+  /**路由元数据 */
+  meta?: MetaRecord;
+  /**子菜单 */
+  children?: MenuDataItem[];
+}
