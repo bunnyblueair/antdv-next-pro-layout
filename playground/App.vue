@@ -26,31 +26,6 @@ body .ant-pro-basicLayout {
   min-height: 100vh;
 }
 
-::view-transition-old(root),
-::view-transition-new(root) {
-  /* 关闭默认的淡入淡出的效果 */
-  animation: none;
-  mix-blend-mode: normal;
-}
-
-[data-theme="dark"]::view-transition-old(root) {
-  z-index: 1;
-}
-[data-theme="dark"]::view-transition-new(root) {
-  z-index: 999;
-}
-
-::view-transition-old(root) {
-  z-index: 999;
-}
-::view-transition-new(root) {
-  z-index: 1;
-}
-
-.ant-pro-sider {
-  z-index: 20;
-}
-
 .slide-left-enter-active,
 .slide-left-leave-active,
 .slide-right-enter-active,
@@ -73,35 +48,22 @@ body .ant-pro-basicLayout {
   transform: translate(-2em, 0);
 }
 
-.zoom-enter-active,
-.zoom-leave-active {
-  animation-duration: 0.3s;
-  animation-fill-mode: both;
-  animation-name: zoomIn;
+/* 明暗主题过渡 */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }
-
-.zoom-leave-active {
-  animation-direction: reverse;
+[data-theme="dark"]::view-transition-old(root) {
+  z-index: 1;
 }
-
-@keyframes zoomIn {
-  from {
-    opacity: 0;
-    transform: scale3d(0.95, 0.95, 0.95);
-  }
-
-  100% {
-    opacity: 1;
-  }
+[data-theme="dark"]::view-transition-new(root) {
+  z-index: 999;
 }
-@keyframes zoomOut {
-  0% {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-    transform: scale3d(0.95, 0.95, 0.95);
-  }
+::view-transition-old(root) {
+  z-index: 999;
+}
+::view-transition-new(root) {
+  z-index: 1;
 }
 </style>
