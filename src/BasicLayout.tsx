@@ -358,7 +358,7 @@ const ProLayout = defineComponent({
         ) {
           width = "100%";
         } else if (!isTop.value && !isMobile.value) {
-          width = `calc(100vw - ${siderWidth.value}px)`;
+          width = `calc(100% - ${siderWidth.value}px)`;
         }
         return width;
       });
