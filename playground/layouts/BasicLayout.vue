@@ -74,14 +74,14 @@ function settingDrawer(bool: boolean) {
       v-bind="proConfig"
       iconfont-url="//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js"
       title="Preview Pro"
-      logo="https://alicdn.antdv.com/v2/assets/logo.1ef800a8.svg"
+      logo="//alicdn.antdv.com/v2/assets/logo.1ef800a8.svg"
       :logoStyle="{ borderRadius: '6px' }"
       @collapse="(v) => console.log('collapse:', v)"
     >
       <!-- 渲染菜单头logo和标题区域 -->
       <template #menuHeaderRender2>
         <router-link :to="{ path: '/' }">
-          <img src="https://alicdn.antdv.com/v2/assets/logo.1ef800a8.svg" />
+          <img src="//alicdn.antdv.com/v2/assets/logo.1ef800a8.svg" />
           <h1>Header Render</h1>
         </router-link>
       </template>
