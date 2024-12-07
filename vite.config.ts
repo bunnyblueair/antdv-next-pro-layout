@@ -37,8 +37,10 @@ export default defineConfig({
   build: {
     lib: {
       entry: fileURLToPath(new URL("./src/index.ts", import.meta.url)),
-      name: "AntdvProLayout",
+      fileName: "antdv-pro-layout",
+      cssFileName: "style",
       formats: ["es", "umd"],
+      name: "AntdvProLayout",
     },
     rollupOptions: {
       external: [
