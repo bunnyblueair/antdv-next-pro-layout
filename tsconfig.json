@@ -3,7 +3,7 @@
     "target": "ESNext",
     "useDefineForClassFields": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "Bundler",
     "strict": true,
     "jsx": "preserve",
     "resolveJsonModule": true,
@@ -17,7 +17,6 @@
     "jsxImportSource": "vue",
     "outDir": "dist",
     "typeRoots": ["./node_modules/@types"],
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./playground/*"],
       "antdv-pro-layout": ["./src/index.ts"]
