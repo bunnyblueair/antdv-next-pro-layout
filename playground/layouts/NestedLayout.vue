@@ -15,7 +15,7 @@
   >
     <template #menuHeaderRender>
       <a>
-        <img src="https://3x.antdv.com/assets/logo.1ef800a8.svg" />
+        <img src="//www.antdv.com/assets/logo.1ef800a8.svg" />
         <h1>Pro Layout Nested</h1>
       </a>
     </template>
