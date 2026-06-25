@@ -1,4 +1,4 @@
-import { fileURLToPath, URL } from "url";
+import { resolve } from "node:path";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vueJSX from "@vitejs/plugin-vue-jsx";
@@ -16,8 +16,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "antdv-pro-layout": fileURLToPath(new URL("./src", import.meta.url)),
-      "@": fileURLToPath(new URL("./playground", import.meta.url)),
+      "antdv-pro-layout": resolve(import.meta.dirname, "src"),
+      "@": resolve(import.meta.dirname, "playground"),
     },
   },
   plugins: [
@@ -25,24 +25,19 @@ export default defineConfig({
     vueJSX(),
     dts({
       // 输出目录
-      outDir: "dist/types",
+      outDirs: ["dist/types"],
       // 排除目录
-      exclude: [
-        "playground/**/*.ts",
-        "playground/**/*.tsx",
-        "playground/**/*.vue",
-      ],
+      exclude: ["playground/**"],
     }),
   ],
   build: {
     lib: {
-      entry: fileURLToPath(new URL("./src/index.ts", import.meta.url)),
-      fileName: "antdv-pro-layout",
-      cssFileName: "style",
+      entry: resolve(import.meta.dirname, "src/index.ts"),
       formats: ["es", "umd"],
+      fileName: "antdv-pro-layout",
       name: "AntdvProLayout",
     },
-    rollupOptions: {
+    rolldownOptions: {
       external: [
         "vue",
         "vue-router",
