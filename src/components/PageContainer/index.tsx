@@ -1,8 +1,6 @@
 import {
   computed,
   defineComponent,
-  unref,
-  type FunctionalComponent,
   type PropType,
   type ExtractPropTypes,
   type VNodeChild,
@@ -19,7 +17,6 @@ import {
 } from "ant-design-vue";
 import { pageHeaderProps } from "ant-design-vue/es/page-header";
 import { withInstall } from "ant-design-vue/es/_util/type";
-import type { TabBarExtraContent } from "ant-design-vue/es/tabs/src/interface";
 /* antd ts define end */
 import { useRouteContext } from "../../RouteContext";
 import { getSlotVNode } from "../../utils";
@@ -108,72 +105,94 @@ const renderFooter = (props: PageContainerProps): VNodeChild | any => {
 };
 
 // PageHeader 页头 https://www.antdv.com/components/page-header-cn/#api
-const ProPageHeader: FunctionalComponent<
-  PageContainerProps & { baseClassName: string }
-> = (props) => {
-  const {
-    baseClassName,
-    title,
-    tabList,
-    tabActiveKey,
-    breadcrumb,
-    content,
-    tags,
-    extra,
-    contentExtra,
-    fixedHeader,
-    footer,
-    ...restProps
-  } = props;
+//
+// 重构说明（4.x 内部优化，不改变对外 API）：
+//  - 原实现是 FunctionalComponent，每次重渲染整个函数体重新执行，包括
+//    useRouteContext() 和 breadcrumb 对象的展开。
+//  - 改为 defineComponent 后：
+//    * useRouteContext() 在 setup 中只调用一次
+//    * breadcrumb 计算用 computed 缓存（breadcrumb prop 或 RouteContext.breadcrumb
+//      变化时才重算）
+const ProPageHeader = defineComponent({
+  name: "ProPageHeader",
+  inheritAttrs: false,
+  props: {
+    ...pageContainerProps,
+    baseClassName: { type: String, required: true },
+  },
+  setup(props) {
+    const context = useRouteContext();
 
-  const pageHeaderTitle: any = title !== false ? title : undefined;
-
-  //面包屑的配置
-  let pageHeaderBreadcrumb = breadcrumb;
-  if (breadcrumb === undefined) {
-    const value = useRouteContext();
-    const unrefBreadcrumb = unref(value.breadcrumb || {});
-    pageHeaderBreadcrumb = {
-      ...unrefBreadcrumb,
-      routes: unrefBreadcrumb.routes,
-      itemRender: unrefBreadcrumb.itemRender,
-    };
-  }
-
-  return (
-    <PageHeader
-      {...restProps}
-      title={pageHeaderTitle}
-      breadcrumb={pageHeaderBreadcrumb}
-      footer={
-        footer ||
-        renderFooter({
-          ...restProps,
-          tabList,
-          tabActiveKey,
-        })
+    // 面包屑：显式传入优先；否则从 RouteContext 拿并展开。
+    const pageHeaderBreadcrumb = computed(() => {
+      if (props.breadcrumb !== undefined) {
+        return props.breadcrumb;
       }
-      tags={tags}
-      extra={extra}
-    >
-      {(content || contentExtra) && (
-        <div class={`${baseClassName}-header`}>
-          {content && (
-            <div class="content">
-              {(typeof content === "function" && content()) || content}
+      const ctxBreadcrumb = context.breadcrumb;
+      const value = ctxBreadcrumb
+        ? (ctxBreadcrumb as any).value || ctxBreadcrumb
+        : {};
+      return {
+        ...value,
+        routes: value.routes,
+        itemRender: value.itemRender,
+      };
+    });
+
+    return () => {
+      const {
+        baseClassName,
+        title,
+        tabList,
+        tabActiveKey,
+        breadcrumb: _breadcrumb,
+        content,
+        tags,
+        extra,
+        contentExtra,
+        fixedHeader: _fixedHeader,
+        footer,
+        ...restProps
+      } = props;
+
+      const pageHeaderTitle: any = title !== false ? title : undefined;
+
+      return (
+        <PageHeader
+          {...restProps}
+          title={pageHeaderTitle}
+          breadcrumb={pageHeaderBreadcrumb.value}
+          footer={
+            footer ||
+            renderFooter({
+              ...restProps,
+              tabList,
+              tabActiveKey,
+            })
+          }
+          tags={tags}
+          extra={extra}
+        >
+          {(content || contentExtra) && (
+            <div class={`${baseClassName}-header`}>
+              {content && (
+                <div class="content">
+                  {(typeof content === "function" && content()) || content}
+                </div>
+              )}
+              {contentExtra && (
+                <div class="content-extra">
+                  {(typeof contentExtra === "function" && contentExtra()) ||
+                    contentExtra}
+                </div>
+              )}
             </div>
           )}
-          {contentExtra && (
-            <div class="content-extra">
-              {(typeof contentExtra === "function" && contentExtra()) ||
-                contentExtra}
-            </div>
-          )}
-        </div>
-      )}
-    </PageHeader>
-  );
-};
+        </PageHeader>
+      );
+    };
+  },
+});
 
 const PageContainer = defineComponent({
   name: "PageContainer",
@@ -195,7 +214,7 @@ const PageContainer = defineComponent({
       const contentExtra = getSlotVNode<DefaultPropRender>(
         slots,
         props,
-        "contentExtra"
+        "contentExtra",
       );
       return (
         <ProPageHeader

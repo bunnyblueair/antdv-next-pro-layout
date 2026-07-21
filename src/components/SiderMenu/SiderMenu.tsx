@@ -1,7 +1,7 @@
 import {
   unref,
   computed,
-  type FunctionalComponent,
+  defineComponent,
   type ExtractPropTypes,
   type PropType,
   type CSSProperties,
@@ -24,7 +24,7 @@ import type {
 
 export const defaultRenderLogo = (
   logo?: CustomRender,
-  logoStyle?: CSSProperties
+  logoStyle?: CSSProperties,
 ): CustomRender => {
   if (!logo) {
     return null;
@@ -43,7 +43,7 @@ export const defaultRenderLogoAndTitle = (
   renderKey:
     | "headerTitleRender"
     | "menuHeaderRender"
-    | undefined = "menuHeaderRender"
+    | undefined = "menuHeaderRender",
 ): CustomRender | null => {
   const { logo, logoStyle, title, layout, isMobile } = props;
   const renderFunction = (props as Record<string, CustomRender>)[
@@ -130,6 +130,14 @@ export const siderMenuProps = {
     default: () => [],
   },
 
+  // mix 布局下用于判断顶栏是否被禁用（headerRender === false），
+  // 实际由父级 BasicLayout 透传。原实现用 Reflect.get(props, "headerRender")
+  // 绕过类型检查，这里显式声明以获得类型安全。
+  headerRender: {
+    type: [Object, Function, Boolean] as PropType<CustomRenderProps>,
+    default: () => undefined,
+  },
+
   // events
   onMenuHeaderClick: PropTypes.func,
   onMenuClick: PropTypes.func,
@@ -146,179 +154,199 @@ export const siderMenuProps = {
 
 export type SiderMenuProps = Partial<ExtractPropTypes<typeof siderMenuProps>>;
 
-const SiderMenu: FunctionalComponent<SiderMenuProps> = (props, { attrs }) => {
-  const {
-    menuHeaderExtraRender = false,
-    menuContentRender = false,
-    menuFooterRender = false,
-    collapsedButtonRender,
-  } = props;
-  const context = useRouteContext();
-  const baseClassName = "ant-pro-sider";
-  const hasSplitMenu = computed(
-    () => props.layout === "mix" && props.splitMenus
-  );
-  const sSideWidth = computed(() =>
-    props.collapsed ? props.collapsedWidth : props.siderWidth
-  );
-  const sSideHeaderTop = computed(() => {
-    if (props.layout === "mix") {
-      // 混合菜单布局去除顶栏
-      if (Reflect.get(props, "headerRender") === false) {
-        return undefined;
+// 重构说明（4.x 内部优化，不改变对外 API）：
+//  - 原实现 SiderMenu 是 FunctionalComponent，每次渲染都会重新创建内部的
+//    computed（hasSplitMenu / sSideWidth / sSideHeaderTop / classNames），
+//    缓存完全失效。改为 defineComponent 后 computed 在 setup 中只创建一次。
+const SiderMenu = defineComponent({
+  name: "SiderMenu",
+  inheritAttrs: false,
+  props: siderMenuProps,
+  setup(props) {
+    const context = useRouteContext();
+    const baseClassName = "ant-pro-sider";
+    const hasSplitMenu = computed(
+      () => props.layout === "mix" && props.splitMenus,
+    );
+    const sSideWidth = computed(() =>
+      props.collapsed ? props.collapsedWidth : props.siderWidth,
+    );
+    const sSideHeaderTop = computed(() => {
+      if (props.layout === "mix") {
+        // 混合菜单布局去除顶栏
+        if (props.headerRender === false) {
+          return undefined;
+        }
+        if (!props.isMobile) {
+          return `${props.headerHeight}px`;
+        }
       }
-      if (!props.isMobile) {
-        return `${props.headerHeight}px`;
+      return undefined;
+    });
+    const classNames = computed(() => {
+      return {
+        [baseClassName]: true,
+        [`${baseClassName}-fixed`]: context.fixSiderbar,
+        [`layout-${props.layout}`]: true,
+        [`theme-${props.theme}`]: true,
+        [`theme-menu-${props.menuTheme}`]: true,
+      };
+    });
+
+    const handleSelect = ($event: string[]) => {
+      if (props.onSelect) {
+        if (hasSplitMenu.value) {
+          props.onSelect([context.selectedKeys[0], ...$event]);
+          return;
+        }
+        props.onSelect($event);
       }
-    }
-    return undefined;
-  });
-  const classNames = computed(() => {
-    return {
-      [baseClassName]: true,
-      [`${baseClassName}-fixed`]: context.fixSiderbar,
-      [`layout-${props.layout}`]: true,
-      [`theme-${props.theme}`]: true,
-      [`theme-menu-${props.menuTheme}`]: true,
     };
-  });
 
-  const handleSelect = ($event: string[]) => {
-    if (props.onSelect) {
-      if (unref(hasSplitMenu)) {
-        props.onSelect([context.selectedKeys[0], ...$event]);
-        return;
+    // 菜单头
+    const menuHeaderRenderDom = computed(() =>
+      defaultRenderLogoAndTitle(props),
+    );
+
+    return () => {
+      const {
+        menuHeaderExtraRender = false,
+        menuContentRender = false,
+        menuFooterRender = false,
+        collapsedButtonRender,
+      } = props;
+
+      // 混合布局拆分菜单
+      if (hasSplitMenu.value && unref(context.flatMenuData).length === 0) {
+        return null;
       }
-      props.onSelect($event);
-    }
-  };
-  // 菜单头
-  const menuHeaderRenderDom = defaultRenderLogoAndTitle(props);
 
-  // 混合布局拆分菜单
-  if (hasSplitMenu.value && unref(context.flatMenuData).length === 0) {
-    return null;
-  }
-
-  // 菜单
-  const baseMenuDom = (
-    <BaseMenu
-      locale={props.locale || context.locale}
-      theme={props.menuTheme}
-      mode="inline"
-      menuData={hasSplitMenu.value ? context.flatMenuData : context.menuData}
-      collapsed={props.collapsed}
-      openKeys={context.openKeys}
-      selectedKeys={context.selectedKeys}
-      menuItemRender={props.menuItemRender}
-      menuSubItemRender={props.menuSubItemRender}
-      iconfontUrl={props.iconfontUrl}
-      onClick={props.onMenuClick}
-      class={`${baseClassName}-content-menu`}
-      {...{
-        "onUpdate:openKeys": ($event: string[]) =>
-          props.onOpenKeys && props.onOpenKeys($event),
-        "onUpdate:selectedKeys": handleSelect,
-      }}
-    />
-  );
-
-  return (
-    <>
-      {context.fixSiderbar && (
-        <div
-          style={{
-            width: `${sSideWidth.value}px`,
-            overflow: "hidden",
-            flex: `0 0 ${sSideWidth.value}px`,
-            maxWidth: `${sSideWidth.value}px`,
-            minWidth: `${sSideWidth.value}px`,
-            transition: `background-color 0.3s, min-width 0.3s, max-width 0.3s cubic-bezier(0.645, 0.045, 0.355, 1)`,
+      // 菜单
+      const baseMenuDom = (
+        <BaseMenu
+          locale={props.locale || context.locale}
+          theme={props.menuTheme}
+          mode="inline"
+          menuData={
+            hasSplitMenu.value ? context.flatMenuData : context.menuData
+          }
+          collapsed={props.collapsed}
+          openKeys={context.openKeys}
+          selectedKeys={context.selectedKeys}
+          menuItemRender={props.menuItemRender}
+          menuSubItemRender={props.menuSubItemRender}
+          iconfontUrl={props.iconfontUrl}
+          onClick={props.onMenuClick}
+          class={`${baseClassName}-content-menu`}
+          {...{
+            "onUpdate:openKeys": ($event: string[]) =>
+              props.onOpenKeys && props.onOpenKeys($event),
+            "onUpdate:selectedKeys": handleSelect,
           }}
         />
-      )}
-      <LayoutSider
-        collapsible
-        trigger={null}
-        collapsed={props.collapsed}
-        breakpoint={props.breakpoint || undefined}
-        onCollapse={(collapse: boolean) => {
-          if (props.isMobile) return;
-          props.onCollapse?.(collapse);
-        }}
-        collapsedWidth={props.collapsedWidth || 48}
-        style={{
-          overflow: "hidden",
-          paddingTop: sSideHeaderTop.value,
-        }}
-        width={sSideWidth.value}
-        theme={props.menuTheme}
-        class={classNames.value}
-      >
-        {menuHeaderRenderDom && (
-          <div
-            class={`${baseClassName}-header`}
-            onClick={
-              props.layout !== "mix" ? props.onMenuHeaderClick : undefined
-            }
-          >
-            {menuHeaderRenderDom}
-          </div>
-        )}
+      );
 
-        {menuHeaderExtraRender &&
-          typeof menuHeaderExtraRender === "function" && (
+      const headerDom = menuHeaderRenderDom.value;
+
+      return (
+        <>
+          {context.fixSiderbar && (
             <div
-              class={{
-                [`${baseClassName}-header-extra`]: true,
-                [`${baseClassName}-header-extra-no-header`]:
-                  !menuHeaderRenderDom,
+              style={{
+                width: `${sSideWidth.value}px`,
+                overflow: "hidden",
+                flex: `0 0 ${sSideWidth.value}px`,
+                maxWidth: `${sSideWidth.value}px`,
+                minWidth: `${sSideWidth.value}px`,
+                transition: `background-color 0.3s, min-width 0.3s, max-width 0.3s cubic-bezier(0.645, 0.045, 0.355, 1)`,
               }}
-            >
-              {menuHeaderExtraRender(props)}
-            </div>
+            />
           )}
-
-        <div class={`${baseClassName}-content`}>
-          {(menuContentRender &&
-            menuContentRender(props, unref(baseMenuDom))) ||
-            unref(baseMenuDom)}
-        </div>
-
-        {(collapsedButtonRender && collapsedButtonRender(props.collapsed)) || (
-          <div class={`${baseClassName}-collapsed`}>
-            <Menu
-              class={`${baseClassName}-collapsed-menu`}
-              inlineIndent={16}
-              theme={props.menuTheme}
-              selectedKeys={[]}
-              openKeys={[]}
-              mode="inline"
-              onClick={() => {
-                if (props.onCollapse) {
-                  props.onCollapse(!props.collapsed);
+          <LayoutSider
+            collapsible
+            trigger={null}
+            collapsed={props.collapsed}
+            breakpoint={props.breakpoint || undefined}
+            onCollapse={(collapse: boolean) => {
+              if (props.isMobile) return;
+              props.onCollapse?.(collapse);
+            }}
+            collapsedWidth={props.collapsedWidth || 48}
+            style={{
+              overflow: "hidden",
+              paddingTop: sSideHeaderTop.value,
+            }}
+            width={sSideWidth.value}
+            theme={props.menuTheme}
+            class={classNames.value}
+          >
+            {headerDom && (
+              <div
+                class={`${baseClassName}-header`}
+                onClick={
+                  props.layout !== "mix" ? props.onMenuHeaderClick : undefined
                 }
-              }}
-            >
-              <MenuItem key={"collapsed-button"} title={false}>
-                {props.collapsed ? (
-                  <MenuUnfoldOutlined />
-                ) : (
-                  <MenuFoldOutlined />
-                )}
-              </MenuItem>
-            </Menu>
-          </div>
-        )}
+              >
+                {headerDom}
+              </div>
+            )}
 
-        {menuFooterRender && (
-          <div class={`${baseClassName}-footer`}>{menuFooterRender(props)}</div>
-        )}
-      </LayoutSider>
-    </>
-  );
-};
+            {menuHeaderExtraRender &&
+              typeof menuHeaderExtraRender === "function" && (
+                <div
+                  class={{
+                    [`${baseClassName}-header-extra`]: true,
+                    [`${baseClassName}-header-extra-no-header`]: !headerDom,
+                  }}
+                >
+                  {menuHeaderExtraRender(props)}
+                </div>
+              )}
+
+            <div class={`${baseClassName}-content`}>
+              {(menuContentRender && menuContentRender(props, baseMenuDom)) ||
+                baseMenuDom}
+            </div>
+
+            {(collapsedButtonRender &&
+              collapsedButtonRender(props.collapsed)) || (
+              <div class={`${baseClassName}-collapsed`}>
+                <Menu
+                  class={`${baseClassName}-collapsed-menu`}
+                  inlineIndent={16}
+                  theme={props.menuTheme}
+                  selectedKeys={[]}
+                  openKeys={[]}
+                  mode="inline"
+                  onClick={() => {
+                    if (props.onCollapse) {
+                      props.onCollapse(!props.collapsed);
+                    }
+                  }}
+                >
+                  <MenuItem key={"collapsed-button"} title={false}>
+                    {props.collapsed ? (
+                      <MenuUnfoldOutlined />
+                    ) : (
+                      <MenuFoldOutlined />
+                    )}
+                  </MenuItem>
+                </Menu>
+              </div>
+            )}
+
+            {menuFooterRender && (
+              <div class={`${baseClassName}-footer`}>
+                {menuFooterRender(props)}
+              </div>
+            )}
+          </LayoutSider>
+        </>
+      );
+    };
+  },
+});
+
 SiderMenu.displayName = "SiderMenu";
-SiderMenu.inheritAttrs = false;
 
 export default SiderMenu;

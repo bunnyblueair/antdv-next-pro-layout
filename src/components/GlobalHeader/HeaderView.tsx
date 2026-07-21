@@ -30,7 +30,9 @@ export const headerViewProps = {
     default: () => undefined,
   },
   hasSiderMenu: PropTypes.looseBool,
-  siderWidth: PropTypes.number.def(208),
+  siderWidth: PropTypes.number.def(200),
+  // collapsedWidth 用于在折叠态正确计算 Header 宽度，原实现硬编码 48 在用户自定义时计算错误
+  collapsedWidth: PropTypes.number.def(48),
 };
 
 export type HeaderViewProps = Partial<
@@ -47,7 +49,7 @@ const HeaderView = defineComponent({
     const context = useRouteContext();
     const baseClassName = "ant-pro-header";
     const needFixedHeader = computed(
-      () => fixedHeader.value || context.fixedHeader || layout.value === "mix"
+      () => fixedHeader.value || context.fixedHeader || layout.value === "mix",
     );
     const isMix = computed(() => layout.value === "mix");
     const isTop = computed(() => layout.value === "top");
@@ -56,18 +58,33 @@ const HeaderView = defineComponent({
         needFixedHeader.value &&
         hasSiderMenu.value &&
         !isTop.value &&
-        !isMobile.value
+        !isMobile.value,
     );
     // cache menu
     const clearMenuData = computed(
       () =>
         (context.menuData &&
           clearMenuItem(context.menuData as RouteRecordRaw[])) ||
-        []
+        [],
     );
 
+    // 性能优化：按优先级提前 return，避免每次重渲染都先创建 GlobalHeader/TopNavHeader
+    // 的 VNode 再被后续分支覆盖（原实现在 headerRender 自定义场景下会白创建两个子树）。
     const renderContent = () => {
-      let defaultDom = (
+      if (props.headerRender) {
+        return props.headerRender(props);
+      }
+      if (isTop.value && !isMobile.value) {
+        return (
+          <TopNavHeader
+            {...props}
+            mode="horizontal"
+            onCollapse={props.onCollapse}
+            menuData={clearMenuData.value}
+          />
+        );
+      }
+      return (
         <GlobalHeader
           {...props}
           onCollapse={props.onCollapse}
@@ -81,20 +98,6 @@ const HeaderView = defineComponent({
             : null}
         </GlobalHeader>
       );
-      if (isTop.value && !isMobile.value) {
-        defaultDom = (
-          <TopNavHeader
-            {...props}
-            mode="horizontal"
-            onCollapse={props.onCollapse}
-            menuData={clearMenuData.value}
-          />
-        );
-      }
-      if (props.headerRender) {
-        return props.headerRender(props);
-      }
-      return defaultDom;
     };
 
     /**
@@ -102,7 +105,7 @@ const HeaderView = defineComponent({
      */
     const width = computed(() => {
       return layout.value !== "mix" && needSettingWidth.value
-        ? `calc(100% - ${props.collapsed ? 48 : props.siderWidth}px)`
+        ? `calc(100% - ${props.collapsed ? props.collapsedWidth : props.siderWidth}px)`
         : "100%";
     });
     const right = computed(() => (needFixedHeader.value ? 0 : undefined));

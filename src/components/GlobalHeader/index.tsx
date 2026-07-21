@@ -1,4 +1,9 @@
-import type { PropType, FunctionalComponent, ExtractPropTypes } from "vue";
+import {
+  computed,
+  defineComponent,
+  type PropType,
+  type ExtractPropTypes,
+} from "vue";
 import type { RouteRecordRaw } from "vue-router";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons-vue";
 import PropTypes from "ant-design-vue/es/_util/vue-types";
@@ -58,66 +63,77 @@ export type GlobalHeaderProps = Partial<
   ExtractPropTypes<typeof globalHeaderProps>
 >;
 
-const GlobalHeader: FunctionalComponent<GlobalHeaderProps> = (
-  props,
-  { slots, emit }
-) => {
-  const {
-    isMobile,
-    headerContentRightRender,
-    onMenuHeaderClick,
-    layout,
-    splitMenus,
-    menuData,
-  } = props;
-  const baseClassName = "ant-pro-global-header";
+// 重构说明（4.x 内部优化，不改变对外 API）：
+//  - 原实现是 FunctionalComponent，每次重渲染整个函数体重新执行，包括
+//    mix 模式下的菜单数据 map + clearMenuItem（递归遍历整棵菜单树）。
+//  - 改为 defineComponent 后，mix 模式的菜单数据计算放到 computed，
+//    只有 menuData/layout/isMobile/splitMenus 变化时才重算。
+const GlobalHeader = defineComponent({
+  name: "GlobalHeader",
+  inheritAttrs: false,
+  props: globalHeaderProps,
+  emits: ["menuHeaderClick", "collapse", "openKeys", "select"],
+  setup(props, { slots, emit }) {
+    const baseClassName = "ant-pro-global-header";
 
-  if (layout === "mix" && !isMobile && splitMenus) {
-    const noChildrenMenuData = (menuData || []).map((item: any) => ({
-      ...item,
-      children: undefined,
-    })) as RouteRecordRaw[];
-    const clearMenuData = clearMenuItem(noChildrenMenuData);
-    return (
-      <TopNavHeader
-        {...props}
-        mode="horizontal"
-        splitMenus={false}
-        menuData={clearMenuData}
-      />
-    );
-  }
+    // mix 布局 + splitMenus 时，把菜单 children 抹平后交给 TopNavHeader。
+    // 用 computed 缓存，避免每次重渲染都重新 map + clearMenuItem。
+    const topNavMenuData = computed<RouteRecordRaw[] | null>(() => {
+      if (props.layout !== "mix" || props.isMobile || !props.splitMenus) {
+        return null;
+      }
+      const noChildrenMenuData = (props.menuData || []).map((item: any) => ({
+        ...item,
+        children: undefined,
+      })) as RouteRecordRaw[];
+      return clearMenuItem(noChildrenMenuData);
+    });
 
-  const onCollapse = () => {
-    emit("collapse", !props.collapsed);
-  };
+    const onCollapse = () => {
+      emit("collapse", !props.collapsed);
+    };
 
-  return (
-    <div class={baseClassName}>
-      {isMobile && (
-        <span onClick={onCollapse}>
-          {props.collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-        </span>
-      )}
-      {layout === "mix" && !isMobile && (
-        <>
-          <div class={`${baseClassName}-logo`} onClick={onMenuHeaderClick}>
-            {defaultRenderLogoAndTitle(
-              { ...props, collapsed: false },
-              "headerTitleRender"
-            )}
-          </div>
-        </>
-      )}
-      <div class={`${baseClassName}-flex`}>{slots.default?.()}</div>
-      {headerContentRightRender &&
-      typeof headerContentRightRender === "function"
-        ? headerContentRightRender(props)
-        : headerContentRightRender}
-    </div>
-  );
-};
-GlobalHeader.inheritAttrs = false;
-GlobalHeader.emits = ["menuHeaderClick", "collapse", "openKeys", "select"];
+    return () => {
+      const { isMobile, headerContentRightRender, onMenuHeaderClick, layout } =
+        props;
+
+      if (topNavMenuData.value) {
+        return (
+          <TopNavHeader
+            {...props}
+            mode="horizontal"
+            splitMenus={false}
+            menuData={topNavMenuData.value}
+          />
+        );
+      }
+
+      return (
+        <div class={baseClassName}>
+          {isMobile && (
+            <span onClick={onCollapse}>
+              {props.collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            </span>
+          )}
+          {layout === "mix" && !isMobile && (
+            <>
+              <div class={`${baseClassName}-logo`} onClick={onMenuHeaderClick}>
+                {defaultRenderLogoAndTitle(
+                  { ...props, collapsed: false },
+                  "headerTitleRender",
+                )}
+              </div>
+            </>
+          )}
+          <div class={`${baseClassName}-flex`}>{slots.default?.()}</div>
+          {headerContentRightRender &&
+          typeof headerContentRightRender === "function"
+            ? headerContentRightRender(props)
+            : headerContentRightRender}
+        </div>
+      );
+    };
+  },
+});
 
 export default GlobalHeader;

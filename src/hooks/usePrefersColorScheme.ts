@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { onScopeDispose, ref } from "vue";
 
 /**媒体主题颜色模式枚举对象 */
 export const PrefersColorSchemeEnum = {
@@ -9,42 +9,49 @@ export const PrefersColorSchemeEnum = {
 export type PrefersColorSchemeKey = keyof typeof PrefersColorSchemeEnum;
 
 /**媒体主题颜色模式偏好 */
-export const getPrefersColorScheme = () => {
-  let screen: PrefersColorSchemeKey = "light";
+export const getPrefersColorScheme = (): PrefersColorSchemeKey => {
   // support ssr
   if (typeof window === "undefined") {
-    return screen;
+    return "light";
   }
   const mediaQueryKey = (
     Object.keys(PrefersColorSchemeEnum) as PrefersColorSchemeKey[]
-  ).find((key) => {
-    const matchMedia = PrefersColorSchemeEnum[key];
-    if (window.matchMedia(matchMedia).matches) {
-      return true;
-    }
-    return false;
-  });
-  if (!mediaQueryKey) {
-    return screen;
-  }
-  return mediaQueryKey;
+  ).find((key) => window.matchMedia(PrefersColorSchemeEnum[key]).matches);
+  return mediaQueryKey ?? "light";
 };
 
-/**媒体主题颜色模式偏好 ref响应监听 */
+/**
+ * 媒体主题颜色模式偏好 ref 响应监听
+ *
+ * 监听器在所属 effect scope 销毁时自动清理（含组件卸载）。
+ */
 export const usePrefersColorScheme = () => {
-  const colorScheme = ref<string>(getPrefersColorScheme());
+  const colorScheme = ref<PrefersColorSchemeKey>(getPrefersColorScheme());
 
-  Object.keys(PrefersColorSchemeEnum).forEach((key) => {
-    const matchMedia = PrefersColorSchemeEnum[key as PrefersColorSchemeKey];
-    const query = window.matchMedia(matchMedia);
-    if (query.matches) {
-      colorScheme.value = key;
-    }
-    query.onchange = (e) => {
-      if (e.matches) {
+  // support ssr
+  if (typeof window === "undefined") {
+    return colorScheme;
+  }
+
+  const cleaners: Array<() => void> = [];
+  (Object.keys(PrefersColorSchemeEnum) as PrefersColorSchemeKey[]).forEach(
+    (key) => {
+      const query = window.matchMedia(PrefersColorSchemeEnum[key]);
+      const handler = (e: MediaQueryListEvent) => {
+        if (e.matches) {
+          colorScheme.value = key;
+        }
+      };
+      if (query.matches) {
         colorScheme.value = key;
       }
-    };
+      query.addEventListener("change", handler);
+      cleaners.push(() => query.removeEventListener("change", handler));
+    },
+  );
+
+  onScopeDispose(() => {
+    cleaners.forEach((clean) => clean());
   });
 
   return colorScheme;
@@ -81,7 +88,7 @@ export const usePrefersColorScheme = () => {
  */
 export function viewTransitionTheme(
   listener: (isDark: boolean) => void,
-  e?: { clientX: number; clientY: number }
+  e?: { clientX: number; clientY: number },
 ) {
   const root = document.documentElement;
   /**主题data-theme 明light 暗dark */
@@ -100,7 +107,7 @@ export function viewTransitionTheme(
   // 获取到最远角的距离
   const endRadius = Math.hypot(
     Math.max(x, innerWidth - x),
-    Math.max(y, innerHeight - y)
+    Math.max(y, innerHeight - y),
   );
 
   // startViewTransition 调用的时候 会获取当前页面的状态 ::view-transition-old(root)
@@ -127,7 +134,7 @@ export function viewTransitionTheme(
         pseudoElement: _isDark // 运用于伪元素的过渡
           ? "::view-transition-old(root)"
           : "::view-transition-new(root)",
-      }
+      },
     );
   });
 }

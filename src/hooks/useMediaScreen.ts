@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { onScopeDispose, ref } from "vue";
 
 /**屏幕尺寸媒体查询枚举对象 */
 export const MediaQueryEnum = {
@@ -47,42 +47,47 @@ export type MediaQueryKey = keyof typeof MediaQueryEnum;
  * `Rendered more hooks than during the previous render.`
  * So should use Array.forEach
  */
-export const getMediaScreen = () => {
-  let screen: MediaQueryKey = "md";
+export const getMediaScreen = (): MediaQueryKey => {
   // support ssr
   if (typeof window === "undefined") {
-    return screen;
+    return "md";
   }
   const mediaQueryKey = (Object.keys(MediaQueryEnum) as MediaQueryKey[]).find(
-    (key) => {
-      const { matchMedia } = MediaQueryEnum[key];
-      if (window.matchMedia(matchMedia).matches) {
-        return true;
-      }
-      return false;
-    }
+    (key) => window.matchMedia(MediaQueryEnum[key].matchMedia).matches,
   );
-  if (!mediaQueryKey) {
-    return screen;
-  }
-  return mediaQueryKey;
+  return mediaQueryKey ?? "md";
 };
 
-/**屏幕尺寸 ref响应监听 */
+/**
+ * 屏幕尺寸 ref 响应监听
+ *
+ * 监听器在所属 effect scope 销毁时自动清理（含组件卸载）。
+ */
 export const useMediaScreen = () => {
-  const colSpan = ref<string>(getMediaScreen());
+  const colSpan = ref<MediaQueryKey>(getMediaScreen());
 
-  Object.keys(MediaQueryEnum).forEach((key) => {
-    const { matchMedia } = MediaQueryEnum[key as MediaQueryKey];
-    const query = window.matchMedia(matchMedia);
-    if (query.matches) {
-      colSpan.value = key;
-    }
-    query.onchange = (e) => {
+  // support ssr
+  if (typeof window === "undefined") {
+    return colSpan;
+  }
+
+  const cleaners: Array<() => void> = [];
+  (Object.keys(MediaQueryEnum) as MediaQueryKey[]).forEach((key) => {
+    const query = window.matchMedia(MediaQueryEnum[key].matchMedia);
+    const handler = (e: MediaQueryListEvent) => {
       if (e.matches) {
         colSpan.value = key;
       }
     };
+    if (query.matches) {
+      colSpan.value = key;
+    }
+    query.addEventListener("change", handler);
+    cleaners.push(() => query.removeEventListener("change", handler));
+  });
+
+  onScopeDispose(() => {
+    cleaners.forEach((clean) => clean());
   });
 
   return colSpan;

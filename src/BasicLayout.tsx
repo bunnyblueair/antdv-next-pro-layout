@@ -1,14 +1,13 @@
 import {
   computed,
   reactive,
-  unref,
   defineComponent,
   toRefs,
   provide,
+  watchEffect,
   type CSSProperties,
   type PropType,
   type ExtractPropTypes,
-  watchEffect,
 } from "vue";
 
 import { Layout, LayoutContent } from "ant-design-vue";
@@ -121,17 +120,15 @@ const ProLayout = defineComponent({
   setup(props, { emit, attrs, slots }) {
     const isTop = computed(() => props.layout === "top");
     const hasSide = computed(
-      () => props.layout === "mix" || props.layout === "side" || false
+      () => props.layout === "mix" || props.layout === "side" || false,
     );
     const hasSplitMenu = computed(
-      () => props.layout === "mix" && props.splitMenus
+      () => props.layout === "mix" && props.splitMenus,
     );
-    const hasFlatMenu = computed(() => {
-      return hasSide.value && hasSplitMenu.value;
-    });
+    const hasFlatMenu = computed(() => hasSide.value && hasSplitMenu.value);
 
     const siderWidth = computed(() =>
-      props.collapsed ? props.collapsedWidth : props.siderWidth
+      props.collapsed ? props.collapsedWidth : props.siderWidth,
     );
 
     // if on event and @event
@@ -156,7 +153,7 @@ const ProLayout = defineComponent({
 
     const screenSize = useMediaScreen();
     const isMobile = computed(
-      () => screenSize.value === "sm" || screenSize.value === "xs"
+      () => screenSize.value === "sm" || screenSize.value === "xs",
     );
     const baseClassName = "ant-pro-basicLayout";
     // gen className
@@ -188,13 +185,61 @@ const ProLayout = defineComponent({
       }
     });
 
-    const headerRender = (
+    // ============================================================
+    // slot/prop 提取
+    //
+    // 重构说明（4.x 内部优化，不改变对外 API）：
+    //  - 原实现把这些 getSlot 调用以及 headerDom / contentClassName /
+    //    contentWidth / tabDom / footerDom 等 computed 都写在返回的渲染
+    //    函数里，导致每次重渲染都新建 computed 实例，缓存完全失效，且
+    //    渲染函数内执行副作用（写入 routeContext.hasHeader）。
+    //  - 现统一上提到 setup 顶层，computed 只创建一次，副作用用
+    //    watchEffect 隔离，渲染函数保持纯函数。
+    // ============================================================
+    const collapsedButtonRender = computed(() =>
+      getSlot<CollapsedButtonRender>(slots, props, "collapsedButtonRender"),
+    );
+    const headerContentRender = computed(() =>
+      getSlot<HeaderContentRender>(slots, props, "headerContentRender"),
+    );
+    const headerContentRightRender = computed(() =>
+      getSlot<CustomRenderProps>(slots, props, "headerContentRightRender"),
+    );
+    const customHeaderRender = computed(() =>
+      getSlot<CustomRenderProps>(slots, props, "headerRender"),
+    );
+    const footerRenderSlot = computed(() =>
+      getSlot<CustomRenderProps>(slots, props, "footerRender"),
+    );
+    const tabRenderSlot = computed(() =>
+      getSlot<CustomRenderProps>(slots, props, "tabRender"),
+    );
+    const menuHeaderRender = computed(() =>
+      getSlot<CustomRenderProps>(slots, props, "menuHeaderRender"),
+    );
+    const menuHeaderExtraRender = computed(() =>
+      getSlot<CustomRenderProps>(slots, props, "menuHeaderExtraRender"),
+    );
+    const menuContentRender = computed(() =>
+      getSlot<MenuContentRender>(slots, props, "menuContentRender"),
+    );
+    const menuFooterRender = computed(() =>
+      getSlot<CustomRenderProps>(slots, props, "menuFooterRender"),
+    );
+    const menuItemRender = computed(() =>
+      getSlot<MenuRender>(slots, props, "menuItemRender"),
+    );
+    const menuSubItemRender = computed(() =>
+      getSlot<MenuRender>(slots, props, "menuSubItemRender"),
+    );
+
+    const renderHeader = (
       p: BasicLayoutProps & {
         hasSiderMenu: boolean;
         headerRender: CustomRenderProps;
         headerContentRightRender: CustomRenderProps;
       },
-      matchMenuKeys?: string[]
+      matchMenuKeys?: string[],
     ): CustomRender | null => {
       if (p.headerRender === false || p.pure) {
         return null;
@@ -207,7 +252,7 @@ const ProLayout = defineComponent({
       itemRender: getSlot<BreadcrumbProps["itemRender"]>(
         slots,
         props,
-        "breadcrumbRender"
+        "breadcrumbRender",
       ),
     }));
 
@@ -216,7 +261,57 @@ const ProLayout = defineComponent({
         (hasFlatMenu.value &&
           props.selectedKeys &&
           getMenuFirstChildren(props.menuData, props.selectedKeys[0])) ||
-        []
+        [],
+    );
+
+    // 性能优化：原实现用 `{ ...props }` 展开整个 props 对象，会让 computed 读取所有
+    // props 字段（包括 loading / contentStyle / pure / breadcrumb / isChildrenLayout
+    // 等与 header 渲染无关的字段），任何 prop 变化都会触发 headerDom 重算。
+    // 这里改为显式列出 HeaderView 真正需要的字段，收窄 computed 依赖范围。
+    const headerDom = computed(() =>
+      renderHeader(
+        {
+          // 基础设置
+          theme: props.theme,
+          menuTheme: props.menuTheme,
+          layout: props.layout,
+          headerHeight: props.headerHeight,
+          fixedHeader: props.fixedHeader,
+          title: props.title,
+          iconfontUrl: props.iconfontUrl,
+          splitMenus: props.splitMenus,
+          locale: props.locale,
+          // 状态
+          collapsed: props.collapsed,
+          isMobile: isMobile.value,
+          // 宽度
+          siderWidth: props.siderWidth,
+          collapsedWidth: props.collapsedWidth,
+          // 菜单数据
+          menuData: props.menuData,
+          logo: props.logo,
+          logoStyle: props.logoStyle,
+          matchMenuKeys: props.matchMenuKeys,
+          // 渲染函数 / slot
+          menuItemRender: menuItemRender.value,
+          menuSubItemRender: menuSubItemRender.value,
+          headerContentRightRender: headerContentRightRender.value,
+          collapsedButtonRender: collapsedButtonRender.value,
+          headerTitleRender: menuHeaderRender.value,
+          menuHeaderExtraRender: menuHeaderExtraRender.value,
+          menuContentRender: menuContentRender.value,
+          headerContentRender: headerContentRender.value,
+          headerRender: customHeaderRender.value,
+          // HeaderView 自身判断
+          hasSiderMenu: !isTop.value,
+          // 事件
+          onCollapse,
+          onOpenKeys,
+          onSelect,
+          onMenuHeaderClick,
+        },
+        props.matchMenuKeys,
+      ),
     );
 
     const routeContext = reactive<RouteContextProps>({
@@ -237,13 +332,56 @@ const ProLayout = defineComponent({
       breadcrumb,
       flatMenuData,
       hasSide,
-      hasHeader: true,
+      hasHeader: computed(() => !!headerDom.value),
       flatMenu: hasFlatMenu,
     });
     provide(routeContextInjectKey, routeContext);
 
-    // 根元素设置明暗主题模式
-    document.documentElement.setAttribute("data-theme", props.theme);
+    // 根元素设置明暗主题模式。
+    // 修复：原代码在 setup 顶层直接执行副作用，未响应 theme 变化且 SSR 不安全。
+    if (typeof document !== "undefined") {
+      watchEffect(() => {
+        document.documentElement.setAttribute("data-theme", props.theme);
+      });
+    }
+
+    const contentClassName = computed(() => {
+      return {
+        [`${baseClassName}-content`]: true,
+        [`${baseClassName}-has-header`]: headerDom.value,
+        [`${baseClassName}-children-layout`]: props.isChildrenLayout,
+      };
+    });
+
+    const contentWidth = computed(() => {
+      // 计算侧边栏的宽度，不然导致左边的样式会出问题
+      let width = "100%";
+      if (
+        props.layout === "mix" &&
+        hasSplitMenu.value &&
+        flatMenuData.value.length === 0
+      ) {
+        width = "100%";
+      } else if (!isTop.value && !isMobile.value) {
+        width = `calc(100% - ${siderWidth.value}px)`;
+      }
+      return width;
+    });
+
+    const tabDom = computed(() => {
+      if (props.tabRender === false || !tabRenderSlot.value) {
+        return null;
+      }
+      return tabRenderSlot.value({ width: contentWidth.value, ...props });
+    });
+
+    const footerDom = computed(() => {
+      if (props.footerRender === false || !footerRenderSlot.value) {
+        return null;
+      }
+      return footerRenderSlot.value({ width: contentWidth.value, ...props });
+    });
+
     return () => {
       const {
         pure,
@@ -253,129 +391,6 @@ const ProLayout = defineComponent({
         onMenuClick: propsOnMenuClick,
         ...restProps
       } = props;
-
-      const collapsedButtonRender = getSlot<CollapsedButtonRender>(
-        slots,
-        props,
-        "collapsedButtonRender"
-      );
-      const headerContentRender = getSlot<HeaderContentRender>(
-        slots,
-        props,
-        "headerContentRender"
-      );
-      const headerContentRightRender = getSlot<CustomRenderProps>(
-        slots,
-        props,
-        "headerContentRightRender"
-      );
-      const customHeaderRender = getSlot<CustomRenderProps>(
-        slots,
-        props,
-        "headerRender"
-      );
-      const footerRender = getSlot<CustomRenderProps>(
-        slots,
-        props,
-        "footerRender"
-      );
-      const tabRender = getSlot<CustomRenderProps>(slots, props, "tabRender");
-
-      // menu
-      const menuHeaderRender = getSlot<CustomRenderProps>(
-        slots,
-        props,
-        "menuHeaderRender"
-      );
-      const menuHeaderExtraRender = getSlot<CustomRenderProps>(
-        slots,
-        props,
-        "menuHeaderExtraRender"
-      );
-      const menuContentRender = getSlot<MenuContentRender>(
-        slots,
-        props,
-        "menuContentRender"
-      );
-      const menuFooterRender = getSlot<CustomRenderProps>(
-        slots,
-        props,
-        "menuFooterRender"
-      );
-      const menuItemRender = getSlot<MenuRender>(
-        slots,
-        props,
-        "menuItemRender"
-      );
-      const menuSubItemRender = getSlot<MenuRender>(
-        slots,
-        props,
-        "menuSubItemRender"
-      );
-
-      const headerDom = computed(() =>
-        headerRender(
-          {
-            ...props,
-            menuItemRender,
-            menuSubItemRender,
-            hasSiderMenu: !isTop.value,
-            menuData: props.menuData,
-            isMobile: unref(isMobile),
-            onCollapse,
-            onOpenKeys,
-            onSelect,
-            onMenuHeaderClick,
-            headerContentRightRender,
-            collapsedButtonRender,
-            headerTitleRender: menuHeaderRender,
-            menuHeaderExtraRender,
-            menuContentRender,
-            headerContentRender,
-            headerRender: customHeaderRender,
-          },
-          props.matchMenuKeys
-        )
-      );
-
-      routeContext.hasHeader = !!headerDom.value;
-
-      const contentClassName = computed(() => {
-        return {
-          [`${baseClassName}-content`]: true,
-          [`${baseClassName}-has-header`]: headerDom,
-          [`${baseClassName}-children-layout`]: props.isChildrenLayout,
-        };
-      });
-
-      const contentWidth = computed(() => {
-        // 计算侧边栏的宽度，不然导致左边的样式会出问题
-        let width = "100%";
-        if (
-          props.layout === "mix" &&
-          hasSplitMenu.value &&
-          flatMenuData.value.length === 0
-        ) {
-          width = "100%";
-        } else if (!isTop.value && !isMobile.value) {
-          width = `calc(100% - ${siderWidth.value}px)`;
-        }
-        return width;
-      });
-
-      const tabDom = computed(() => {
-        if (props.tabRender === false || !tabRender) {
-          return null;
-        }
-        return tabRender({ width: contentWidth.value, ...props });
-      });
-
-      const footerDom = computed(() => {
-        if (props.footerRender === false || !footerRender) {
-          return null;
-        }
-        return footerRender({ width: contentWidth.value, ...props });
-      });
 
       return (
         <>
@@ -393,13 +408,13 @@ const ProLayout = defineComponent({
                   <SiderMenuWrapper
                     {...restProps}
                     isMobile={isMobile.value}
-                    menuHeaderRender={menuHeaderRender}
-                    menuHeaderExtraRender={menuHeaderExtraRender}
-                    menuContentRender={menuContentRender}
-                    menuFooterRender={menuFooterRender}
-                    menuItemRender={menuItemRender}
-                    menuSubItemRender={menuSubItemRender}
-                    collapsedButtonRender={collapsedButtonRender}
+                    menuHeaderRender={menuHeaderRender.value}
+                    menuHeaderExtraRender={menuHeaderExtraRender.value}
+                    menuContentRender={menuContentRender.value}
+                    menuFooterRender={menuFooterRender.value}
+                    menuItemRender={menuItemRender.value}
+                    menuSubItemRender={menuSubItemRender.value}
+                    collapsedButtonRender={collapsedButtonRender.value}
                     onCollapse={onCollapse}
                     onSelect={onSelect}
                     onOpenKeys={onOpenKeys}

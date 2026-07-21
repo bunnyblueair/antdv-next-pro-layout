@@ -32,7 +32,7 @@ export interface PureSettings {
 
 export type ProSettings = PureSettings & RenderSetting;
 
-export const defaultSettings = {
+export const defaultSettings: PureSettings = {
   theme: "light",
   menuTheme: "light",
   layout: "side",

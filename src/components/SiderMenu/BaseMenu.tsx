@@ -2,10 +2,12 @@ import {
   defineComponent,
   resolveComponent,
   computed,
-  watchEffect,
+  watch,
   withCtx,
   getCurrentInstance,
   isVNode,
+  createVNode,
+  shallowRef,
   type ComputedRef,
   type VNodeChild,
   type VNode,
@@ -38,14 +40,20 @@ import { isImg, isUrl } from "../../utils";
 import "./BaseMenu.css";
 
 export function useRootSubmenuKeys(
-  menus: MenuDataItem[]
+  menus: MenuDataItem[],
 ): ComputedRef<string[]> {
   return computed(() => menus.map((it) => it.path));
 }
 
-let IconFont = createFromIconfontCN({
-  scriptUrl: defaultSettings.iconfontUrl,
-});
+/**
+ * IconFont 组件实例，使用 shallowRef 包裹以支持 `iconfontUrl` 变更后触发重渲染。
+ *
+ * 早期实现使用模块级 `let IconFont`，watchEffect 重新赋值后已渲染的 LazyIcon 闭包
+ * 仍指向旧实例，导致切换 iconfontUrl 不会真正刷新图标。这里改为响应式引用解决该问题。
+ */
+const IconFontRef = shallowRef(
+  createFromIconfontCN({ scriptUrl: defaultSettings.iconfontUrl }),
+);
 
 const LazyIcon: FunctionalComponent<{
   icon: VNodeChild | string;
@@ -60,14 +68,25 @@ const LazyIcon: FunctionalComponent<{
       );
     }
     if (icon.startsWith("icon-")) {
+      const IconFont = IconFontRef.value;
       return <IconFont type={icon} />;
     }
   }
   if (isVNode(icon)) {
     return icon;
   }
-  const DynamicIcon = resolveComponent(icon as string) as any;
-  return (typeof LazyIcon === "function" && <DynamicIcon />) || null;
+  // 兜底：把字符串当作已注册的全局组件名解析。
+  // 修复：原实现写成 `typeof LazyIcon === "function" && <DynamicIcon/>`，
+  // LazyIcon 自身就是函数组件，该条件永远为真，等价于无条件渲染
+  // <DynamicIcon/>；而 resolveComponent 找不到时返回的是组件名字符串，
+  // 直接当组件渲染会触发 Vue 警告。改为先校验类型再渲染。
+  const DynamicIcon = resolveComponent(icon as string);
+  if (typeof DynamicIcon === "string") {
+    return null;
+  }
+  // createVNode 接受 ConcreteComponent 类型；直接用 <DynamicIcon /> 会因
+  // resolveComponent 的返回类型联合体（含 {}）触发 TSX 类型错误。
+  return createVNode(DynamicIcon);
 };
 
 class MenuUtil {
@@ -99,7 +118,7 @@ class MenuUtil {
       if (this.props.menuSubItemRender) {
         const menuSubItemRender = withCtx(
           this.props.menuSubItemRender,
-          this.ctx
+          this.ctx,
         );
         return menuSubItemRender(item) as VNode;
       }
@@ -176,13 +195,6 @@ class MenuUtil {
 
     return titleDom;
   };
-
-  conversionPath = (path: string) => {
-    if (path && path.indexOf("http") === 0) {
-      return path;
-    }
-    return `/${path || ""}`.replace(/\/+/g, "/");
-  };
 }
 
 export type MenuOnSelect = {
@@ -252,14 +264,17 @@ const BaseMenu = defineComponent({
   setup(props, { emit }) {
     const ctx = getCurrentInstance();
     const menuUtil = new MenuUtil(props, ctx);
-    // update iconfontUrl
-    watchEffect(() => {
-      if (props.iconfontUrl) {
-        IconFont = createFromIconfontCN({
-          scriptUrl: props.iconfontUrl,
-        });
-      }
-    });
+
+    // iconfontUrl 变更时重建 IconFont 实例；shallowRef 赋值会触发 LazyIcon 重渲染。
+    watch(
+      () => props.iconfontUrl,
+      (url) => {
+        if (url) {
+          IconFontRef.value = createFromIconfontCN({ scriptUrl: url });
+        }
+      },
+      { immediate: true },
+    );
 
     const handleOpenChange = (openKeys: Key[]): void => {
       emit("update:openKeys", openKeys);
@@ -275,6 +290,11 @@ const BaseMenu = defineComponent({
       emit("click", args);
     };
 
+    // 性能优化：把菜单 VNode 树的计算包成 computed，依赖（menuData /
+    // menuItemRender / menuSubItemRender / locale）不变时直接复用上次结果，
+    // 避免每次重渲染都遍历整棵 menuData 重建 VNode。大型菜单收益明显。
+    const menuItems = computed(() => menuUtil.getNavMenuItems(props.menuData));
+
     return () => {
       return (
         <Menu
@@ -288,7 +308,7 @@ const BaseMenu = defineComponent({
           onSelect={handleSelect}
           onClick={handleClick}
         >
-          {menuUtil.getNavMenuItems(props.menuData)}
+          {menuItems.value}
         </Menu>
       );
     };

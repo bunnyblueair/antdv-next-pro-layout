@@ -18,7 +18,7 @@ export type MenuData = {
  * @returns
  */
 export function clearMenuItem(
-  routes: RouteRecord[] | RouteRecordRaw[]
+  routes: RouteRecord[] | RouteRecordRaw[],
 ): RouteRecordRaw[] {
   return routes
     .map((item: RouteRecord | RouteRecordRaw) => {
@@ -32,7 +32,7 @@ export function clearMenuItem(
           !finalItem.meta?.hideChildInMenu &&
           finalItem.children.some(
             (child: RouteRecord | RouteRecordRaw) =>
-              child && child.name && !child.meta?.hideInMenu
+              child && child.name && !child.meta?.hideInMenu,
           )
         ) {
           return {
@@ -49,6 +49,13 @@ export function clearMenuItem(
 
 /**
  * 格式化路由路径地址
+ *
+ * 重构说明（4.x 内部修复，不改变对外签名）：
+ *  - 原实现直接写 `route.path = ...` 与 `route.children = ...`，
+ *    会 mutate 传入的路由表，业务方再次把同一份 routes 传进来时
+ *    path 已被改成绝对路径。
+ *  - 这里对每一项做浅拷贝（`{ ...route }`）后再修改，保持入参不可变。
+ *
  * @param routes
  * @param breadcrumb
  * @param parent
@@ -57,35 +64,38 @@ export function clearMenuItem(
 const formatRelativePath = (
   routes: RouteRecordRaw[],
   breadcrumb: Record<string, RouteRecordRaw>,
-  parent?: RouteRecordRaw
+  parent?: RouteRecordRaw,
 ): RouteRecordRaw[] => {
-  // 计算路由绝对路径
   return routes.map((route) => {
+    // 浅拷贝，避免修改传入的路由表
+    const next: RouteRecordRaw = { ...route };
+
     // startWith : http | https
-    if (isUrl(route.path)) {
-      return route;
+    if (isUrl(next.path)) {
+      breadcrumb[`${next.path}`] = next;
+      return next;
     }
 
     // Note that nested paths that start with / will be treated as a root path.
     // This allows you to leverage the component nesting without having to use a nested URL.
     // @ref https://router.vuejs.org/guide/essentials/nested-routes.html#nested-routes
-    const hasRelativePath = route.path.startsWith("/");
+    const hasRelativePath = next.path.startsWith("/");
     if (!hasRelativePath) {
       if (parent) {
-        route.path = `${parent.path || ""}/${route.path}`;
+        next.path = `${parent.path || ""}/${next.path}`;
       } else {
-        route.path = `/${route.path}`;
+        next.path = `/${next.path}`;
       }
     }
 
     // reformat path
-    route.path = route.path.replace("//", "/");
+    next.path = next.path.replace("//", "/");
     // format children routes
-    if (route.children && route.children.length > 0) {
-      route.children = formatRelativePath(route.children, breadcrumb, route);
+    if (next.children && next.children.length > 0) {
+      next.children = formatRelativePath(next.children, breadcrumb, next);
     }
-    breadcrumb[`${route.path}`] = route;
-    return route;
+    breadcrumb[`${next.path}`] = next;
+    return next;
   });
 };
 
@@ -100,7 +110,7 @@ export const getMenuData = (routes: RouteRecordRaw[]): MenuData => {
   return {
     menuData: formatRelativePath(
       childrenRoute?.children || ([] as RouteRecordRaw[]),
-      breadcrumb
+      breadcrumb,
     ),
     breadcrumb,
   };

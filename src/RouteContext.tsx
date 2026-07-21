@@ -41,7 +41,6 @@ export interface RouteContextProps extends Partial<PureSettings> {
   breadcrumb?: BreadcrumbListReturn | ComputedRef<BreadcrumbListReturn>;
   isMobile?: boolean;
   collapsed?: boolean;
-  hasSideMenu?: boolean;
   hasHeader?: boolean;
   siderWidth?: number;
   headerHeight?: number;
@@ -64,14 +63,8 @@ export const routeContextInjectKey: InjectionKey<RouteContextProps> =
 export const createRouteContext = () =>
   createContext<RouteContextProps>(
     routeContextInjectKey,
-    "RouteContext.Provider"
+    "RouteContext.Provider",
   );
 
 export const useRouteContext = () =>
   useContext<RouteContextProps>(routeContextInjectKey, defaultRouteContext);
-
-const Provider = createRouteContext();
-
-export default {
-  Provider,
-};

@@ -52,7 +52,9 @@ export type EventHandlers<E> = {
  * @param paths The property paths to pick
  */
 export function pick<T, K extends keyof T>(obj: T, paths: K[]): Pick<T, K> {
-  return {
-    ...paths.reduce((mem, key) => ({ ...mem, [key]: obj[key] }), {}),
-  } as Pick<T, K>;
+  const result = {} as Pick<T, K>;
+  for (let i = 0; i < paths.length; i++) {
+    result[paths[i]] = obj[paths[i]];
+  }
+  return result;
 }
