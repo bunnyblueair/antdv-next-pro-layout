@@ -46,8 +46,6 @@ export default defineConfig({
         "ant-design-vue",
         "vue-types",
         "lodash-es",
-        "moment",
-        "dayjs",
       ],
       output: {
         exports: "named",
@@ -61,7 +59,6 @@ export default defineConfig({
           "@ant-design/icons-svg": "AntdIconsSvg",
           "vue-types": "vueTypes",
           "lodash-es": "Lodash",
-          dayjs: "dayjs",
         },
       },
     },

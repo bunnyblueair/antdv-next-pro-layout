@@ -16,7 +16,6 @@
     "emitDeclarationOnly": true,
     "jsxImportSource": "vue",
     "outDir": "dist",
-    "typeRoots": ["./node_modules/@types"],
     "paths": {
       "@/*": ["./playground/*"],
       "antdv-pro-layout": ["./src/index.ts"]
