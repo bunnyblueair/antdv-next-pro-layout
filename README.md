@@ -85,52 +85,61 @@ const layoutConf = reactive({
 
 ### 函数布局 ProLayout
 
-- `MediaQueryEnum` 屏幕尺寸媒体查询枚举对象
-- `getMediaScreen` 屏幕尺寸
-- `useMediaScreen` 屏幕尺寸 ref 响应监听
-- `PrefersColorSchemeEnum` 媒体主题颜色模式枚举对象
-- `getPrefersColorScheme` 媒体主题颜色模式偏好
-- `usePrefersColorScheme` 媒体主题颜色模式偏好 ref 响应监听
-- `viewTransitionTheme` 主题切换视图过渡
-- `getMenuData` 路由表转出系统菜单
-- `clearMenuItem` 清除菜单项，属性排除!name 和 meta 隐藏标记
+| 名称 | 说明 | 参数 | 返回值 |
+| --- | --- | --- | --- |
+| `MediaQueryEnum` | 屏幕尺寸媒体查询枚举对象 | - | 枚举 xs/sm/md/lg/xl/xxl/xxxl |
+| `getMediaScreen()` | 当前屏幕尺寸 | - | `MediaQueryKey` |
+| `useMediaScreen()` | 屏幕尺寸响应式监听（自动清理） | - | `Ref<MediaQueryKey>` |
+| `PrefersColorSchemeEnum` | 主题颜色模式枚举对象 | - | 枚举 light/dark |
+| `getPrefersColorScheme()` | 系统主题颜色模式偏好 | - | `PrefersColorSchemeKey` |
+| `usePrefersColorScheme()` | 主题颜色模式偏好响应式监听 | - | `Ref<PrefersColorSchemeKey>` |
+| `viewTransitionTheme(listener, e?)` | 主题切换视图过渡动画 | `listener: (isDark) => void`<br>`e?: { clientX, clientY }` | `void` |
+| `getMenuData(routes)` | 路由表转系统菜单，仅取 `/` 子树 | `routes: readonly RouteRecordRaw[]` | `{ menuData, breadcrumb }` |
+| `clearMenuItem(routes)` | 清除隐藏/无 `name` 的菜单项 | `routes: readonly RouteRecordRaw[] \| readonly RouteRecord[]` | `RouteRecordRaw[]` |
 
 ### 组件布局 ProLayout
 
-| 参数                     | 说明                                                         | 类型                                                           | 默认值             |
-| ------------------------ | ------------------------------------------------------------ | -------------------------------------------------------------- | ------------------ |
-| title                    | 布局 LOGO 右侧文本                                           | string                                                         | `'Ant Design Pro'` |
-| logo                     | 布局 LOGO 图链接                                             | string                                                         | -                  |
-| logoStyle                | 布局 LOGO 图样式                                             | object                                                         | -                  |
-| loading                  | 布局内容区加载等待状态                                       | boolean                                                        | false              |
-| layout                   | 菜单布局                                                     | 'side' \| 'top' \| 'mix'                                       | `'side'`           |
-| breadcrumb               | 布局内容左上角面包屑                                         | Object                                                         | -                  |
-| theme                    | 全局主题色                                                   | 'light' \|'dark'                                               | `'light'`          |
-| menuTheme                | 菜单导航主题色                                               | 'light' \|'dark'                                               | `'light'`          |
-| menuData                 | 菜单项数据 [`MenuDataItem[]`](dist\types\typings\index.d.ts) | Array                                                          | `[]`               |
-| collapsed                | 菜单左侧时收起展开                                           | boolean                                                        | `true`             |
-| collapsedWidth           | 菜单左侧时收起宽度大小                                       | number                                                         | 48                 |
-| siderWidth               | 菜单左侧时展开宽度大小                                       | number                                                         | 200                |
-| selectedKeys             | 菜单选择高亮 keys                                            | string[]                                                       | `[]`               |
-| openKeys                 | 菜单选择打开展开 keys                                        | string[]                                                       | `[]`               |
-| fixSiderbar              | 菜单左侧列表固定                                             | boolean                                                        | `false`            |
-| splitMenus               | 菜单布局`mix`分割二级菜单到左侧                              | boolean                                                        | `false`            |
-| menuHeaderRender         | 渲染菜单头 logo 和标题区域                                   | v-slot \| VNode \| (props: BasicLayoutProps) => VNode \| false | -                  |
-| menuHeaderExtraRender    | 渲染菜单头拓展区域                                           | v-slot \| VNode \| (props: BasicLayoutProps) => VNode \| false | -                  |
-| menuFooterRender         | 渲染菜单底脚区域                                             | v-slot \| VNode \| (props: BasicLayoutProps) => VNode \| false | -                  |
-| menuItemRender           | 渲染菜单项 Menu.Item                                         | v-slot#menuItemRender="menuItem"                               | -                  |
-| menuSubItemRender        | 渲染菜单嵌套子项 Menu.SubItem                                | v-slot#menuSubItemRender="menuItem"                            | -                  |
-| collapsedButtonRender    | 渲染菜单收起按钮区域                                         | v-slot#collapsedButtonRender="collapsed"                       | -                  |
-| fixedHeader              | 顶部区域固定                                                 | boolean                                                        | `false`            |
-| headerHeight             | 顶部区域高度                                                 | number                                                         | 48                 |
-| headerRender             | 渲染顶部区域                                                 | v-slot \| VNode \| (props: BasicLayoutProps) => VNode          | -                  |
-| headerContentRender      | 渲染顶部内容区域，仅布局`side`有效                           | v-slot \| (props: BasicLayoutProps) => VNode                   | -                  |
-| headerContentRightRender | 渲染顶部内容右端区域                                         | v-slot \| (props: BasicLayoutProps) => VNode                   | -                  |
-| footerRender             | 渲染底部区域                                                 | v-slot \| ({ width, ...props }) => VNode                       | `false`            |
-| tabRender                | 渲染顶部标签页区域                                           | v-slot \| ({ width, ...props }) => VNode                       | `false`            |
-| breadcrumbRender         | 渲染面包屑导航区域                                           | v-slot \| ({ route, params, routes, paths, h }) => VNode[]     | -                  |
-| locale                   | 菜单名国际化函数处理                                         | Function(menuDataItem?: MenuDataItem) => string \| `false`     | `false`            |
-| collapse                 | 菜单左侧收起展开触发函数处理                                 | Function(collapsed: boolean) => void                           | -                  |
+| 参数 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| title | 布局 LOGO 右侧文本 | string | `'Ant Design Vue Pro'` |
+| logo | 布局 LOGO，支持链接 / VNode / 渲染函数 | string \| VNode \| Function | - |
+| logoStyle | 布局 LOGO 图样式 | object | - |
+| iconfontUrl | Iconfont Symbol 脚本地址 | string | `''` |
+| loading | 布局内容区加载等待状态 | boolean | `false` |
+| pure | 纯净模式，仅渲染默认插槽（无布局外壳） | boolean | `false` |
+| isChildrenLayout | 是否为嵌套子布局 | boolean | - |
+| contentStyle | 布局内容区自定义样式 | object \| string | - |
+| layout | 菜单布局 | 'side' \| 'top' \| 'mix' | `'side'` |
+| theme | 全局主题色 | 'light' \| 'dark' | `'light'` |
+| menuTheme | 菜单导航主题色 | 'light' \| 'dark' | `'light'` |
+| menuData | 菜单项数据 [`MenuDataItem[]`](dist\types\typings\index.d.ts) | Array | `[]` |
+| collapsed | 菜单左侧收起展开 | boolean | `false` |
+| collapsedWidth | 菜单左侧收起宽度大小 | number | `48` |
+| siderWidth | 菜单左侧展开宽度大小 | number | `200` |
+| selectedKeys | 菜单选择高亮 keys | string[] | `[]` |
+| openKeys | 菜单选择打开展开 keys | string[] | `[]` |
+| matchMenuKeys | 菜单高亮匹配 keys | string[] | `[]` |
+| breakpoint | 侧边栏响应式断点，传空串 `''` 关闭 | string \| object | `'md'` |
+| breadcrumb | 布局内容左上角面包屑 | object \| Function | - |
+| fixSiderbar | 菜单左侧列表固定 | boolean | `false` |
+| fixedHeader | 顶部区域固定 | boolean | `false` |
+| headerHeight | 顶部区域高度 | number | `48` |
+| splitMenus | 菜单布局`mix`分割二级菜单到左侧 | boolean | `false` |
+| locale | 菜单名国际化函数处理，传 `false` 关闭 | (menuDataItem?: MenuDataItem) => string \| `false` | `false` |
+| menuHeaderRender | 渲染菜单头 logo 和标题区域 | v-slot \| VNode \| (props) => VNode \| false | - |
+| menuHeaderExtraRender | 渲染菜单头拓展区域 | v-slot \| VNode \| (props) => VNode \| false | - |
+| menuContentRender | 渲染整个菜单内容区域 | v-slot#menuContentRender="props" | - |
+| menuFooterRender | 渲染菜单底脚区域 | v-slot \| VNode \| (props) => VNode \| false | - |
+| menuItemRender | 渲染菜单项 Menu.Item | v-slot#menuItemRender="menuItem" | - |
+| menuSubItemRender | 渲染菜单嵌套子项 Menu.SubItem | v-slot#menuSubItemRender="menuItem" | - |
+| collapsedButtonRender | 渲染菜单收起按钮区域 | v-slot#collapsedButtonRender="collapsed" | - |
+| headerRender | 渲染顶部区域，传 `false` 隐藏 | v-slot \| VNode \| (props) => VNode \| false | - |
+| headerContentRender | 渲染顶部内容区域，仅布局`side`有效 | v-slot \| (props) => VNode | - |
+| headerContentRightRender | 渲染顶部内容右端区域 | v-slot \| (props) => VNode | - |
+| footerRender | 渲染底部区域，传 `false` 隐藏 | v-slot \| ({ width, ...props }) => VNode | - |
+| tabRender | 渲染顶部标签页区域，传 `false` 隐藏 | v-slot \| ({ width, ...props }) => VNode | - |
+| breadcrumbRender | 渲染面包屑导航区域 | v-slot \| ({ route, params, routes, paths }) => VNode[] | - |
+| collapse | 菜单收起展开触发事件 | (collapsed: boolean) => void | - |
 
 > 菜单数据可通过提供的 `getMenuData` 和 `clearMenuItem` 函数转换  
 > 例如 `const { menuData } = getMenuData(clearMenuItem(routes))`
@@ -266,10 +275,10 @@ const layoutConf = reactive({
 
 ### 组件页脚 GlobalFooter
 
-| 参数      | 说明           | 类型                                                                         | 默认值    |
-| --------- | -------------- | ---------------------------------------------------------------------------- | --------- |
-| links     | 必填，链接跳转 | Array<{ key?: string; title: string; href: string; blankTarget?: boolean; }> | -         |
-| copyright | 版权声明区域   | v-slot \| VNode \| (props: BasicLayoutProps) => VNode \| false               | undefined |
+| 参数 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| links | 必填，链接跳转 | Array<{ key?: string; title: string; href: string; blankTarget?: boolean; }> | - |
+| copyright | 版权声明区域 | string \| VNode \| v-slot | undefined |
 
 ```vue
 <GlobalFooter
@@ -298,23 +307,23 @@ const layoutConf = reactive({
 
 包含 antdv 组件 API 属性: [PageHeader 页头](https://www.antdv.com/components/page-header-cn#api)、[Affix 固钉](https://www.antdv.com/components/affix-cn#api)
 
-| 参数           | 说明                                      | 类型                                                                       | 默认值          |
-| -------------- | ----------------------------------------- | -------------------------------------------------------------------------- | --------------- |
-| loading        | 加载状态                                  | boolean                                                                    | false           |
-| disableMargin  | 布局内容禁用外边距 `24px`                 | boolean                                                                    | false           |
-| flex           | 内容布局充满，默认固定宽度 1200px         | boolean                                                                    | false           |
-| fixed-header   | 固定 PageHeader 到顶部                    | boolean                                                                    | false           |
-| affixProps     | 固钉的配置                                | [affix](https://www.antdv.com/components/affix-cn#api)                     | {offsetTop: 48} |
-| pageFooter     | 渲染页脚插槽                              | VNode \| v-slot                                                            | -               |
-| pageHeader     | 渲染页头替换 PageHeader 组件插槽          | VNode \| v-slot                                                            | -               |
-| ...            | PageHeader 属性                           | [PageHeader 页头 API](https://www.antdv.com/components/page-header-cn#api) | -               |
-| breadcrumb     | PageHeader 面包屑的配置,{}配置不显示      | [breadcrumb](https://www.antdv.com/components/breadcrumb-cn/)              | -               |
-| content        | PageHeader 默认插槽                       | VNode \| v-slot                                                            | -               |
-| contentExtra   | PageHeader 默认插槽右侧空间               | VNode \| v-slot                                                            | -               |
-| tab-list       | PageHeader 插槽 footer 无时，显示标签列表 | `Array<{key: string, tab: any}>`                                           | -               |
-| tab-active-key | 标签列表当前激活 key                      | string                                                                     | -               |
-| tab-change     | 标签列表 tab 被点击的回调                 | (key) => void                                                              | -               |
-| tab-props      | 标签列表标签页属性                        | [tabs](https://www.antdv.com/components/tabs-cn)                           | -               |
+| 参数 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| loading | 加载状态 | boolean | false |
+| disableMargin | 布局内容禁用外边距 `24px` | boolean | false |
+| flex | 内容布局是否充满宽度 | boolean | true |
+| fixed-header | 固定 PageHeader 到顶部 | boolean | false |
+| affixProps | 固钉的配置 | [affix](https://www.antdv.com/components/affix-cn#api) | - |
+| pageHeader | 渲染页头替换 PageHeader 组件插槽 | VNode \| v-slot | - |
+| pageFooter | 渲染页脚插槽 | VNode \| v-slot | - |
+| content | PageHeader 默认插槽 | VNode \| v-slot | - |
+| contentExtra | PageHeader 默认插槽右侧空间 | VNode \| v-slot | - |
+| breadcrumb | PageHeader 面包屑的配置，`{}` 不显示 | [breadcrumb](https://www.antdv.com/components/breadcrumb-cn/) | - |
+| tab-list | PageHeader footer 插槽无时显示标签列表 | `Array<{ key: string; tab: any }>` | - |
+| tab-active-key | 标签列表当前激活 key | string | - |
+| tab-change | 标签列表 tab 被点击的回调 | (key) => void | - |
+| tab-props | 标签列表标签页属性 | [tabs](https://www.antdv.com/components/tabs-cn) | - |
+| ... | PageHeader 属性 | [PageHeader 页头 API](https://www.antdv.com/components/page-header-cn#api) | - |
 
 ## 基本使用示例 Basic Usage
 
@@ -330,7 +339,7 @@ const layoutConf = reactive({
 - v3.1 : Vue3 + `ant-design-vue@2.2.x` (release LTS)
 - v2 : Vue2 + `ant-design-vue@1.7.x`
 
-当前版本，还在持续更新 [v4](https://gitee.com/TsMask/antdv-pro-layout)
+当前版本 Vue3 + ant-design-vue@4.2.6 ([v4](https://gitee.com/TsMask/antdv-pro-layout))
 
 ## 持续维护 Continuous Maintenance
 

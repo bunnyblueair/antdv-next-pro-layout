@@ -81,51 +81,61 @@ const layoutConf = reactive({
 
 ### Function Layout - ProLayout
 
-- `MediaQueryEnum` Screen size media query enumeration object
-- `getMediaScreen` Screen size
-- `useMediaScreen` Screen size ref responds to listening
-- `PrefersColorSchemeEnum` Media theme color mode enumeration object
-- `getPrefersColorScheme` Media Theme Color Mode Preferences
-- `usePrefersColorScheme` Media Theme Color Mode Preferences ref responds to listening
-- `viewTransitionTheme` Theme switching view transitions
-- `getMenuData` The routing table exits the system menu
-- `clearMenuItem` Clear menu item, property excluded !name and meta
+| Name | Description | Parameters | Return |
+| --- | --- | --- | --- |
+| `MediaQueryEnum` | Screen size media query enum object | - | enum xs/sm/md/lg/xl/xxl/xxxl |
+| `getMediaScreen()` | Current screen size | - | `MediaQueryKey` |
+| `useMediaScreen()` | Reactive screen size listener (auto cleanup) | - | `Ref<MediaQueryKey>` |
+| `PrefersColorSchemeEnum` | Theme color mode enum object | - | enum light/dark |
+| `getPrefersColorScheme()` | System theme color mode preference | - | `PrefersColorSchemeKey` |
+| `usePrefersColorScheme()` | Reactive theme color mode preference | - | `Ref<PrefersColorSchemeKey>` |
+| `viewTransitionTheme(listener, e?)` | Theme switching view transition animation | `listener: (isDark) => void`<br>`e?: { clientX, clientY }` | `void` |
+| `getMenuData(routes)` | Convert route table to system menu, reads only the `/` subtree | `routes: readonly RouteRecordRaw[]` | `{ menuData, breadcrumb }` |
+| `clearMenuItem(routes)` | Remove hidden / unnamed menu items | `routes: readonly RouteRecordRaw[] \| readonly RouteRecord[]` | `RouteRecordRaw[]` |
 
 ### Component Layout - ProLayout
 
-| Property                | Description                   | Type                        | Default Value      |
-| ----------------------- | ----------------------  | -------------------------------- | ------------------ |
-| title                   | Text to the right of the layout LOGO               | string       | `'Ant Design Pro'` |
-| logo                    | Layout Logo Link                                   | string      | -                |
-| logoStyle               | Layout Logo Style                                  | object      | -                  |
-| loading                 | Layout content area loading waiting status          | boolean      | false                  |
-| layout                  | Menu Layout                                         | 'side' \| 'top' \| 'mix'       | `'side'`           |
-| breadcrumb              | Layout content: Breadcrumbs in the upper left corner            | Object                                       | -         |
-| theme                   | Global Theme Colors                         | 'light' \|'dark'                              | `'light'`          |
-| menuTheme               | Menu navigation theme color                 | 'light' \|'dark'                             | `'light'`          |
-| menuData                | Menu item data [`MenuDataItem[]`](dist\types\typings\index.d.ts)  | Array         | `[]` |
-| collapsed               | When the left side of the menu is closed and expanded             | boolean                                       | `true`               |
-| collapsedWidth          | Collapse width size on the left side of the menu          | number                                       |  48                 |
-| siderWidth              | Expand width size on the left side of the menu            | number                                       |  200                |
-| selectedKeys            | Choose highlight keys from the menu               | string[]                                     | `[]`               |
-| openKeys                | Menu select open expand keys                      | string[]                                      | `[]`               |
-| fixSiderbar             | Fixed list on left side of menu                   | boolean                                      | `false`         |
-| splitMenus              | The menu layout `mix` splits the secondary menu to the left | boolean                            | `false`         |
-| menuHeaderRender        | Renders the header logo and header area of the menu      | v-slot \| VNode \| (props: BasicLayoutProps) => VNode \| false       | -                  |
-| menuHeaderExtraRender   | Render menu header expands area                          | v-slot \| VNode \| (props: BasicLayoutProps) => VNode \| false       | -                  |
-| menuFooterRender        | Render the footer area of the menu                       | v-slot \| VNode \| (props: BasicLayoutProps) => VNode \| false       | -                  |
-| menuItemRender          | Render menu items Menu.Item            | v-slot#menuItemRender="menuItem"          | -               |
-| menuSubItemRender       | Nested subitems of the render menu Menu.SubItem    | v-slot#menuSubItemRender="menuItem"       | -               |
-| collapsedButtonRender   | The render menu closes the button area             | v-slot#collapsedButtonRender="collapsed"   | -               |
-| fixedHeader             | The top area is fixed                    | boolean                                      | `false`         |
-| headerRender            | Render the top area                    | v-slot \| VNode \| (props: BasicLayoutProps) => VNode         | -                  |
-| headerContentRender     | Render the top content area, only the `side` layout works                | v-slot \| (props: BasicLayoutProps) => VNode                 | -                  |
-| headerContentRightRender| Renders the right area of the top content             | v-slot \| (props: BasicLayoutProps) => VNode                  | -                  |
-| footerRender            | Render the bottom area                    | v-slot \| ({ width, ...props }) => VNode                       | `false`            |
-| tabRender               | Renders the top tab area               | v-slot \| ({ width, ...props }) => VNode                        | `false`            |
-| breadcrumbRender        | Render the BREADCRUMB area               | v-slot \| ({ route, params, routes, paths, h }) => VNode[]         | -                  |
-| locale                  | Menu name internationalization function processing             | Function(menuDataItem?: MenuDataItem) => string \| `false`              | `false`            |
-| collapse                | The left side of the menu folds up to expand the trigger function processing      | Function(collapsed: boolean) => void            | -                  |
+| Property | Description | Type | Default Value |
+| --- | --- | --- | --- |
+| title | Text to the right of the layout LOGO | string | `'Ant Design Vue Pro'` |
+| logo | Layout LOGO, supports URL / VNode / render function | string \| VNode \| Function | - |
+| logoStyle | Layout LOGO style | object | - |
+| iconfontUrl | Iconfont Symbol script URL | string | `''` |
+| loading | Loading state of the layout content area | boolean | `false` |
+| pure | Pure mode, renders only the default slot (no layout shell) | boolean | `false` |
+| isChildrenLayout | Whether it is a nested child layout | boolean | - |
+| contentStyle | Custom style of the layout content area | object \| string | - |
+| layout | Menu layout | 'side' \| 'top' \| 'mix' | `'side'` |
+| theme | Global theme | 'light' \| 'dark' | `'light'` |
+| menuTheme | Menu navigation theme | 'light' \| 'dark' | `'light'` |
+| menuData | Menu item data [`MenuDataItem[]`](dist\types\typings\index.d.ts) | Array | `[]` |
+| collapsed | Collapse/expand the left menu | boolean | `false` |
+| collapsedWidth | Width when the left menu is collapsed | number | `48` |
+| siderWidth | Width when the left menu is expanded | number | `200` |
+| selectedKeys | Selected highlight keys of the menu | string[] | `[]` |
+| openKeys | Open keys of the menu | string[] | `[]` |
+| matchMenuKeys | Menu highlight match keys | string[] | `[]` |
+| breakpoint | Responsive breakpoint of the sider, pass `''` to disable | string \| object | `'md'` |
+| breadcrumb | Breadcrumbs in the upper left of the content area | object \| Function | - |
+| fixSiderbar | Fix the left list of the menu | boolean | `false` |
+| fixedHeader | Fix the top area | boolean | `false` |
+| headerHeight | Top area height | number | `48` |
+| splitMenus | The `mix` layout splits the secondary menu to the left | boolean | `false` |
+| locale | Menu name i18n function, pass `false` to disable | (menuDataItem?: MenuDataItem) => string \| `false` | `false` |
+| menuHeaderRender | Render the menu header logo and title area | v-slot \| VNode \| (props) => VNode \| false | - |
+| menuHeaderExtraRender | Render the menu header extra area | v-slot \| VNode \| (props) => VNode \| false | - |
+| menuContentRender | Render the whole menu content area | v-slot#menuContentRender="props" | - |
+| menuFooterRender | Render the menu footer area | v-slot \| VNode \| (props) => VNode \| false | - |
+| menuItemRender | Render menu items Menu.Item | v-slot#menuItemRender="menuItem" | - |
+| menuSubItemRender | Render nested sub-items Menu.SubItem | v-slot#menuSubItemRender="menuItem" | - |
+| collapsedButtonRender | Render the menu collapse button area | v-slot#collapsedButtonRender="collapsed" | - |
+| headerRender | Render the top area, pass `false` to hide | v-slot \| VNode \| (props) => VNode \| false | - |
+| headerContentRender | Render the top content area, only `side` layout works | v-slot \| (props) => VNode | - |
+| headerContentRightRender | Render the right area of the top content | v-slot \| (props) => VNode | - |
+| footerRender | Render the bottom area, pass `false` to hide | v-slot \| ({ width, ...props }) => VNode | - |
+| tabRender | Render the top tab area, pass `false` to hide | v-slot \| ({ width, ...props }) => VNode | - |
+| breadcrumbRender | Render the breadcrumb area | v-slot \| ({ route, params, routes, paths }) => VNode[] | - |
+| collapse | Collapse/expand trigger event of the left menu | (collapsed: boolean) => void | - |
 
 > Menu generation requires `getMenuData` and `clearMenuItem` function transformations
 > For example: `const { menuData } = getMenuData(clearMenuItem(routes))`
@@ -262,9 +272,9 @@ const layoutConf = reactive({
 ### Component Footer - GlobalFooter
 
 | Property | Description | Type | Default Value |
-| ---- | ---- | ---- | ---- |
-| links     | Required, link jump    | Array<{ key?: string; title: string; href: string; blankTarget?: boolean; }> | - |
-| copyright | Copyright notice area      | v-slot \| VNode \| (props: BasicLayoutProps) => VNode \| false               | undefined |
+| --- | --- | --- | --- |
+| links | Required, link jump | Array<{ key?: string; title: string; href: string; blankTarget?: boolean; }> | - |
+| copyright | Copyright notice area | string \| VNode \| v-slot | undefined |
 
 ```vue
 <GlobalFooter
@@ -294,21 +304,22 @@ const layoutConf = reactive({
 Contains the ANTDV component API attributes: [PageHeader](https://www.antdv.com/components/page-header#api)、[Affix](https://www.antdv.com/components/affix#api)
 
 | Property | Description | Type | Default Value |
-| ---- | ---- | ---- | ---- |
-| loading        | Load status                          | boolean      | false |
-| flex           | The content layout is full, with a default fixed width of 1200px   | boolean      | false  |
-| fixed-header   | Fix the page header to the top            | boolean       | false  |
-| affixProps     | Configuration of fasteners                      | [affix](https://www.antdv.com/components/affix#api) | {offsetTop: 48} |
-| pageFooter     | Render footer slot                    | VNode \| v-slot | -    |
-| pageHeader     | The render header replaces the page header component slot   | VNode \| v-slot | -    |
-| ...            | The PageHeader property                  | [PageHeader API](https://www.antdv.com/components/page-header#api) | - |
-| breadcrumb     | Page header breadcrumb configuration, {} configuration is not displayed      | [breadcrumb](https://www.antdv.com/components/breadcrumb/)  | -       |
-| content        | Page header default slot                       | VNode \| v-slot | -    |
-| contentExtra   | The default slot space on the right side of the page header                | VNode \| v-slot | -   |
-| tab-list       | Pageheader footer slot no time to display the tag list     | `Array<{key: string, tab: any}>` | -             |
-| tab-active-key | The list of tags currently activates the key                       | string      | -  |
-| tab-change     | Tab list tab is a callback for being clicked                   | (key) => void          | -      |
-| tab-props      | Tab list tab properties                        | [tabs](https://www.antdv.com/components/tabs)         | -      |
+| --- | --- | --- | --- |
+| loading | Load status | boolean | false |
+| disableMargin | Disable the content outer margin `24px` | boolean | false |
+| flex | Whether the content fills the width | boolean | true |
+| fixed-header | Fix the PageHeader to the top | boolean | false |
+| affixProps | Affix configuration | [affix](https://www.antdv.com/components/affix#api) | - |
+| pageHeader | Render slot to replace the PageHeader component | VNode \| v-slot | - |
+| pageFooter | Render footer slot | VNode \| v-slot | - |
+| content | PageHeader default slot | VNode \| v-slot | - |
+| contentExtra | Right space of the PageHeader default slot | VNode \| v-slot | - |
+| breadcrumb | PageHeader breadcrumb configuration, `{}` to hide | [breadcrumb](https://www.antdv.com/components/breadcrumb/) | - |
+| tab-list | Display the tab list when the PageHeader footer slot is absent | `Array<{ key: string; tab: any }>` | - |
+| tab-active-key | Currently active key of the tab list | string | - |
+| tab-change | Callback when a tab is clicked | (key) => void | - |
+| tab-props | Tab list Tabs properties | [tabs](https://www.antdv.com/components/tabs) | - |
+| ... | PageHeader properties | [PageHeader API](https://www.antdv.com/components/page-header#api) | - |
 
 ## Basic Usage
 
@@ -322,7 +333,7 @@ From [@ant-design-vue/pro-layout](https://github.com/vueComponent/pro-components
 - v3.1 : Vue3 + `ant-design-vue@2.2.x` (release LTS)
 - v2 : Vue2 + `ant-design-vue@1.7.x`
 
-The version is still being updated [v4](https://gitee.com/TsMask/antdv-pro-layout)
+The version is a Vue3 + `ant-design-vue@4.2.6` ([v4](https://gitee.com/TsMask/antdv-pro-layout))
 
 ## Continuous Maintenance
 

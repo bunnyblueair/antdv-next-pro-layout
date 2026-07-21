@@ -18,7 +18,7 @@ export type MenuData = {
  * @returns
  */
 export function clearMenuItem(
-  routes: RouteRecord[] | RouteRecordRaw[],
+  routes: readonly RouteRecord[] | readonly RouteRecordRaw[],
 ): RouteRecordRaw[] {
   return routes
     .map((item: RouteRecord | RouteRecordRaw) => {
@@ -62,7 +62,7 @@ export function clearMenuItem(
  * @returns
  */
 const formatRelativePath = (
-  routes: RouteRecordRaw[],
+  routes: readonly RouteRecordRaw[],
   breadcrumb: Record<string, RouteRecordRaw>,
   parent?: RouteRecordRaw,
 ): RouteRecordRaw[] => {
@@ -104,7 +104,7 @@ const formatRelativePath = (
  * @param routes 路由表取根路径"/"下节点数据
  * @returns 菜单数据和面包屑数据
  */
-export const getMenuData = (routes: RouteRecordRaw[]): MenuData => {
+export const getMenuData = (routes: readonly RouteRecordRaw[]): MenuData => {
   const childrenRoute = routes.find((route) => route.path === "/");
   const breadcrumb: Record<string, RouteRecordRaw> = {};
   return {

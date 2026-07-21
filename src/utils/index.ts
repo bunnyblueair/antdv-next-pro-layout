@@ -7,7 +7,7 @@ export { default as isImg } from "./isImg";
 
 export { getSlot, getSlotVNode };
 
-export function flatMap(menusData: RouteRecord[]): MenuDataItem[] {
+export function flatMap(menusData: readonly RouteRecord[]): MenuDataItem[] {
   return menusData
     .map((item) => {
       const finalItem = { ...item } as MenuDataItem;
@@ -22,7 +22,7 @@ export function flatMap(menusData: RouteRecord[]): MenuDataItem[] {
     .filter((item) => item) as MenuDataItem[];
 }
 
-export function getMenuFirstChildren(menus: MenuDataItem[], key?: string) {
+export function getMenuFirstChildren(menus: readonly MenuDataItem[], key?: string) {
   return key === undefined
     ? []
     : (menus[menus.findIndex((menu) => menu.path === key)] || {}).children ||
