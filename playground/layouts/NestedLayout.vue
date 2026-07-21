@@ -2,12 +2,12 @@
   <pro-layout
     v-model:selectedKeys="baseState.selectedKeys"
     v-model:openKeys="baseState.openKeys"
-    collapsed
+    v-model:collapsed="outerCollapsed"
     :loading="loading"
     :breadcrumb="{ routes: breadcrumb }"
     :header-render="false"
     :fix-siderbar="true"
-    :collapsed-button-render="false"
+    :breakpoint="''"
     :menu-data="routes"
     disable-content-margin
     style="min-height: 100vh"
@@ -27,8 +27,9 @@
         v-model:openKeys="baseState.childrenOpenKeys"
         nav-theme="light"
         :menu-header-render="false"
-        :menu-data="menuData"
+        :menu-data="innerMenuData"
         :fix-siderbar="true"
+        :breakpoint="''"
         :is-children-layout="true"
         disable-content-margin
       >
@@ -68,32 +69,37 @@
 import { computed, reactive, ref, watchEffect, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import {
-  getMenuData,
+  ProLayout,
   clearMenuItem,
   type RouteContextProps,
 } from "antdv-pro-layout";
 const loading = ref(false);
 const watermarkContent = ref("Pro Layout");
 const router = useRouter();
-// 请重新渲染菜单数据
-const { menuData } = getMenuData(clearMenuItem(router.getRoutes()));
+// /nested 嵌套布局专用：取 /nested 路由子树作为菜单数据
+// 外层 sider 显示一级（应用），内层 sider 显示二级/多级（应用内页面）
+const nestedRoot = router.getRoutes().find((r) => r.path === "/nested");
+const menuData = clearMenuItem(nestedRoot?.children || []);
 import { UserOutlined } from "@ant-design/icons-vue";
 
 const routes = menuData.map((item) => {
   return {
     ...item,
-    children: null,
+    children: undefined,
   };
 });
 
 const baseState = reactive<Omit<RouteContextProps, "menuData">>({
-  selectedKeys: ["PageInfo"],
+  selectedKeys: [],
   openKeys: [],
 
   childrenSelectedKeys: [],
   childrenOpenKeys: [],
   collapsed: false,
 });
+
+// 外层 sider 折叠状态（初始收起，点击底部按钮可展开看应用名）
+const outerCollapsed = ref(true);
 
 const breadcrumb = computed(() =>
   router.currentRoute.value.matched.concat().map((item) => {
@@ -106,16 +112,31 @@ const breadcrumb = computed(() =>
   })
 );
 
+// 当前选中的应用（matched[0] 为布局层，matched[1] 为应用层）
+const currentApp = computed(() => {
+  const matched = router.currentRoute.value.matched;
+  return matched.length > 1 ? matched[1] : null;
+});
+
+// 内层：只显示当前应用的菜单树（不包含其他应用）
+const innerMenuData = computed(() => {
+  const app = currentApp.value;
+  if (!app) return [];
+  return menuData.find((item) => item.path === app.path)?.children || [];
+});
+
 watchEffect(() => {
-  if (router.currentRoute) {
-    const matched = router.currentRoute.value.matched.concat();
-    baseState.childrenSelectedKeys = matched
-      .filter((r) => r.name !== "Root")
-      .map((r) => r.path);
-    baseState.childrenOpenKeys = matched
-      .filter((r) => r.path !== router.currentRoute.value.path)
-      .map((r) => r.path);
-  }
+  const matched = router.currentRoute.value.matched.concat();
+  // 应用内路径：布局层与应用层之后的匹配项
+  const innerMatched = matched.slice(2);
+  // 外层：选中当前应用
+  baseState.selectedKeys = currentApp.value ? [currentApp.value.path] : [];
+  baseState.openKeys = [];
+  // 内层：选中当前叶子，展开应用内父级
+  baseState.childrenSelectedKeys = [router.currentRoute.value.path];
+  baseState.childrenOpenKeys = innerMatched
+    .filter((r) => r.path !== router.currentRoute.value.path)
+    .map((r) => r.path);
 });
 
 onMounted(() => {

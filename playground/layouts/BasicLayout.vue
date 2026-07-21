@@ -8,7 +8,6 @@ import {
   type RouteContextProps,
   type MenuDataItem,
 } from "antdv-pro-layout";
-import { SmileOutlined, HeartOutlined } from "@ant-design/icons-vue";
 import { reactive, ref, computed, watch } from "vue";
 import RightContent from "./components/RightContent/RightContent.vue";
 import SettingDrawer from "./components/SettingDrawer/SettingDrawer.vue";
@@ -51,7 +50,7 @@ watch(
       .filter((r) => r.name !== "Root")
       .map((r) => r.path);
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 /**抽屉设置 */
@@ -127,12 +126,16 @@ function settingDrawer(bool: boolean) {
       <template #menuSubItemRender2="menuItem">
         <template v-if="menuItem.meta?.type === 'group'">
           <a-menu-item-group :title="menuItem.meta?.title" :key="menuItem.path">
-            {{ menuItem.children.length }}
+            <a-menu-item v-for="item in menuItem.children" :key="item.path">
+              <router-link :to="item.path">{{ item.meta?.title }}</router-link>
+            </a-menu-item>
           </a-menu-item-group>
         </template>
         <template v-else>
           <a-sub-menu :title="menuItem.meta?.title" :key="menuItem.path">
-            {{ menuItem.children.length }}
+            <a-menu-item v-for="item in menuItem.children" :key="item.path">
+              <router-link :to="item.path">{{ item.meta?.title }}</router-link>
+            </a-menu-item>
           </a-sub-menu>
         </template>
       </template>
@@ -151,11 +154,9 @@ function settingDrawer(bool: boolean) {
       <!-- 渲染面包屑导航区域  -->
       <template #breadcrumbRender="{ route, params, routes }">
         <span v-if="routes.indexOf(route) === routes.length - 1">
-          <HeartOutlined />
           {{ route.breadcrumbName }}
         </span>
         <RouterLink v-else :to="{ path: route.path, params }">
-          <SmileOutlined />
           {{ route.breadcrumbName }}
         </RouterLink>
       </template>
