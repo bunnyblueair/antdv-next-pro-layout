@@ -1,7 +1,7 @@
 {
   "name": "antdv-pro-layout",
   "type": "module",
-  "version": "4.2.2",
+  "version": "4.2.3",
   "description": "Ant Design Pro Layout of Vue, easy to use pro scaffolding.",
   "keywords": [
     "Ant Design Vue",
@@ -26,13 +26,14 @@
   },
   "peerDependencies": {
     "ant-design-vue": ">=4.2.0",
-    "vue": ">=3.4.0"
+    "vue": ">=3.4.0",
+    "vue-router": ">=4.0.0"
   },
   "files": [
     "dist"
   ],
   "types": "./dist/types",
-  "style": "./dist/style.css",
+  "style": "./dist/antdv-pro-layout.css",
   "main": "./dist/antdv-pro-layout.umd.cjs",
   "module": "./dist/antdv-pro-layout.js",
   "exports": {
@@ -48,18 +49,17 @@
     "build": "vue-tsc && vite build",
     "preview": "vite preview"
   },
-  "dependencies": {},
   "devDependencies": {
-    "@types/node": "^22.0.0",
-    "@vitejs/plugin-vue": "^6.0.7",
-    "@vitejs/plugin-vue-jsx": "^5.1.6",
     "@ant-design/icons-vue": "7.0.1",
+    "@types/node": "^22.0.0",
+    "@vitejs/plugin-vue": "^6.0.8",
+    "@vitejs/plugin-vue-jsx": "^5.1.6",
     "ant-design-vue": "4.2.6",
-    "vue": "^3.5.13",
-    "vue-router": "^5.1.0",
-    "vite": "^8.1.0",
+    "typescript": "~6.0.3",
+    "vite": "^8.1.5",
     "vite-plugin-dts": "^5.0.3",
-    "vue-tsc": "~3.3.5",
-    "typescript": "~6.0.3"
+    "vue": "^3.5.40",
+    "vue-router": "^5.2.0",
+    "vue-tsc": "~3.3.7"
   }
 }
