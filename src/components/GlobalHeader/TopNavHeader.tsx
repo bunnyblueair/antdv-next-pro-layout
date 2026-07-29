@@ -12,10 +12,22 @@ import {
   siderMenuProps,
 } from "../SiderMenu/SiderMenu";
 import BaseMenu from "../SiderMenu/BaseMenu";
-import type { CustomRenderProps } from "../../typings";
+import type {
+  CustomRenderProps,
+  HeaderContentRender,
+  MenuContentRender,
+} from "../../typings";
 
 export const topNavHeaderProps = {
   ...siderMenuProps,
+  menuRender: {
+    type: [Object, Function, Boolean] as PropType<MenuContentRender>,
+    default: () => undefined,
+  },
+  headerContentRender: {
+    type: [Function, Object, Boolean] as PropType<HeaderContentRender>,
+    default: () => undefined,
+  },
   headerContentRightRender: {
     type: [Object, Function] as PropType<CustomRenderProps>,
     default: () => undefined,
@@ -26,11 +38,6 @@ export type TopNavHeaderProps = Partial<
   ExtractPropTypes<typeof topNavHeaderProps>
 >;
 
-// 重构说明（4.x 内部优化，不改变对外 API）：
-//  - 原实现是 FunctionalComponent，每次重渲染都重新执行 useRouteContext()
-//    和 defaultRenderLogoAndTitle()。改为 defineComponent 后：
-//    * useRouteContext() 在 setup 中只调用一次
-//    * logo+title 的渲染结果用 computed 缓存
 const TopNavHeader = defineComponent({
   name: "TopNavHeader",
   inheritAttrs: false,
@@ -40,14 +47,52 @@ const TopNavHeader = defineComponent({
     const baseClassName = "ant-pro-top-nav-header";
 
     // logo + title 渲染缓存；仅 logo/title/layout/collapsed 等变化时重算。
-    const headerDom = computed(() =>
-      defaultRenderLogoAndTitle(
+    const headerDom = computed(() => {
+      // 与 React 对齐：提供 menuHeaderRender 时优先使用，否则 top/mix 走默认渲染
+      let renderKey: "headerTitleRender" | "menuHeaderRender" | undefined =
+        undefined;
+      if (props.menuHeaderRender !== undefined) {
+        renderKey = "menuHeaderRender";
+      } else if (props.layout === "mix" || props.layout === "top") {
+        renderKey = "headerTitleRender";
+      }
+      return defaultRenderLogoAndTitle(
         { ...props, collapsed: false },
-        // REMARK:: Any time render header title
-        // layout === 'mix' ? 'headerTitleRender' : undefined,
-        props.layout !== "side" ? "headerTitleRender" : undefined,
-      ),
-    );
+        renderKey,
+      );
+    });
+
+    const contentDom = computed(() => {
+      const defaultDom = (
+        <BaseMenu
+          locale={props.locale || context.locale}
+          theme={props.menuTheme}
+          mode={props.mode}
+          collapsed={props.collapsed}
+          iconfontUrl={props.iconfontUrl}
+          menuData={props.menuData}
+          menuItemRender={props.menuItemRender}
+          menuSubItemRender={props.menuSubItemRender}
+          openKeys={context.openKeys}
+          selectedKeys={context.selectedKeys}
+          class={`${baseClassName}-menu`}
+          {...{
+            "onUpdate:openKeys": ($event: string[]) =>
+              props.onOpenKeys && props.onOpenKeys($event),
+            "onUpdate:selectedKeys": ($event: string[]) =>
+              props.onSelect && props.onSelect($event),
+          }}
+        />
+      );
+      const hcr = props.headerContentRender;
+      if (hcr !== undefined && hcr !== false) {
+        if (typeof hcr === "function") {
+          return (hcr as (p: typeof props, d: any) => any)(props, defaultDom);
+        }
+        return hcr;
+      }
+      return defaultDom;
+    });
 
     return () => (
       <div class={baseClassName}>
@@ -63,27 +108,7 @@ const TopNavHeader = defineComponent({
             </div>
           )}
 
-          <div class={`${baseClassName}-main-menu`}>
-            <BaseMenu
-              locale={props.locale || context.locale}
-              theme={props.menuTheme}
-              mode={props.mode}
-              collapsed={props.collapsed}
-              iconfontUrl={props.iconfontUrl}
-              menuData={props.menuData}
-              menuItemRender={props.menuItemRender}
-              menuSubItemRender={props.menuSubItemRender}
-              openKeys={context.openKeys}
-              selectedKeys={context.selectedKeys}
-              class={`${baseClassName}-menu`}
-              {...{
-                "onUpdate:openKeys": ($event: string[]) =>
-                  props.onOpenKeys && props.onOpenKeys($event),
-                "onUpdate:selectedKeys": ($event: string[]) =>
-                  props.onSelect && props.onSelect($event),
-              }}
-            />
-          </div>
+          <div class={`${baseClassName}-main-menu`}>{contentDom.value}</div>
 
           {props.headerContentRightRender &&
             typeof props.headerContentRightRender === "function" &&

@@ -46,6 +46,9 @@ export type Theme = "dark" | "light";
 /**菜单布局 */
 export type LayoutType = "side" | "top" | "mix";
 
+/**侧边菜单类型：sub 折叠子菜单 / group 分组展开 */
+export type SiderMenuType = "sub" | "group";
+
 /**链接跳转类型 */
 export type TargetType = "_blank" | "_self" | undefined;
 

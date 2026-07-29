@@ -32,6 +32,7 @@ import { Menu, MenuItem, MenuItemGroup, SubMenu } from "ant-design-vue";
 import type {
   MenuDataItem,
   LayoutType,
+  SiderMenuType,
   MenuRender,
   FormatLocale,
 } from "../../typings";
@@ -76,10 +77,6 @@ const LazyIcon: FunctionalComponent<{
     return icon;
   }
   // 兜底：把字符串当作已注册的全局组件名解析。
-  // 修复：原实现写成 `typeof LazyIcon === "function" && <DynamicIcon/>`，
-  // LazyIcon 自身就是函数组件，该条件永远为真，等价于无条件渲染
-  // <DynamicIcon/>；而 resolveComponent 找不到时返回的是组件名字符串，
-  // 直接当组件渲染会触发 Vue 警告。改为先校验类型再渲染。
   const DynamicIcon = resolveComponent(icon as string);
   if (typeof DynamicIcon === "string") {
     return null;
@@ -102,26 +99,42 @@ class MenuUtil {
     this.RouterLink = resolveComponent("router-link") as ConcreteComponent;
   }
 
-  getNavMenuItems = (menusData: MenuDataItem[] = []) => {
+  getNavMenuItems = (menusData: MenuDataItem[] = [], level = 0): VNode[] => {
     return menusData
-      .map((item) => this.getSubMenuOrItem(item))
-      .filter((item) => item);
+      .flatMap((item) => this.getSubMenuOrItem(item, level))
+      .filter((item) => item) as VNode[];
   };
 
-  getSubMenuOrItem = (item: MenuDataItem): VNode => {
+  getSubMenuOrItem = (item: MenuDataItem, level = 0): VNode | VNode[] => {
+    // siderMenuType="group": side/mix layouts only, top level only (React parity: menu.type==='group')
+    const isGroup =
+      this.props.siderMenuType === "group" && this.props.layout !== "top";
+    const menuType = isGroup && level === 0 ? "group" : undefined;
+    const hasGroup = menuType === "group" || item.meta?.type === "group";
+
     if (
       Array.isArray(item.children) &&
       item.children.length > 0 &&
       !item?.meta?.hideInMenu &&
       !item?.meta?.hideChildrenInMenu
     ) {
-      if (this.props.menuSubItemRender) {
+      // collapsed sider + group: groups cannot collapse, so flatten children
+      if (menuType === "group" && this.props.collapsed) {
+        return this.getNavMenuItems(item.children, level + 1);
+      }
+
+      // menuSubItemRender is a full-render override (Vue slot). When siderMenuType
+      // is "group" at the top level, the group decision takes precedence over the
+      // custom slot so groups render as MenuItemGroup (aligns with React, where
+      // subMenuItemRender only customizes the title and menu.type decides grouping).
+      if (this.props.menuSubItemRender && menuType !== "group") {
         const menuSubItemRender = withCtx(
           this.props.menuSubItemRender,
           this.ctx,
         );
         return menuSubItemRender(item) as VNode;
       }
+
       const locale = this.props.locale;
       const menuTitle = (locale && locale(item)) || item.meta?.title;
       const defaultTitle = item.meta?.icon ? (
@@ -132,18 +145,23 @@ class MenuUtil {
         <span class="ant-pro-menu-item-title-no-icon">{menuTitle}</span>
       );
 
-      const hasGroup = item.meta?.type === "group";
+      if (hasGroup) {
+        return (
+          <MenuItemGroup title={defaultTitle} key={item.path}>
+            {this.getNavMenuItems(item.children, level + 1)}
+          </MenuItemGroup>
+        );
+      }
 
-      const MenuComponent = hasGroup ? MenuItemGroup : SubMenu;
       return (
-        <MenuComponent
+        <SubMenu
           title={defaultTitle}
           key={item.path}
-          popupClassName={hasGroup ? undefined : `ant-pro-menu-popup`}
-          icon={hasGroup ? null : <LazyIcon icon={item.meta?.icon} />}
+          popupClassName={`ant-pro-menu-popup`}
+          icon={<LazyIcon icon={item.meta?.icon} />}
         >
-          {this.getNavMenuItems(item.children)}
-        </MenuComponent>
+          {this.getNavMenuItems(item.children, level + 1)}
+        </SubMenu>
       );
     }
 
@@ -164,7 +182,6 @@ class MenuUtil {
       )
     );
   };
-
   getMenuItem = (item: MenuDataItem) => {
     const meta = { ...item.meta };
     const target = (meta.target || null) as string | null;
@@ -230,6 +247,10 @@ export const baseMenuProps = {
     type: String as PropType<LayoutType>,
     default: "side",
   },
+  siderMenuType: {
+    type: String as PropType<SiderMenuType>,
+    default: "sub",
+  },
   collapsed: {
     type: Boolean,
     default: false,
@@ -290,11 +311,8 @@ const BaseMenu = defineComponent({
       emit("click", args);
     };
 
-    // 性能优化：把菜单 VNode 树的计算包成 computed，依赖（menuData /
-    // menuItemRender / menuSubItemRender / locale）不变时直接复用上次结果，
-    // 避免每次重渲染都遍历整棵 menuData 重建 VNode。大型菜单收益明显。
-    const menuItems = computed(() => menuUtil.getNavMenuItems(props.menuData));
-
+    // menu items rebuilt on each render; reads props.menuData, siderMenuType and
+    // layout reactively, so toggling siderMenuType or switching layout updates the menu.
     return () => {
       return (
         <Menu
@@ -308,7 +326,7 @@ const BaseMenu = defineComponent({
           onSelect={handleSelect}
           onClick={handleClick}
         >
-          {menuItems.value}
+          {menuUtil.getNavMenuItems(props.menuData)}
         </Menu>
       );
     };

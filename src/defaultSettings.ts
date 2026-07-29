@@ -1,5 +1,5 @@
 import type { PropType, ExtractPropTypes } from "vue";
-import type { LayoutType, Theme } from "./typings";
+import type { LayoutType, SiderMenuType, Theme } from "./typings";
 import { MenuTheme } from "ant-design-vue";
 
 export interface RenderSetting {
@@ -7,6 +7,7 @@ export interface RenderSetting {
   footerRender?: false;
   menuRender?: false;
   menuHeaderRender?: false;
+  tabRender?: false;
 }
 export interface PureSettings {
   /**全局主题色*/
@@ -28,6 +29,8 @@ export interface PureSettings {
   // Usage: https://github.com/ant-design/ant-design-pro/pull/3517
   iconfontUrl: string;
   splitMenus?: boolean;
+  /**侧边菜单类型 */
+  siderMenuType?: SiderMenuType;
 }
 
 export type ProSettings = PureSettings & RenderSetting;
@@ -79,7 +82,11 @@ export const defaultSettingProps = {
   /**菜单布局 `mix`下生效 分割二级菜单到左侧 */
   splitMenus: {
     type: Boolean,
-    default: false,
+    default: true,
+  },
+  siderMenuType: {
+    type: String as PropType<SiderMenuType>,
+    default: "sub",
   },
 };
 

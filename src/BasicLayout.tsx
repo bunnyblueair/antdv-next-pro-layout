@@ -155,6 +155,11 @@ const ProLayout = defineComponent({
     const isMobile = computed(
       () => screenSize.value === "sm" || screenSize.value === "xs",
     );
+    // whether an inline sider actually takes layout space (used for header/tab/footer width)
+    const hasSiderMenu = computed(
+      () =>
+        !isTop.value && !isMobile.value && (props as any).menuRender !== false,
+    );
     const baseClassName = "ant-pro-basicLayout";
     // gen className
     const className = computed(() => {
@@ -185,17 +190,8 @@ const ProLayout = defineComponent({
       }
     });
 
-    // ============================================================
     // slot/prop 提取
-    //
-    // 重构说明（4.x 内部优化，不改变对外 API）：
-    //  - 原实现把这些 getSlot 调用以及 headerDom / contentClassName /
-    //    contentWidth / tabDom / footerDom 等 computed 都写在返回的渲染
-    //    函数里，导致每次重渲染都新建 computed 实例，缓存完全失效，且
-    //    渲染函数内执行副作用（写入 routeContext.hasHeader）。
-    //  - 现统一上提到 setup 顶层，computed 只创建一次，副作用用
-    //    watchEffect 隔离，渲染函数保持纯函数。
-    // ============================================================
+    // 统一上提到 setup 顶层，computed 只创建一次，副作用用  watchEffect 隔离，渲染函数保持纯函数。
     const collapsedButtonRender = computed(() =>
       getSlot<CollapsedButtonRender>(slots, props, "collapsedButtonRender"),
     );
@@ -264,10 +260,7 @@ const ProLayout = defineComponent({
         [],
     );
 
-    // 性能优化：原实现用 `{ ...props }` 展开整个 props 对象，会让 computed 读取所有
-    // props 字段（包括 loading / contentStyle / pure / breadcrumb / isChildrenLayout
-    // 等与 header 渲染无关的字段），任何 prop 变化都会触发 headerDom 重算。
-    // 这里改为显式列出 HeaderView 真正需要的字段，收窄 computed 依赖范围。
+    // 显式列出 HeaderView 真正需要的字段，收窄 computed 依赖范围。
     const headerDom = computed(() =>
       renderHeader(
         {
@@ -292,18 +285,19 @@ const ProLayout = defineComponent({
           logo: props.logo,
           logoStyle: props.logoStyle,
           matchMenuKeys: props.matchMenuKeys,
+          menuRender: props.menuRender,
           // 渲染函数 / slot
           menuItemRender: menuItemRender.value,
           menuSubItemRender: menuSubItemRender.value,
           headerContentRightRender: headerContentRightRender.value,
           collapsedButtonRender: collapsedButtonRender.value,
-          headerTitleRender: menuHeaderRender.value,
+          menuHeaderRender: menuHeaderRender.value,
           menuHeaderExtraRender: menuHeaderExtraRender.value,
           menuContentRender: menuContentRender.value,
           headerContentRender: headerContentRender.value,
           headerRender: customHeaderRender.value,
           // HeaderView 自身判断
-          hasSiderMenu: !isTop.value,
+          hasSiderMenu: hasSiderMenu.value,
           // 事件
           onCollapse,
           onOpenKeys,
@@ -362,7 +356,7 @@ const ProLayout = defineComponent({
         flatMenuData.value.length === 0
       ) {
         width = "100%";
-      } else if (!isTop.value && !isMobile.value) {
+      } else if (hasSiderMenu.value) {
         width = `calc(100% - ${siderWidth.value}px)`;
       }
       return width;
@@ -404,29 +398,32 @@ const ProLayout = defineComponent({
                   ...((attrs.style as CSSProperties) || {}),
                 }}
               >
-                {(!isTop.value || isMobile.value) && (
-                  <SiderMenuWrapper
-                    {...restProps}
-                    isMobile={isMobile.value}
-                    menuHeaderRender={menuHeaderRender.value}
-                    menuHeaderExtraRender={menuHeaderExtraRender.value}
-                    menuContentRender={menuContentRender.value}
-                    menuFooterRender={menuFooterRender.value}
-                    menuItemRender={menuItemRender.value}
-                    menuSubItemRender={menuSubItemRender.value}
-                    collapsedButtonRender={collapsedButtonRender.value}
-                    onCollapse={onCollapse}
-                    onSelect={onSelect}
-                    onOpenKeys={onOpenKeys}
-                    onMenuClick={onMenuClick}
-                  />
-                )}
+                {(!isTop.value || isMobile.value) &&
+                  (props as any).menuRender !== false && (
+                    <SiderMenuWrapper
+                      {...restProps}
+                      isMobile={isMobile.value}
+                      menuHeaderRender={menuHeaderRender.value}
+                      menuHeaderExtraRender={menuHeaderExtraRender.value}
+                      menuContentRender={menuContentRender.value}
+                      menuFooterRender={menuFooterRender.value}
+                      menuItemRender={menuItemRender.value}
+                      menuSubItemRender={menuSubItemRender.value}
+                      collapsedButtonRender={collapsedButtonRender.value}
+                      onCollapse={onCollapse}
+                      onSelect={onSelect}
+                      onOpenKeys={onOpenKeys}
+                      onMenuClick={onMenuClick}
+                    />
+                  )}
                 <Layout style={genLayoutStyle}>
                   {headerDom.value}
                   {tabDom.value}
                   <LayoutContent
                     class={contentClassName.value}
-                    style={props.contentStyle}
+                    style={{
+                      ...((props.contentStyle as any) || {}),
+                    }}
                   >
                     {props.loading ? <PageLoading /> : slots.default?.()}
                   </LayoutContent>

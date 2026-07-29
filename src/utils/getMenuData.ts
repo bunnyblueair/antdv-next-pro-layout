@@ -50,12 +50,6 @@ export function clearMenuItem(
 /**
  * 格式化路由路径地址
  *
- * 重构说明（4.x 内部修复，不改变对外签名）：
- *  - 原实现直接写 `route.path = ...` 与 `route.children = ...`，
- *    会 mutate 传入的路由表，业务方再次把同一份 routes 传进来时
- *    path 已被改成绝对路径。
- *  - 这里对每一项做浅拷贝（`{ ...route }`）后再修改，保持入参不可变。
- *
  * @param routes
  * @param breadcrumb
  * @param parent

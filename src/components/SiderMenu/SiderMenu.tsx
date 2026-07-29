@@ -45,7 +45,7 @@ export const defaultRenderLogoAndTitle = (
     | "menuHeaderRender"
     | undefined = "menuHeaderRender",
 ): CustomRender | null => {
-  const { logo, logoStyle, title, layout, isMobile } = props;
+  const { logo, logoStyle, title } = props;
   const renderFunction = (props as Record<string, CustomRender>)[
     renderKey || ""
   ];
@@ -54,10 +54,6 @@ export const defaultRenderLogoAndTitle = (
   }
   const logoDom = defaultRenderLogo(logo, logoStyle);
   const titleDom = <h1>{title}</h1>;
-  if (layout === "mix" && !isMobile && renderKey === "menuHeaderRender") {
-    return null;
-  }
-  // call menuHeaderRender
   if (typeof renderFunction === "function") {
     // when collapsed, no render title
     return renderFunction(props);
@@ -154,10 +150,7 @@ export const siderMenuProps = {
 
 export type SiderMenuProps = Partial<ExtractPropTypes<typeof siderMenuProps>>;
 
-// 重构说明（4.x 内部优化，不改变对外 API）：
-//  - 原实现 SiderMenu 是 FunctionalComponent，每次渲染都会重新创建内部的
-//    computed（hasSplitMenu / sSideWidth / sSideHeaderTop / classNames），
-//    缓存完全失效。改为 defineComponent 后 computed 在 setup 中只创建一次。
+// 改为 defineComponent 后 computed 在 setup 中只创建一次。
 const SiderMenu = defineComponent({
   name: "SiderMenu",
   inheritAttrs: false,
@@ -171,17 +164,26 @@ const SiderMenu = defineComponent({
     const sSideWidth = computed(() =>
       props.collapsed ? props.collapsedWidth : props.siderWidth,
     );
-    const sSideHeaderTop = computed(() => {
-      if (props.layout === "mix") {
-        // 混合菜单布局去除顶栏
-        if (props.headerRender === false) {
-          return undefined;
-        }
-        if (!props.isMobile) {
-          return `${props.headerHeight}px`;
-        }
+    // mix layout: render the sider below the global header so they never overlap
+    // (aligns with React, which offsets the fixed mix sider via top/height, not paddingTop).
+    // - fixSiderbar: sider is fixed-positioned, place it under the header with top + height.
+    // - otherwise: the header still floats full-width (mix forces fixedHeader), so pad the
+    //   sider content down to keep the menu from being hidden behind it.
+    const mixOffsetStyle = computed<CSSProperties>(() => {
+      if (
+        props.layout !== "mix" ||
+        props.isMobile ||
+        props.headerRender === false
+      ) {
+        return {};
       }
-      return undefined;
+      if (context.fixSiderbar) {
+        return {
+          top: `${props.headerHeight}px`,
+          height: `calc(100% - ${props.headerHeight}px)`,
+        };
+      }
+      return { paddingTop: `${props.headerHeight}px` };
     });
     const classNames = computed(() => {
       return {
@@ -203,9 +205,11 @@ const SiderMenu = defineComponent({
       }
     };
 
-    // 菜单头
+    // 菜单头：mix 布局下子菜单侧边栏不渲染 logo（logo 已在顶部导航）
     const menuHeaderRenderDom = computed(() =>
-      defaultRenderLogoAndTitle(props),
+      props.layout === "mix" && !props.isMobile
+        ? null
+        : defaultRenderLogoAndTitle(props),
     );
 
     return () => {
@@ -226,6 +230,7 @@ const SiderMenu = defineComponent({
         <BaseMenu
           locale={props.locale || context.locale}
           theme={props.menuTheme}
+          siderMenuType={props.siderMenuType}
           mode="inline"
           menuData={
             hasSplitMenu.value ? context.flatMenuData : context.menuData
@@ -274,7 +279,7 @@ const SiderMenu = defineComponent({
             collapsedWidth={props.collapsedWidth || 48}
             style={{
               overflow: "hidden",
-              paddingTop: sSideHeaderTop.value,
+              ...mixOffsetStyle.value,
             }}
             width={sSideWidth.value}
             theme={props.menuTheme}

@@ -4,6 +4,7 @@ export * from "./hooks/useContext";
 export * from "./hooks/useMediaScreen";
 export * from "./hooks/usePrefersColorScheme";
 export * from "./utils/getMenuData";
+export * from "./defaultSettings";
 
 export type { BaseMenuProps } from "./components/SiderMenu/BaseMenu";
 export { default as BaseMenu } from "./components/SiderMenu/BaseMenu";

@@ -31,7 +31,7 @@ export const headerViewProps = {
   },
   hasSiderMenu: PropTypes.looseBool,
   siderWidth: PropTypes.number.def(200),
-  // collapsedWidth 用于在折叠态正确计算 Header 宽度，原实现硬编码 48 在用户自定义时计算错误
+  // collapsedWidth 用于在折叠态正确计算 Header 宽度
   collapsedWidth: PropTypes.number.def(48),
 };
 
@@ -51,7 +51,6 @@ const HeaderView = defineComponent({
     const needFixedHeader = computed(
       () => fixedHeader.value || context.fixedHeader || layout.value === "mix",
     );
-    const isMix = computed(() => layout.value === "mix");
     const isTop = computed(() => layout.value === "top");
     const needSettingWidth = computed(
       () =>
@@ -60,16 +59,12 @@ const HeaderView = defineComponent({
         !isTop.value &&
         !isMobile.value,
     );
-    // cache menu
     const clearMenuData = computed(
       () =>
         (context.menuData &&
           clearMenuItem(context.menuData as RouteRecordRaw[])) ||
         [],
     );
-
-    // 性能优化：按优先级提前 return，避免每次重渲染都先创建 GlobalHeader/TopNavHeader
-    // 的 VNode 再被后续分支覆盖（原实现在 headerRender 自定义场景下会白创建两个子树）。
     const renderContent = () => {
       if (props.headerRender) {
         return props.headerRender(props);
@@ -90,12 +85,10 @@ const HeaderView = defineComponent({
           onCollapse={props.onCollapse}
           menuData={clearMenuData.value}
         >
-          {!isMix.value
-            ? props.headerContentRender &&
-              typeof props.headerContentRender === "function"
-              ? props.headerContentRender(props)
-              : props.headerContentRender
-            : null}
+          {props.headerContentRender &&
+          typeof props.headerContentRender === "function"
+            ? props.headerContentRender(props)
+            : props.headerContentRender}
         </GlobalHeader>
       );
     };

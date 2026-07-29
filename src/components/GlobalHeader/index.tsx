@@ -39,14 +39,14 @@ export const globalHeaderProps = {
   },
   splitMenus: siderMenuProps.splitMenus,
   menuRender: {
-    type: [Object, Function] as PropType<MenuContentRender>,
+    type: [Object, Function, Boolean] as PropType<MenuContentRender>,
     default: () => undefined,
   },
   menuHeaderRender: siderMenuProps.menuHeaderRender,
   menuItemRender: siderMenuProps.menuItemRender,
   menuSubItemRender: siderMenuProps.menuSubItemRender,
   headerContentRightRender: {
-    type: [Object, Function] as PropType<CustomRenderProps>,
+    type: [Object, Function, Boolean] as PropType<CustomRenderProps>,
     default: () => undefined,
   },
   collapsedButtonRender: siderMenuProps.collapsedButtonRender,
@@ -120,7 +120,9 @@ const GlobalHeader = defineComponent({
               <div class={`${baseClassName}-logo`} onClick={onMenuHeaderClick}>
                 {defaultRenderLogoAndTitle(
                   { ...props, collapsed: false },
-                  "headerTitleRender",
+                  props.menuHeaderRender !== undefined
+                    ? "menuHeaderRender"
+                    : "headerTitleRender",
                 )}
               </div>
             </>

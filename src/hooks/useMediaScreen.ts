@@ -43,9 +43,6 @@ export type MediaQueryKey = keyof typeof MediaQueryEnum;
 /**
  * 屏幕尺寸
  * Screen Media Query
- * Array.find will throw a error
- * `Rendered more hooks than during the previous render.`
- * So should use Array.forEach
  */
 export const getMediaScreen = (): MediaQueryKey => {
   // support ssr

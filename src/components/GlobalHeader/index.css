@@ -14,7 +14,7 @@
 /* LOGO区域 mix */
 .ant-pro-global-header-logo {
   position: relative;
-  min-width: 165px;
+  min-width: 48px;
   height: 100%;
   overflow: hidden;
 }
