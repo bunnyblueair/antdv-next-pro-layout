@@ -1,0 +1,196 @@
+/* SettingDrawer - aligned with React @ant-design/pro-components SettingDrawer */
+.sd-content {
+  padding-block-end: 24px;
+}
+.sd-body {
+  margin-block-end: 24px;
+}
+
+/* BlockCheckbox (theme / layout / siderMenuType) */
+.sd-block-checkbox {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.sd-block-checkbox-item {
+  position: relative;
+  width: 44px;
+  height: 36px;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid #f0f0f0;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+  background: #fff;
+}
+.sd-block-checkbox-item:hover {
+  border-color: #1677ff;
+}
+.sd-block-checkbox-item.active {
+  border-color: #1677ff;
+}
+.sd-block-checkbox-selectIcon {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  color: #1677ff;
+  font-size: 12px;
+  z-index: 2;
+}
+
+/* mini layout thumbnails */
+.sd-mini {
+  position: absolute;
+  inset: 0;
+  display: flex;
+}
+.sd-mini__sider {
+  display: block;
+}
+.sd-mini__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.sd-mini__head {
+  display: block;
+}
+
+.sd-mini--light {
+  flex-direction: row;
+  background: #f0f2f5;
+}
+.sd-mini--light .sd-mini__sider {
+  width: 32%;
+  background: #001529;
+}
+.sd-mini--light .sd-mini__body {
+  background: #f0f2f5;
+}
+
+.sd-mini--realDark {
+  flex-direction: row;
+  background: #141414;
+}
+.sd-mini--realDark .sd-mini__sider {
+  width: 32%;
+  background: #000;
+}
+.sd-mini--realDark .sd-mini__body {
+  background: #141414;
+}
+
+.sd-mini--side {
+  flex-direction: row;
+  background: #f0f2f5;
+}
+.sd-mini--side .sd-mini__sider {
+  width: 32%;
+  background: #001529;
+}
+.sd-mini--side .sd-mini__body {
+  background: #f0f2f5;
+}
+.sd-mini--side .sd-mini__head {
+  height: 30%;
+  margin: 2px;
+  background: #fff;
+  border-radius: 2px;
+}
+
+.sd-mini--top {
+  flex-direction: column;
+  background: #f0f2f5;
+}
+.sd-mini--top .sd-mini__sider {
+  display: none;
+}
+.sd-mini--top .sd-mini__body {
+  background: #f0f2f5;
+}
+.sd-mini--top .sd-mini__head {
+  height: 42%;
+  background: #001529;
+}
+
+.sd-mini--mix {
+  flex-direction: row;
+  background: #f0f2f5;
+}
+.sd-mini--mix .sd-mini__sider {
+  width: 32%;
+  background: #001529;
+}
+.sd-mini--mix .sd-mini__body {
+  background: #f0f2f5;
+}
+.sd-mini--mix .sd-mini__head {
+  height: 42%;
+  background: #001529;
+}
+
+/* siderMenuType thumbnails (simple lines) */
+.sd-mini--sub,
+.sd-mini--group {
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  padding: 7px 6px;
+  background: #fff;
+}
+.sd-line {
+  display: block;
+  height: 3px;
+  border-radius: 1.5px;
+  background: #d9d9d9;
+}
+.sd-line--parent {
+  width: 75%;
+  background: #001529;
+}
+.sd-line--child {
+  width: 50%;
+  margin-left: 22%;
+}
+.sd-line--grouptitle {
+  width: 42%;
+  background: #8c8c8c;
+}
+
+/* ThemeColor */
+.sd-theme-color {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.sd-theme-color-block {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+}
+
+/* list items full width */
+.sd-list .ant-list-item {
+  padding-inline: 0;
+  padding-block: 6px;
+  align-items: center;
+}
+.sd-list .ant-list-item-meta {
+  display: none;
+}
+/* inline label + control row (e.g. menu theme) */
+.sd-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-block-start: 12px;
+}

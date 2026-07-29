@@ -121,6 +121,22 @@ export const constantRoutes: RouteRecordRaw[] = [
         meta: { title: "嵌套布局", icon: "icon-morentouxiang" },
         redirect: "/nested",
       },
+      {
+        path: "/render",
+        name: "Render",
+        meta: {
+          title: "渲染目录",
+          icon: "icon-zhizuoliucheng",
+        },
+        component: BlankLayout,
+        redirect: () => ({ name: "RenderPageInfo1" }),
+        children: Array.from({ length: 20 }, (_, i) => ({
+          path: `page-info/${i}`,
+          name: `RenderPageInfo${i}`,
+          meta: { title: `渲染信息${i}`, icon: "icon-huifu" },
+          component: () => import("@/views/demos/page-info.vue"),
+        })),
+      },
     ],
   },
   {

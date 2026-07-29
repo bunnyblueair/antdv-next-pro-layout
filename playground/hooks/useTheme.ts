@@ -1,43 +1,48 @@
-import { onBeforeMount, reactive, ref, watch } from "vue";
+import { onBeforeMount, reactive, ref, watch, type CSSProperties } from "vue";
 import { theme } from "ant-design-vue";
 import type { ThemeConfig } from "ant-design-vue/es/config-provider/context";
+import type { ProSettings } from "antdv-pro-layout";
 
 const CACHE_LOCAL_PRIMARY_COLOR = "cache:local:primaryColor";
 
-export type ConfigType = {
-  /**导航布局 */
-  layout: "side" | "top" | "mix";
-  /**全局主题色*/
-  theme: "dark" | "light";
-  /**菜单导航主题色 */
-  menuTheme: "dark" | "light";
-  /**固定顶部栏 */
-  fixedHeader: boolean;
-  /**固定菜单栏 */
-  fixSiderbar: boolean;
-  /**自动分割菜单 */
-  splitMenus: boolean;
-  /**内容区域-顶栏 */
-  headerRender?: any | boolean | undefined;
-  /**内容区域-页脚 */
-  footerRender?: any | boolean | undefined;
-  /**内容区域-菜单头 */
-  menuHeaderRender?: any | boolean | undefined;
-  /**内容区域-导航标签项 */
-  tabRender?: any | boolean | undefined;
+/**
+ * 布局配置：复用库内置的 ProSettings（theme/menuTheme/layout/fixedHeader/
+ * fixSiderbar/splitMenus/siderMenuType，以及 5 个 *Render 显隐开关），
+ * 仅追加 playground 需要的 navTheme / contentWidth / contentStyle。
+ */
+export type ConfigType = Omit<
+  ProSettings,
+  "title" | "iconfontUrl" | "headerHeight"
+> & {
+  /** 整体风格：light | realDark（联动 menuTheme 与全局 theme 算法） */
+  navTheme: "light" | "realDark";
+  /** 内容区域宽度：Fluid 流式 | Fixed 定宽居中 */
+  contentWidth: "Fluid" | "Fixed";
+  /** 内容区域样式（由 layout + contentWidth 派生） */
+  contentStyle?: CSSProperties;
 };
 
+/** compute content area style from layout + contentWidth */
+export function getContentStyle(
+  layout: ConfigType["layout"],
+  contentWidth: ConfigType["contentWidth"],
+): CSSProperties {
+  return layout !== "side" && contentWidth === "Fixed"
+    ? { maxWidth: "1200px", margin: "0 auto" }
+    : {};
+}
+
 export const proConfig = ref<ConfigType>({
-  layout: "side",
-  theme: "light", // "dark" | "light",
-  menuTheme: "light", // "dark" | "light",
+  navTheme: "light",
+  layout: "side", // "side" | "top" | "mix"
+  contentWidth: "Fluid",
+  contentStyle: getContentStyle("side", "Fluid"),
+  theme: "light",
+  menuTheme: "light",
   fixedHeader: true,
   fixSiderbar: true,
   splitMenus: true,
-  headerRender: undefined,
-  footerRender: undefined,
-  menuHeaderRender: undefined,
-  tabRender: undefined,
+  siderMenuType: "sub",
 });
 
 const themeColor = {

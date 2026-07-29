@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import {
-  BuildOutlined,
   GithubOutlined,
   SettingOutlined,
   LogoutOutlined,
@@ -8,12 +7,12 @@ import {
 } from "@ant-design/icons-vue";
 import { changePrimaryColor, getLocalColor } from "@/hooks/useTheme";
 import type { MenuInfo } from "ant-design-vue/es/menu/src/interface";
-const emit = defineEmits(["drawer"]);
+
 const props = defineProps({
   /**用户名 */
   name: {
     type: String,
-    default: "",
+    default: "ProLayout",
   },
 });
 
@@ -27,11 +26,6 @@ function fnClick({ key }: MenuInfo) {
     case "logout":
       break;
   }
-}
-
-/**抽屉打开 */
-function fnDrawerOpen() {
-  emit("drawer", true);
 }
 </script>
 
@@ -52,15 +46,6 @@ function fnDrawerOpen() {
     </a-tooltip>
 
     <a-tooltip>
-      <template #title>变更布局</template>
-      <a-button type="text" style="color: inherit" @click="fnDrawerOpen()">
-        <template #icon>
-          <BuildOutlined />
-        </template>
-      </a-button>
-    </a-tooltip>
-
-    <a-tooltip>
       <template #title>改变颜色</template>
       <a-button
         type="text"
@@ -74,15 +59,15 @@ function fnDrawerOpen() {
     </a-tooltip>
 
     <a-dropdown placement="bottomRight" :trigger="['click', 'hover']">
-      <div class="user">
+      <a-space :size="8" align="start">
         <a-avatar
           shape="circle"
           size="default"
           src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"
           alt="头像"
         ></a-avatar>
-        <span class="nick"> ProLayout </span>
-      </div>
+        <span class="nick"> {{ props.name }} </span>
+      </a-space>
       <template #overlay>
         <a-menu @click="fnClick">
           <a-menu-item key="settings">

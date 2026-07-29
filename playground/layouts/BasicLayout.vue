@@ -8,6 +8,7 @@ import {
   type RouteContextProps,
   type MenuDataItem,
 } from "antdv-pro-layout";
+import { BuildOutlined } from "@ant-design/icons-vue";
 import { reactive, ref, computed, watch } from "vue";
 import RightContent from "./components/RightContent/RightContent.vue";
 import SettingDrawer from "./components/SettingDrawer/SettingDrawer.vue";
@@ -85,9 +86,9 @@ function settingDrawer(bool: boolean) {
         </router-link>
       </template>
       <!-- 渲染菜单头拓展区域 -->
-      <template #menuHeaderExtraRender2>
+      <template #menuHeaderExtraRender2="{ collapsed }">
         <div style="height: 100px; background-color: red">
-          menuHeaderExtraRender
+          menuHeaderExtraRender {{ collapsed }}
         </div>
       </template>
       <!-- 渲染菜单收起按钮区域 -->
@@ -100,9 +101,9 @@ function settingDrawer(bool: boolean) {
         </div>
       </template>
       <!-- 渲染菜单底脚区域 -->
-      <template #menuFooterRender2>
+      <template #menuFooterRender2="{ collapsed }">
         <div style="height: 100px; background-color: blue">
-          menuFooterRender
+          menuFooterRender {{ collapsed }}
         </div>
       </template>
       <!-- 渲染菜单项 Menu.Item -->
@@ -111,7 +112,6 @@ function settingDrawer(bool: boolean) {
           :key="path"
           :disabled="meta?.disabled"
           :danger="meta?.danger"
-          :icon="meta?.icon"
         >
           <router-link :to="path">
             <span class="ant-pro-menu-item">
@@ -142,13 +142,13 @@ function settingDrawer(bool: boolean) {
 
       <!-- 渲染顶部头区域 -->
       <template #headerRender2>
-        <div style="background-color: #1677ff">headerRender</div>
+        <div style="background-color: #1677ff">headerContenXX都覆盖</div>
       </template>
       <template #headerContentRender2>
         <div style="background-color: #ff7875">headerContentRender</div>
       </template>
       <template #headerContentRightRender>
-        <RightContent @drawer="settingDrawer" />
+        <RightContent />
       </template>
 
       <!-- 渲染面包屑导航区域  -->
@@ -162,7 +162,7 @@ function settingDrawer(bool: boolean) {
       </template>
 
       <!--渲染顶部标签页区域-->
-      <template #tabRender2="{ width, fixedHeader }">
+      <template #tabRender="{ width, fixedHeader, headerRender, headerHeight }">
         <div>
           <header
             class="ant-layout-header"
@@ -175,13 +175,13 @@ function settingDrawer(bool: boolean) {
               height: '36px',
               lineHeight: '36px',
               right: '0px',
-              top: '48px',
+              top: `${headerRender === false ? 0 : headerHeight || 48}px`,
               position: fixedHeader ? 'fixed' : 'unset',
               width: fixedHeader ? width : '100%',
               overflow: 'hidden',
               zIndex: 14,
               padding: '4px 16px',
-              background: '#fff',
+              background: '#0015291f',
               boxShadow: '0 1px 4px #0015291f',
               transition: 'background 0.3s, width 0.2s',
             }"
@@ -249,8 +249,23 @@ function settingDrawer(bool: boolean) {
     <SettingDrawer
       v-model:config="proConfig"
       :open="settingDrawerOpen"
-      @close="settingDrawer"
+      @close="settingDrawer(false)"
     ></SettingDrawer>
+    <a-tooltip>
+      <template #title>变更布局</template>
+      <a-float-button
+        type="primary"
+        :style="{
+          right: '32px',
+          bottom: '64px',
+        }"
+        @click="settingDrawer(true)"
+      >
+        <template #icon>
+          <BuildOutlined />
+        </template>
+      </a-float-button>
+    </a-tooltip>
   </a-watermark>
 </template>
 
