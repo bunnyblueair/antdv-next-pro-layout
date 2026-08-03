@@ -41,10 +41,8 @@ export default defineConfig({
       external: [
         "vue",
         "vue-router",
-        "@ant-design/icons-vue",
-        "@ant-design/icons-svg",
-        "ant-design-vue",
-        "vue-types",
+        "@antdv-next/icons",
+        "antdv-next",
         "lodash-es",
       ],
       output: {
@@ -54,10 +52,8 @@ export default defineConfig({
         globals: {
           vue: "Vue",
           "vue-router": "VueRouter",
-          "ant-design-vue": "Antdv",
-          "@ant-design/icons-vue": "AntdIconsVue",
-          "@ant-design/icons-svg": "AntdIconsSvg",
-          "vue-types": "vueTypes",
+          "antdv-next": "AntdvNext",
+          "@antdv-next/icons": "AntdvNextIcons",
           "lodash-es": "Lodash",
         },
       },

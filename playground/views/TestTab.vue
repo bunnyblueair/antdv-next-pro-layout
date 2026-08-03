@@ -9,7 +9,7 @@
     @tab-change="tabChange"
     :tabProps="{
       hideAdd: true,
-      tabPosition: 'top',
+      tabPlacement: 'top',
       type: 'editable-card',
       tabBarGutter: 8,
       tabBarStyle: { margin: '0', height: '32px', lineHeight: '16px' },
@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { Button, Tag, Result } from "ant-design-vue";
+import { Button, Tag, Result } from "antdv-next";
 import { PageContainer } from "antdv-pro-layout";
 
 import { useRoute } from "vue-router";

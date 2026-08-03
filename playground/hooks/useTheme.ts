@@ -1,6 +1,6 @@
 import { onBeforeMount, reactive, ref, watch, type CSSProperties } from "vue";
-import { theme } from "ant-design-vue";
-import type { ThemeConfig } from "ant-design-vue/es/config-provider/context";
+import { theme } from "antdv-next";
+import type { ThemeConfig } from "antdv-next";
 import type { ProSettings } from "antdv-pro-layout";
 
 const CACHE_LOCAL_PRIMARY_COLOR = "cache:local:primaryColor";
@@ -51,7 +51,7 @@ const themeColor = {
   dark: theme.darkAlgorithm,
 };
 
-export const themeConfig = reactive<ThemeConfig>({
+export const themeConfig: ThemeConfig = reactive({
   algorithm: [themeColor["light"]],
   // algorithm: themeColor["compact"],
   token: {

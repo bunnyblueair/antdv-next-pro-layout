@@ -10,8 +10,8 @@ import {
   type ExtractPropTypes,
 } from "vue";
 
-import { Layout, LayoutContent } from "ant-design-vue";
-import { withInstall } from "ant-design-vue/es/_util/type";
+import { Layout, LayoutContent } from "antdv-next";
+import { withInstall } from "./utils/withInstall";
 import { useMediaScreen } from "./hooks/useMediaScreen";
 
 import { defaultSettingProps } from "./defaultSettings";
@@ -422,6 +422,8 @@ const ProLayout = defineComponent({
                   <LayoutContent
                     class={contentClassName.value}
                     style={{
+                      // antdv-next 的 LayoutContent 默认 width 为 0，列布局下需显式撑满。
+                      width: "100%",
                       ...((props.contentStyle as any) || {}),
                     }}
                   >

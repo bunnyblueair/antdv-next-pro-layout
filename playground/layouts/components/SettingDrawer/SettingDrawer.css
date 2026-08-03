@@ -178,14 +178,13 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
 }
 
-/* list items full width */
-.sd-list .ant-list-item {
+/* 设置行占满宽度 */
+.sd-list-item {
+  display: flex;
   padding-inline: 0;
   padding-block: 6px;
+  justify-content: space-between;
   align-items: center;
-}
-.sd-list .ant-list-item-meta {
-  display: none;
 }
 /* inline label + control row (e.g. menu theme) */
 .sd-row {

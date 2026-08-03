@@ -10,8 +10,7 @@ import { useRouteContext } from "../../RouteContext";
 import { CustomRenderProps } from "../../typings";
 import { clearMenuItem } from "../../utils/getMenuData";
 import GlobalHeader, { GlobalHeaderProps, globalHeaderProps } from ".";
-import { LayoutHeader } from "ant-design-vue";
-import PropTypes from "ant-design-vue/es/_util/vue-types";
+import { LayoutHeader } from "antdv-next";
 import TopNavHeader from "./TopNavHeader";
 import "./HeaderView.css";
 
@@ -29,10 +28,10 @@ export const headerViewProps = {
     type: [Object, Function, Boolean] as PropType<CustomRenderProps>,
     default: () => undefined,
   },
-  hasSiderMenu: PropTypes.looseBool,
-  siderWidth: PropTypes.number.def(200),
+  hasSiderMenu: Boolean,
+  siderWidth: { type: Number, default: 200 },
   // collapsedWidth 用于在折叠态正确计算 Header 宽度
-  collapsedWidth: PropTypes.number.def(48),
+  collapsedWidth: { type: Number, default: 48 },
 };
 
 export type HeaderViewProps = Partial<

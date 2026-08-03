@@ -18,6 +18,9 @@ export { default as GlobalFooter } from "./components/GlobalFooter";
 export type { PageContainerProps } from "./components/PageContainer";
 export { default as PageContainer } from "./components/PageContainer";
 
+export type { PageHeaderProps } from "./components/PageHeader";
+export { default as PageHeader } from "./components/PageHeader";
+
 export type { BasicLayoutProps } from "./BasicLayout";
 export { default as ProLayout } from "./BasicLayout";
 

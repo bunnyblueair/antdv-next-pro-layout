@@ -60,9 +60,9 @@
 
 <script lang="ts" setup>
 import { PageContainer } from "antdv-pro-layout";
-import { message, Modal, notification } from "ant-design-vue";
+import { message, Modal, notification } from "antdv-next";
 import { createVNode, h, ref } from "vue";
-import { ExclamationCircleOutlined } from "@ant-design/icons-vue";
+import { ExclamationCircleOutlined } from "@antdv-next/icons";
 const [modal, contextHolder] = Modal.useModal();
 
 const spinning = ref<boolean>(false);
@@ -125,7 +125,7 @@ const handleCancel = (e: MouseEvent) => {
 
 const handleNotification = () => {
   notification.open({
-    message: "Notification Title",
+    title: "Notification Title",
     description:
       "This is the content of the notification. This is the content of the notification. This is the content of the notification.",
     onClick: () => {

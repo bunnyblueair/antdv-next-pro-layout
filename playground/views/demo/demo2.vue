@@ -6,11 +6,8 @@
         v-model:selectedKeys="selectedKeys"
         theme="dark"
         mode="horizontal"
-      >
-        <a-menu-item key="1">nav 1</a-menu-item>
-        <a-menu-item key="2">nav 2</a-menu-item>
-        <a-menu-item key="3">nav 3</a-menu-item>
-      </a-menu>
+        :items="menuItems"
+      />
     </a-layout-header>
     <a-layout-content class="layout-content">
       <a-breadcrumb style="margin: 16px 0">
@@ -30,6 +27,11 @@
 import { ref } from "vue";
 
 const selectedKeys = ref<string[]>(["2"]);
+const menuItems = [
+  { key: "1", label: "nav 1" },
+  { key: "2", label: "nav 2" },
+  { key: "3", label: "nav 3" },
+];
 </script>
 
 <style scoped>

@@ -1,5 +1,5 @@
 import { defineComponent } from "vue";
-import { Drawer } from "ant-design-vue";
+import { Drawer } from "antdv-next";
 import SiderMenu, { siderMenuProps, type SiderMenuProps } from "./SiderMenu";
 
 const SiderMenuWrapper = defineComponent({
@@ -19,12 +19,14 @@ const SiderMenuWrapper = defineComponent({
               height: "100vh",
             }}
             onClose={() => props.onCollapse && props.onCollapse(true)}
-            width={props.siderWidth}
-            bodyStyle={{
-              height: "100vh",
-              padding: 0,
-              display: "flex",
-              flexDirection: "row",
+            size={props.siderWidth}
+            styles={{
+              body: {
+                height: "100vh",
+                padding: 0,
+                display: "flex",
+                flexDirection: "row",
+              },
             }}
           >
             <SiderMenu

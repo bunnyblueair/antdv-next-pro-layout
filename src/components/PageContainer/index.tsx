@@ -1,51 +1,46 @@
 import {
+  Affix,
+  Tabs,
+  type AffixProps,
+  type TabPaneProps,
+  type TabsProps,
+} from "antdv-next";
+import {
   computed,
   defineComponent,
-  type PropType,
   type ExtractPropTypes,
+  type PropType,
   type VNodeChild,
 } from "vue";
-/* antd ts define */
-import {
-  Tabs,
-  TabPane,
-  TabPaneProps,
-  TabsProps,
-  Affix,
-  AffixProps,
-  PageHeader,
-} from "ant-design-vue";
-import { pageHeaderProps } from "ant-design-vue/es/page-header";
-import { withInstall } from "ant-design-vue/es/_util/type";
-/* antd ts define end */
+import { withInstall } from "../../utils/withInstall";
 import { useRouteContext } from "../../RouteContext";
 import { getSlotVNode } from "../../utils";
 import PageLoading from "../PageLoading";
+import PageHeader, { pageHeaderProps } from "../PageHeader";
 import type { DefaultPropRender } from "../../typings";
 import "./index.css";
 
 export const pageHeaderTabProps = {
-  /**tabs 的列表 */
+  /** tabs 的列表 */
   tabList: {
     type: [Object, Function, Array] as PropType<
       (Omit<TabPaneProps, "id"> & { key?: string; tab?: any })[]
     >,
     default: () => undefined,
   },
-  /**当前选中 tab 的 key */
+  /** 当前选中 tab 的 key */
   tabActiveKey: String,
-  /**tabs 的其他配置 */
+  /** tabs 的其他配置 */
   tabProps: {
     type: Object as PropType<TabsProps>,
     default: () => undefined,
   },
-  // events
-  onTabChange: Function,
+  onTabChange: Function as PropType<(key: string) => void>,
 };
 
 export const pageContainerProps = {
   ...pageHeaderTabProps,
-  ...pageHeaderProps(),
+  ...pageHeaderProps,
   content: {
     type: [Object, String, Boolean, Function] as PropType<DefaultPropRender>,
     default: () => null,
@@ -54,26 +49,26 @@ export const pageContainerProps = {
     type: [Object, String, Boolean, Function] as PropType<DefaultPropRender>,
     default: () => null,
   },
-  /**固钉的配置 */
+  /** 固钉的配置 */
   affixProps: {
     type: [Object, Function] as PropType<AffixProps>,
   },
-  /**内容布局充满，默认固定宽度1200px */
+  /** 内容布局充满，默认固定宽度 1200px */
   flex: {
     type: Boolean,
     default: true,
   },
-  /**加载状态 */
+  /** 加载状态 */
   loading: {
     type: Boolean,
     default: false,
   },
-  /**布局内容禁用外边距*/
+  /** 布局内容禁用外边距 */
   disableMargin: {
     type: Boolean,
     default: false,
   },
-  /**固定 PageHeader 到页面顶部*/
+  /** 固定 PageHeader 到页面顶部 */
   fixedHeader: {
     type: Boolean,
     default: false,
@@ -84,50 +79,47 @@ export type PageContainerProps = Partial<
   ExtractPropTypes<typeof pageContainerProps>
 >;
 
-const renderFooter = (props: PageContainerProps): VNodeChild | any => {
+const renderFooter = (props: PageContainerProps): VNodeChild | null => {
   const { tabList, tabActiveKey, onTabChange, tabProps } = props;
-  if (!Array.isArray(tabList) || tabList.length <= 0) {
+  if (!Array.isArray(tabList) || tabList.length === 0) {
     return null;
   }
+
+  const items = tabList.map((item, index) => {
+    const { tab, key, ...rest } = item;
+    return {
+      ...rest,
+      key: String(key ?? index),
+      label: tab,
+    };
+  });
+
   return (
     <Tabs
-      activeKey={tabActiveKey}
-      onChange={(key: string | number) => {
-        if (onTabChange) onTabChange(key);
-      }}
       {...tabProps}
-    >
-      {tabList.map((item) => (
-        <TabPane {...item} tab={item.tab} key={item.key} />
-      ))}
-    </Tabs>
+      activeKey={tabActiveKey}
+      items={items}
+      onChange={(key: string) => {
+        onTabChange?.(key);
+      }}
+    />
   );
 };
 
-// PageHeader 页头 https://www.antdv.com/components/page-header-cn/#api
-//
-// 重构说明（4.x 内部优化，不改变对外 API）：
-//  - 原实现是 FunctionalComponent，每次重渲染整个函数体重新执行，包括
-//    useRouteContext() 和 breadcrumb 对象的展开。
-//  - 改为 defineComponent 后：
-//    * useRouteContext() 在 setup 中只调用一次
-//    * breadcrumb 计算用 computed 缓存（breadcrumb prop 或 RouteContext.breadcrumb
-//      变化时才重算）
-const ProPageHeader = defineComponent({
-  name: "ProPageHeader",
+const PageContainer = defineComponent({
+  name: "PageContainer",
   inheritAttrs: false,
-  props: {
-    ...pageContainerProps,
-    baseClassName: { type: String, required: true },
-  },
-  setup(props) {
+  props: pageContainerProps,
+  setup(props, { slots }) {
     const context = useRouteContext();
+    const baseClassName = "ant-pro-page-container";
 
-    // 面包屑：显式传入优先；否则从 RouteContext 拿并展开。
+    // 显式 breadcrumb 优先；否则兼容 ProLayout 原有的 routes 配置。
     const pageHeaderBreadcrumb = computed(() => {
       if (props.breadcrumb !== undefined) {
         return props.breadcrumb;
       }
+
       const ctxBreadcrumb = context.breadcrumb;
       const value = ctxBreadcrumb
         ? (ctxBreadcrumb as any).value || ctxBreadcrumb
@@ -139,37 +131,42 @@ const ProPageHeader = defineComponent({
       };
     });
 
-    return () => {
+    const pageHeaderDom = computed(() => {
+      if (slots.pageHeader) {
+        return slots.pageHeader({ ...props });
+      }
+
+      const tags = getSlotVNode<DefaultPropRender>(slots, props, "tags");
+      const extra = getSlotVNode<DefaultPropRender>(slots, props, "extra");
+      const footer = getSlotVNode<DefaultPropRender>(slots, props, "footer");
+      const content = getSlotVNode<DefaultPropRender>(slots, props, "content");
+      const contentExtra = getSlotVNode<DefaultPropRender>(
+        slots,
+        props,
+        "contentExtra",
+      );
       const {
-        baseClassName,
-        title,
-        tabList,
-        tabActiveKey,
-        breadcrumb: _breadcrumb,
-        content,
-        tags,
-        extra,
-        contentExtra,
+        tabList: _tabList,
+        tabActiveKey: _tabActiveKey,
+        tabProps: _tabProps,
+        onTabChange: _onTabChange,
+        content: _content,
+        contentExtra: _contentExtra,
+        affixProps: _affixProps,
+        flex: _flex,
+        loading: _loading,
+        disableMargin: _disableMargin,
         fixedHeader: _fixedHeader,
-        footer,
         ...restProps
       } = props;
-
-      const pageHeaderTitle: any = title !== false ? title : undefined;
 
       return (
         <PageHeader
           {...restProps}
-          title={pageHeaderTitle}
+          title={props.title !== false ? props.title : undefined}
           breadcrumb={pageHeaderBreadcrumb.value}
-          footer={
-            footer ||
-            renderFooter({
-              ...restProps,
-              tabList,
-              tabActiveKey,
-            })
-          }
+          ghost={Boolean(props.ghost)}
+          footer={footer || renderFooter(props)}
           tags={tags}
           extra={extra}
         >
@@ -189,44 +186,6 @@ const ProPageHeader = defineComponent({
             </div>
           )}
         </PageHeader>
-      );
-    };
-  },
-});
-
-const PageContainer = defineComponent({
-  name: "PageContainer",
-  inheritAttrs: false,
-  props: pageContainerProps,
-  setup(props, { slots }) {
-    const context = useRouteContext();
-    const baseClassName = "ant-pro-page-container";
-    const pageHeaderDom = computed(() => {
-      // 渲染页头
-      if (slots.pageHeader) {
-        return slots.pageHeader({ ...props });
-      }
-
-      const tags = getSlotVNode<DefaultPropRender>(slots, props, "tags");
-      const extra = getSlotVNode<DefaultPropRender>(slots, props, "extra");
-      const footer = getSlotVNode<DefaultPropRender>(slots, props, "footer");
-      const content = getSlotVNode<DefaultPropRender>(slots, props, "content");
-      const contentExtra = getSlotVNode<DefaultPropRender>(
-        slots,
-        props,
-        "contentExtra",
-      );
-      return (
-        <ProPageHeader
-          {...props}
-          baseClassName={baseClassName}
-          ghost={Boolean(props.ghost)}
-          content={content}
-          tags={tags}
-          footer={footer}
-          extra={extra}
-          contentExtra={contentExtra}
-        />
       );
     });
 
@@ -254,10 +213,8 @@ const PageContainer = defineComponent({
           }}
         >
           {props.loading ? (
-            // 加载状态
             <PageLoading />
           ) : (
-            // 默认插槽
             slots.default && (
               <div
                 class={{
@@ -270,10 +227,7 @@ const PageContainer = defineComponent({
           )}
         </div>
 
-        {
-          /* 渲染页脚 */
-          slots.pageFooter && slots.pageFooter({ ...props })
-        }
+        {slots.pageFooter && slots.pageFooter({ ...props })}
       </div>
     );
   },

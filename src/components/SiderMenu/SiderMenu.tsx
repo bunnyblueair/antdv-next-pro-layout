@@ -6,13 +6,14 @@ import {
   type PropType,
   type CSSProperties,
 } from "vue";
-import { LayoutSider, Menu, MenuItem, SiderProps } from "ant-design-vue";
-import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons-vue";
-import PropTypes from "ant-design-vue/es/_util/vue-types";
+import { LayoutSider, Menu, MenuItem } from "antdv-next";
+import { MenuUnfoldOutlined, MenuFoldOutlined } from "@antdv-next/icons";
 import BaseMenu, { baseMenuProps } from "./BaseMenu";
 import { defaultSettingProps } from "../../defaultSettings";
 import { useRouteContext } from "../../RouteContext";
 import "./SiderMenu.css";
+
+type SiderBreakpoint = InstanceType<typeof LayoutSider>["$props"]["breakpoint"];
 import type {
   MenuContentRender,
   CollapsedButtonRender,
@@ -114,13 +115,13 @@ export const siderMenuProps = {
     default: () => undefined,
   },
   breakpoint: {
-    type: [String, Object] as PropType<SiderProps["breakpoint"]>,
+    type: [String, Object] as PropType<SiderBreakpoint>,
     default: () => "md",
   },
-  isMobile: PropTypes.looseBool,
-  splitMenus: PropTypes.looseBool,
-  fixed: PropTypes.looseBool,
-  hide: PropTypes.looseBool,
+  isMobile: Boolean,
+  splitMenus: Boolean,
+  fixed: Boolean,
+  hide: Boolean,
   matchMenuKeys: {
     type: Array as PropType<string[]>,
     default: () => [],
@@ -135,8 +136,12 @@ export const siderMenuProps = {
   },
 
   // events
-  onMenuHeaderClick: PropTypes.func,
-  onMenuClick: PropTypes.func,
+  onMenuHeaderClick: {
+    type: Function as PropType<(...args: any[]) => any>,
+  },
+  onMenuClick: {
+    type: Function as PropType<(...args: any[]) => any>,
+  },
   onCollapse: {
     type: Function as PropType<(collapsed: boolean) => void>,
   },
@@ -269,7 +274,6 @@ const SiderMenu = defineComponent({
           )}
           <LayoutSider
             collapsible
-            trigger={null}
             collapsed={props.collapsed}
             breakpoint={props.breakpoint || undefined}
             onCollapse={(collapse: boolean) => {

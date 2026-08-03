@@ -1,6 +1,6 @@
 import type { RouteRecordRaw } from "vue-router";
 import { createVNode } from "vue";
-import { AlipayOutlined } from "@ant-design/icons-vue";
+import { AlipayOutlined } from "@antdv-next/icons";
 import BasicLayout from "../layouts/BasicLayout.vue";
 import BlankLayout from "../layouts/BlankLayout.vue";
 import NestedLayout from "../layouts/NestedLayout.vue";
@@ -96,7 +96,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         component: () => {},
       },
       {
-        path: "https://www.antdv.com/",
+        path: "https://antdv-next.com/",
         name: "Ant Design Vue",
         meta: {
           title: "Antdv-当前窗口",

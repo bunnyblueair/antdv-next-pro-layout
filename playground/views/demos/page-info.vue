@@ -48,7 +48,7 @@
 import { PageContainer } from "antdv-pro-layout";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
-import { LikeOutlined } from "@ant-design/icons-vue";
+import { LikeOutlined } from "@antdv-next/icons";
 const route = useRoute();
 
 /**路由标题 */

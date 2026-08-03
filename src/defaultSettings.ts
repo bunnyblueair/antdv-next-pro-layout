@@ -1,6 +1,8 @@
 import type { PropType, ExtractPropTypes } from "vue";
 import type { LayoutType, SiderMenuType, Theme } from "./typings";
-import { MenuTheme } from "ant-design-vue";
+import type { MenuProps } from "antdv-next";
+
+type MenuTheme = NonNullable<MenuProps["theme"]>;
 
 export interface RenderSetting {
   headerRender?: false;

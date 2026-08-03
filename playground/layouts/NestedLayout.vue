@@ -7,7 +7,7 @@
     :breadcrumb="{ routes: breadcrumb }"
     :header-render="false"
     :fix-siderbar="true"
-    :breakpoint="''"
+    :breakpoint="undefined"
     :menu-data="routes"
     disable-content-margin
     style="min-height: 100vh"
@@ -15,7 +15,7 @@
   >
     <template #menuHeaderRender>
       <a>
-        <img src="//www.antdv.com/assets/logo.1ef800a8.svg" />
+        <img src="https://antdv-next.com/antdv-next.svg" />
         <h1>Pro Layout Nested</h1>
       </a>
     </template>
@@ -29,7 +29,7 @@
         :menu-header-render="false"
         :menu-data="innerMenuData"
         :fix-siderbar="true"
-        :breakpoint="''"
+        :breakpoint="undefined"
         :is-children-layout="true"
         disable-content-margin
       >
@@ -80,7 +80,7 @@ const router = useRouter();
 // 外层 sider 显示一级（应用），内层 sider 显示二级/多级（应用内页面）
 const nestedRoot = router.getRoutes().find((r) => r.path === "/nested");
 const menuData = clearMenuItem(nestedRoot?.children || []);
-import { UserOutlined } from "@ant-design/icons-vue";
+import { UserOutlined } from "@antdv-next/icons";
 
 const routes = menuData.map((item) => {
   return {

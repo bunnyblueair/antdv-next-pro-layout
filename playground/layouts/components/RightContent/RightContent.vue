@@ -1,12 +1,15 @@
 <script setup lang="ts">
+import { h } from "vue";
 import {
   GithubOutlined,
   SettingOutlined,
   LogoutOutlined,
   BgColorsOutlined,
-} from "@ant-design/icons-vue";
+} from "@antdv-next/icons";
 import { changePrimaryColor, getLocalColor } from "@/hooks/useTheme";
-import type { MenuInfo } from "ant-design-vue/es/menu/src/interface";
+import type { MenuProps } from "antdv-next";
+
+type MenuInfo = Parameters<NonNullable<MenuProps["onClick"]>>[0];
 
 const props = defineProps({
   /**用户名 */
@@ -27,6 +30,23 @@ function fnClick({ key }: MenuInfo) {
       break;
   }
 }
+
+const userMenu = {
+  items: [
+    {
+      key: "settings",
+      label: "个人设置",
+      icon: h(SettingOutlined),
+    },
+    { type: "divider" as const },
+    {
+      key: "logout",
+      label: "退出登录",
+      icon: h(LogoutOutlined),
+    },
+  ],
+  onClick: fnClick,
+};
 </script>
 
 <template>
@@ -58,7 +78,11 @@ function fnClick({ key }: MenuInfo) {
       </a-button>
     </a-tooltip>
 
-    <a-dropdown placement="bottomRight" :trigger="['click', 'hover']">
+    <a-dropdown
+      placement="bottomRight"
+      :trigger="['click', 'hover']"
+      :menu="userMenu"
+    >
       <a-space :size="8" align="start">
         <a-avatar
           shape="circle"
@@ -68,23 +92,6 @@ function fnClick({ key }: MenuInfo) {
         ></a-avatar>
         <span class="nick"> {{ props.name }} </span>
       </a-space>
-      <template #overlay>
-        <a-menu @click="fnClick">
-          <a-menu-item key="settings">
-            <template #icon>
-              <SettingOutlined />
-            </template>
-            <span>个人设置</span>
-          </a-menu-item>
-          <a-menu-divider />
-          <a-menu-item key="logout">
-            <template #icon>
-              <LogoutOutlined />
-            </template>
-            <span>退出登录</span>
-          </a-menu-item>
-        </a-menu>
-      </template>
     </a-dropdown>
   </a-space>
 </template>

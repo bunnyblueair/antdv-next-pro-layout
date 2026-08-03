@@ -18,16 +18,15 @@ import {
   type ComponentInternalInstance,
 } from "vue";
 
-import type {
-  SelectEventHandler,
-  MenuClickEventHandler,
-  SelectInfo,
-  MenuInfo,
-} from "ant-design-vue/es/menu/src/interface";
-import type { MenuMode } from "ant-design-vue/es/menu";
-import type { Key } from "ant-design-vue/es/_util/type";
-import { createFromIconfontCN } from "@ant-design/icons-vue";
-import { Menu, MenuItem, MenuItemGroup, SubMenu } from "ant-design-vue";
+import type { MenuProps as AntdvMenuProps } from "antdv-next";
+import { Menu, MenuItem, MenuItemGroup, SubMenu } from "antdv-next";
+import { createFromIconfontCN } from "@antdv-next/icons";
+
+type MenuMode = NonNullable<AntdvMenuProps["mode"]>;
+type MenuInfo = Parameters<NonNullable<AntdvMenuProps["onClick"]>>[0];
+type SelectInfo = Parameters<NonNullable<AntdvMenuProps["onSelect"]>>[0];
+type SelectEventHandler = (info: SelectInfo) => void;
+type MenuClickEventHandler = (info: MenuInfo) => void;
 
 import type {
   MenuDataItem,
@@ -297,7 +296,7 @@ const BaseMenu = defineComponent({
       { immediate: true },
     );
 
-    const handleOpenChange = (openKeys: Key[]): void => {
+    const handleOpenChange = (openKeys: string[]): void => {
       emit("update:openKeys", openKeys);
     };
     const handleSelect: SelectEventHandler = (args: SelectInfo): void => {

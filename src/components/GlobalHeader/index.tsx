@@ -5,8 +5,7 @@ import {
   type ExtractPropTypes,
 } from "vue";
 import type { RouteRecordRaw } from "vue-router";
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons-vue";
-import PropTypes from "ant-design-vue/es/_util/vue-types";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@antdv-next/icons";
 import type {
   CustomRenderProps,
   MenuContentRender,
@@ -53,7 +52,7 @@ export const globalHeaderProps = {
   matchMenuKeys: siderMenuProps.matchMenuKeys,
 
   // events
-  onMenuHeaderClick: PropTypes.func,
+  onMenuHeaderClick: Function as PropType<(...args: any[]) => any>,
   onCollapse: siderMenuProps.onCollapse,
   onOpenKeys: siderMenuProps.onOpenKeys,
   onSelect: siderMenuProps.onSelect,

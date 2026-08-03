@@ -4,8 +4,8 @@ import {
   CheckOutlined,
   CopyOutlined,
   NotificationOutlined,
-} from "@ant-design/icons-vue";
-import { message, theme } from "ant-design-vue";
+} from "@antdv-next/icons";
+import { message, theme } from "antdv-next";
 import {
   ConfigType,
   changePrimaryColor,
@@ -141,7 +141,7 @@ function copySetting() {
     :open="open"
     placement="right"
     :closable="false"
-    :width="300"
+    :size="300"
     @close="() => emit('close', false)"
   >
     <div class="sd-content" :style="{ color: themeToken.colorText }">
@@ -269,65 +269,57 @@ function copySetting() {
       <!-- 布局设置 -->
       <div class="sd-body">
         <a-typography-title :level="5">布局设置</a-typography-title>
-        <a-list class="sd-list" :split="false" size="small">
-          <a-list-item>
+        <div class="sd-list">
+          <div class="sd-list-item">
             <span>内容区域宽度</span>
-            <template #extra>
-              <a-select
-                size="small"
-                style="width: 80px"
-                :value="config.contentWidth"
-                @change="(v: any) => changeSetting('contentWidth', v)"
+            <a-select
+              size="small"
+              style="width: 80px"
+              :value="config.contentWidth"
+              @change="(v: any) => changeSetting('contentWidth', v)"
+            >
+              <a-select-option v-if="config.layout !== 'side'" value="Fixed"
+                >定宽</a-select-option
               >
-                <a-select-option v-if="config.layout !== 'side'" value="Fixed"
-                  >定宽</a-select-option
-                >
-                <a-select-option value="Fluid">流式</a-select-option>
-              </a-select>
-            </template>
-          </a-list-item>
-          <a-list-item>
+              <a-select-option value="Fluid">流式</a-select-option>
+            </a-select>
+          </div>
+          <div class="sd-list-item">
             <span>固定 Header</span>
-            <template #extra>
-              <a-switch
-                size="small"
-                :checked="config.fixedHeader"
-                @change="(c: boolean) => changeSetting('fixedHeader', c)"
-              />
-            </template>
-          </a-list-item>
-          <a-list-item>
+            <a-switch
+              size="small"
+              :checked="config.fixedHeader"
+              @change="(c: boolean) => changeSetting('fixedHeader', c)"
+            />
+          </div>
+          <div class="sd-list-item">
             <span :style="{ opacity: config.layout === 'top' ? 0.5 : 1 }"
               >固定侧边菜单</span
             >
-            <template #extra>
-              <a-tooltip
-                :title="config.layout === 'top' ? '侧边菜单布局时可配置' : ''"
-                placement="left"
-              >
-                <a-switch
-                  size="small"
-                  :disabled="config.layout === 'top'"
-                  :checked="config.fixSiderbar"
-                  @change="(c: boolean) => changeSetting('fixSiderbar', c)"
-                />
-              </a-tooltip>
-            </template>
-          </a-list-item>
-          <a-list-item>
+            <a-tooltip
+              :title="config.layout === 'top' ? '侧边菜单布局时可配置' : ''"
+              placement="left"
+            >
+              <a-switch
+                size="small"
+                :disabled="config.layout === 'top'"
+                :checked="config.fixSiderbar"
+                @change="(c: boolean) => changeSetting('fixSiderbar', c)"
+              />
+            </a-tooltip>
+          </div>
+          <div class="sd-list-item">
             <span :style="{ opacity: config.layout !== 'mix' ? 0.5 : 1 }"
               >自动分割菜单</span
             >
-            <template #extra>
-              <a-switch
-                size="small"
-                :disabled="config.layout !== 'mix'"
-                :checked="config.splitMenus"
-                @change="(c: boolean) => changeSetting('splitMenus', c)"
-              />
-            </template>
-          </a-list-item>
-        </a-list>
+            <a-switch
+              size="small"
+              :disabled="config.layout !== 'mix'"
+              :checked="config.splitMenus"
+              @change="(c: boolean) => changeSetting('splitMenus', c)"
+            />
+          </div>
+        </div>
       </div>
 
       <a-divider />
@@ -335,18 +327,16 @@ function copySetting() {
       <!-- 内容区域 -->
       <div class="sd-body">
         <a-typography-title :level="5">内容区域</a-typography-title>
-        <a-list class="sd-list" :split="false" size="small">
-          <a-list-item v-for="r in regionalList" :key="r.key">
+        <div class="sd-list">
+          <div v-for="r in regionalList" :key="r.key" class="sd-list-item">
             <span>{{ r.title }}</span>
-            <template #extra>
-              <a-switch
-                size="small"
-                :checked="regionalChecked(r.key)"
-                @change="(c: boolean) => changeRegional(r.key, c)"
-              />
-            </template>
-          </a-list-item>
-        </a-list>
+            <a-switch
+              size="small"
+              :checked="regionalChecked(r.key)"
+              @change="(c: boolean) => changeRegional(r.key, c)"
+            />
+          </div>
+        </div>
       </div>
 
       <a-divider />

@@ -12,7 +12,7 @@ Ant Design Pro Vue 布局，易于使用专业脚手架。
 ## 安装 Install
 
 ```bash
-npm i antdv-pro-layout
+npm i antdv-pro-layout antdv-next @antdv-next/icons
 ```
 
 ## 简单使用 Simple Usage
@@ -24,8 +24,8 @@ npm i antdv-pro-layout
 import { createApp } from "vue";
 import App from "./App.vue";
 
-import "ant-design-vue/dist/reset.css";
-import Antd from "ant-design-vue";
+import "antdv-next/dist/reset.css";
+import Antd from "antdv-next";
 
 import "antdv-pro-layout/dist/style.css";
 import { ProLayout, PageContainer } from "antdv-pro-layout";
@@ -305,7 +305,7 @@ const layoutConf = reactive({
 
 ### 组件内容页 PageContainer
 
-包含 antdv 组件 API 属性: [PageHeader 页头](https://www.antdv.com/components/page-header-cn#api)、[Affix 固钉](https://www.antdv.com/components/affix-cn#api)
+使用 antdv-next 的 [Affix 固钉](https://antdv-next.com/docs/vue/components/affix-cn#api) API；PageContainer 页头由本项目提供兼容实现。
 
 | 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
@@ -313,17 +313,17 @@ const layoutConf = reactive({
 | disableMargin | 布局内容禁用外边距 `24px` | boolean | false |
 | flex | 内容布局是否充满宽度 | boolean | true |
 | fixed-header | 固定 PageHeader 到顶部 | boolean | false |
-| affixProps | 固钉的配置 | [affix](https://www.antdv.com/components/affix-cn#api) | - |
+| affixProps | 固钉的配置 | [affix](https://antdv-next.com/docs/vue/components/affix-cn#api) | - |
 | pageHeader | 渲染页头替换 PageHeader 组件插槽 | VNode \| v-slot | - |
 | pageFooter | 渲染页脚插槽 | VNode \| v-slot | - |
 | content | PageHeader 默认插槽 | VNode \| v-slot | - |
 | contentExtra | PageHeader 默认插槽右侧空间 | VNode \| v-slot | - |
-| breadcrumb | PageHeader 面包屑的配置，`{}` 不显示 | [breadcrumb](https://www.antdv.com/components/breadcrumb-cn/) | - |
+| breadcrumb | PageHeader 面包屑的配置，`{}` 不显示 | [breadcrumb](https://antdv-next.com/docs/vue/components/breadcrumb-cn/) | - |
 | tab-list | PageHeader footer 插槽无时显示标签列表 | `Array<{ key: string; tab: any }>` | - |
 | tab-active-key | 标签列表当前激活 key | string | - |
 | tab-change | 标签列表 tab 被点击的回调 | (key) => void | - |
-| tab-props | 标签列表标签页属性 | [tabs](https://www.antdv.com/components/tabs-cn) | - |
-| ... | PageHeader 属性 | [PageHeader 页头 API](https://www.antdv.com/components/page-header-cn#api) | - |
+| tab-props | 标签列表标签页属性 | [tabs](https://antdv-next.com/docs/vue/components/tabs-cn) | - |
+| ... | PageContainer 页头兼容属性 | - | - |
 
 ## 基本使用示例 Basic Usage
 
@@ -339,7 +339,7 @@ const layoutConf = reactive({
 - v3.1 : Vue3 + `ant-design-vue@2.2.x` (release LTS)
 - v2 : Vue2 + `ant-design-vue@1.7.x`
 
-当前版本 Vue3 + ant-design-vue@4.2.6 ([v4](https://gitee.com/TsMask/antdv-pro-layout))
+当前版本 Vue3 + antdv-next@1.4.5 ([迁移说明](https://antdv-next.com/docs/vue/migration-antdv-next-cn))
 
 ## 持续维护 Continuous Maintenance
 

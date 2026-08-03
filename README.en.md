@@ -12,7 +12,7 @@ Ant Design Pro Layout of Vue, easy to use pro scaffolding.
 ## Install
 
 ```bash
-npm i antdv-pro-layout
+npm i antdv-pro-layout antdv-next @antdv-next/icons
 ```
 
 ## Simple Usage
@@ -24,8 +24,8 @@ First, you should add the `antdv-pro-layout` that you need into the library.
 import { createApp } from "vue";
 import App from "./App.vue";
 
-import "ant-design-vue/dist/reset.css";
-import Antd from "ant-design-vue";
+import "antdv-next/dist/reset.css";
+import Antd from "antdv-next";
 
 import 'antdv-pro-layout/dist/style.css';
 import { ProLayout, PageContainer } from "antdv-pro-layout";
@@ -301,7 +301,7 @@ const layoutConf = reactive({
 
 ### Component content page - PageContainer
 
-Contains the ANTDV component API attributes: [PageHeader](https://www.antdv.com/components/page-header#api)、[Affix](https://www.antdv.com/components/affix#api)
+Uses the antdv-next [Affix](https://antdv-next.com/docs/vue/components/affix-cn#api) API; PageContainer provides its own compatible page-header implementation.
 
 | Property | Description | Type | Default Value |
 | --- | --- | --- | --- |
@@ -309,17 +309,17 @@ Contains the ANTDV component API attributes: [PageHeader](https://www.antdv.com/
 | disableMargin | Disable the content outer margin `24px` | boolean | false |
 | flex | Whether the content fills the width | boolean | true |
 | fixed-header | Fix the PageHeader to the top | boolean | false |
-| affixProps | Affix configuration | [affix](https://www.antdv.com/components/affix#api) | - |
+| affixProps | Affix configuration | [affix](https://antdv-next.com/docs/vue/components/affix-cn#api) | - |
 | pageHeader | Render slot to replace the PageHeader component | VNode \| v-slot | - |
 | pageFooter | Render footer slot | VNode \| v-slot | - |
 | content | PageHeader default slot | VNode \| v-slot | - |
 | contentExtra | Right space of the PageHeader default slot | VNode \| v-slot | - |
-| breadcrumb | PageHeader breadcrumb configuration, `{}` to hide | [breadcrumb](https://www.antdv.com/components/breadcrumb/) | - |
+| breadcrumb | PageHeader breadcrumb configuration, `{}` to hide | [breadcrumb](https://antdv-next.com/docs/vue/components/breadcrumb-cn/) | - |
 | tab-list | Display the tab list when the PageHeader footer slot is absent | `Array<{ key: string; tab: any }>` | - |
 | tab-active-key | Currently active key of the tab list | string | - |
 | tab-change | Callback when a tab is clicked | (key) => void | - |
-| tab-props | Tab list Tabs properties | [tabs](https://www.antdv.com/components/tabs) | - |
-| ... | PageHeader properties | [PageHeader API](https://www.antdv.com/components/page-header#api) | - |
+| tab-props | Tab list Tabs properties | [tabs](https://antdv-next.com/docs/vue/components/tabs-cn) | - |
+| ... | PageContainer page-header compatibility properties | - | - |
 
 ## Basic Usage
 
@@ -333,7 +333,7 @@ From [@ant-design-vue/pro-layout](https://github.com/vueComponent/pro-components
 - v3.1 : Vue3 + `ant-design-vue@2.2.x` (release LTS)
 - v2 : Vue2 + `ant-design-vue@1.7.x`
 
-The version is a Vue3 + `ant-design-vue@4.2.6` ([v4](https://gitee.com/TsMask/antdv-pro-layout))
+The current version uses Vue3 + `antdv-next@1.4.5` ([migration guide](https://antdv-next.com/docs/vue/migration-antdv-next-cn))
 
 ## Continuous Maintenance
 
