@@ -55,6 +55,13 @@ const IconFontRef = shallowRef(
   createFromIconfontCN({ scriptUrl: defaultSettings.iconfontUrl }),
 );
 
+/**
+ * 顶部多级菜单的弹层不能挂在布局内部，否则布局的 overflow 或 transform
+ * 会影响弹层的可视区域和锚点计算。使用触发节点所属文档的 body，兼容 iframe。
+ */
+const getMenuPopupContainer = (triggerNode: HTMLElement): HTMLElement =>
+  triggerNode.ownerDocument.body;
+
 const LazyIcon: FunctionalComponent<{
   icon: VNodeChild | string;
 }> = ({ icon }) => {
@@ -319,6 +326,8 @@ const BaseMenu = defineComponent({
           inlineIndent={16}
           mode={props.mode}
           theme={props.theme}
+          getPopupContainer={getMenuPopupContainer}
+          forceSubMenuRender={props.mode === "horizontal"}
           openKeys={props.openKeys || []}
           selectedKeys={props.selectedKeys || []}
           onOpenChange={handleOpenChange}
