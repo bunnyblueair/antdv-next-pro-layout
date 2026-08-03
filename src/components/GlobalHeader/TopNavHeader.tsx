@@ -14,7 +14,6 @@ import {
 import BaseMenu from "../SiderMenu/BaseMenu";
 import type {
   CustomRenderProps,
-  HeaderContentRender,
   MenuContentRender,
 } from "../../typings";
 
@@ -22,10 +21,6 @@ export const topNavHeaderProps = {
   ...siderMenuProps,
   menuRender: {
     type: [Object, Function, Boolean] as PropType<MenuContentRender>,
-    default: () => undefined,
-  },
-  headerContentRender: {
-    type: [Function, Object, Boolean] as PropType<HeaderContentRender>,
     default: () => undefined,
   },
   headerContentRightRender: {
@@ -84,13 +79,7 @@ const TopNavHeader = defineComponent({
           }}
         />
       );
-      const hcr = props.headerContentRender;
-      if (hcr !== undefined && hcr !== false) {
-        if (typeof hcr === "function") {
-          return (hcr as (p: typeof props, d: any) => any)(props, defaultDom);
-        }
-        return hcr;
-      }
+      // headerContentRender 仅属于 side 布局的 GlobalHeader；顶栏必须保留业务菜单。
       return defaultDom;
     });
 
